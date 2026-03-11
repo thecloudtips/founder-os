@@ -1,55 +1,39 @@
 # Founder OS
 
-**32-plugin AI automation ecosystem for SMB founders, built on Claude Code.**
+**32-namespace AI automation ecosystem for SMB founders, built on Claude Code.**
 
 Stop drowning in email, meetings, and manual busywork. Founder OS gives you a full AI-powered command center — from inbox triage to client health dashboards to automated proposals — all running inside Claude Code.
 
 ---
 
-## Quick Start
+## Install
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/your-org/founder-os.git
-cd founder-os
+# 1. Add the marketplace
+claude plugin marketplace add thecloudtips/founder-os
 
-# 2. Set up your environment
-cp .env.example .env
-# Edit .env with your Notion token and other credentials
+# 2. Install the plugin
+claude plugin install founder-os
 
-# 3. Run the installer
-./install.sh
+# 3. Set your Notion API key (required for most commands)
+#    Get yours at: https://www.notion.so/my-integrations
+export NOTION_API_KEY=ntn_your_token_here
 ```
 
-That's it. Follow the prompts in `./install.sh` to authenticate gws (Gmail/Calendar/Drive) and connect Notion.
+That's it. All 94 commands are now available as `/founder-os:<namespace>:<action>`.
 
 ---
 
 ## What's Included
 
-**32 plugins across 4 pillars:**
+**32 namespaces across 4 pillars:**
 
-| Pillar | Plugins | Focus |
-|--------|---------|-------|
-| Daily Work | #01–#08 | Inbox zero, meeting prep, weekly reviews |
-| Code Without Coding | #09–#16 | Reports, invoices, proposals, contracts |
-| MCP & Integrations | #17–#24 | Notion, Drive, Slack, CRM sync |
-| Meta & Growth | #25–#32 | ROI tracking, workflows, templates, memory |
-
-Each plugin ships with:
-- Slash commands (e.g., `/inbox:triage`, `/client:load`)
-- INSTALL.md, QUICKSTART.md, README.md
-- Notion HQ database integration
-
----
-
-## Documentation
-
-| Guide | Description |
-|-------|-------------|
-| [SETUP-GUIDE.md](docs/getting-started/SETUP-GUIDE.md) | Full setup walkthrough, MCP configuration, Notion HQ install |
-| [FAQ.md](docs/getting-started/FAQ.md) | Common questions and answers |
-| [TROUBLESHOOTING.md](docs/getting-started/TROUBLESHOOTING.md) | Fixes for common issues |
+| Pillar | Namespaces | Focus |
+|--------|------------|-------|
+| Daily Work | inbox, briefing, prep, actions, review, followup, meeting, newsletter | Email, meetings, reviews |
+| Code Without Coding | report, health, invoice, proposal, contract, sow, compete, expense | Reports, invoices, proposals |
+| MCP & Integrations | notion, drive, slack, client, crm, morning, kb, linkedin | Notion, Drive, Slack, CRM |
+| Meta & Growth | savings, prompt, workflow, workflow-doc, learn, goal, memory, intel | ROI, workflows, templates |
 
 ---
 
@@ -57,15 +41,42 @@ Each plugin ships with:
 
 - Claude Code (latest)
 - Node.js 18+
-- A Notion workspace (free tier works)
-- Google account (for Gmail/Calendar/Drive plugins)
+- Notion workspace + API key (free tier works)
+- Google account + [gws CLI](https://github.com/nicholasgasior/gws) for Gmail/Calendar/Drive features
+
+---
+
+## Optional: Google Workspace
+
+For email, calendar, and drive features, install and authenticate the gws CLI:
+
+```bash
+# Install gws (see gws docs for your platform)
+gws auth login
+```
+
+---
+
+## Optional: Notion HQ Databases
+
+After installing, run the setup command inside Claude Code to create all 22 Notion databases:
+
+```
+/founder-os:setup:notion-hq
+```
+
+---
+
+## Documentation
+
+| Guide | Description |
+|-------|-------------|
+| [SETUP-GUIDE.md](docs/getting-started/SETUP-GUIDE.md) | Detailed setup walkthrough |
+| [FAQ.md](docs/getting-started/FAQ.md) | Common questions |
+| [TROUBLESHOOTING.md](docs/getting-started/TROUBLESHOOTING.md) | Fixes for common issues |
 
 ---
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
-
----
-
-*Built with Claude Code by the Founder OS team.*
+MIT

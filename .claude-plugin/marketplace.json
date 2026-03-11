@@ -1,0 +1,15 @@
+{
+  "name": "founder-os-marketplace",
+  "owner": {
+    "name": "Founder OS",
+    "url": "https://github.com/thecloudtips/founder-os"
+  },
+  "plugins": [
+    {
+      "name": "founder-os",
+      "version": "1.0.0",
+      "source": "./plugin",
+      "description": "32-namespace AI automation ecosystem for SMB founders — email triage, meeting prep, reports, CRM sync, and more."
+    }
+  ]
+}
