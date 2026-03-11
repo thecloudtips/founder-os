@@ -2,9 +2,9 @@
 
 ## General
 
-### Do I need all 32 plugins?
+### Do I need all 32 namespaces?
 
-All 32 plugins are installed together (they share infrastructure), but you only use the ones you need. Unused plugins have zero overhead — they're just symlinked directories that Claude Code discovers on demand.
+All 32 namespaces are part of the single Founder OS plugin, but you only use the ones you need. Unused namespaces have zero overhead — they are just command and skill files on disk that Claude Code discovers on demand. No extra processes, no extra memory.
 
 ### What does Founder OS cost?
 
@@ -25,7 +25,7 @@ Yes. Each team member clones the repo and runs the installer with their own API 
 
 ### Can I use Founder OS without Notion?
 
-Partially. Notion is the backbone for 21 of 32 plugins. Without it, you can still use file-based plugins like Report Generator, Contract Analyzer, and LinkedIn Post Generator. Run `./install.sh --skip-notion` to install without Notion.
+Partially. Notion is the backbone for 21 of 32 namespaces. Without it, you can still use file-based namespaces like Report Generator, Contract Analyzer, and LinkedIn Post Generator. Run `./install.sh --skip-notion` to install without Notion.
 
 ### What Google permissions does gws need?
 
@@ -43,24 +43,26 @@ Yes. Update `WORKSPACE_DIR` in `.env` and re-run `./install.sh`. The installer u
 
 Yes. The installer is idempotent — it detects what's already done and skips completed steps. Re-running is always safe.
 
-## Plugins
+## Commands & Namespaces
 
-### Can I add custom plugins?
+### How do I invoke a command?
 
-Yes. Create a new directory following the plugin format (see `_templates/plugin-scaffold/`), add a `.claude-plugin/plugin.json` manifest, and symlink it into `.claude/plugins/`.
+All commands use the format `/founder-os:namespace:action`. For example:
+- `/founder-os:inbox:triage` — triage your inbox
+- `/founder-os:client:load` — load client context
+- `/founder-os:report:generate` — generate a report
 
-### How do I disable a specific plugin?
+### How do I disable a specific namespace?
 
-Remove its symlink from `.claude/plugins/`:
-```bash
-rm .claude/plugins/founder-os-[plugin-name]
-```
+You don't need to. All namespaces are part of the single plugin and unused ones have zero overhead — they're just markdown files that Claude Code only reads when you invoke their commands. There is nothing to disable or uninstall for individual namespaces.
 
-Re-running `./install.sh` will re-link it. To permanently exclude a plugin, remove it before running the installer or delete its symlink after.
+### Can I add custom commands?
+
+Yes. Add a new markdown file under `commands/[namespace]/[action].md` following the existing command format. Claude Code discovers it automatically.
 
 ### What are the four pillars?
 
-| Pillar | Focus | Plugins |
+| Pillar | Focus | Namespaces |
 |--------|-------|---------|
 | Daily Work | Email, meetings, reviews | #01-#08 |
 | Code Without Coding | Reports, invoices, contracts | #09-#16 |
@@ -68,7 +70,7 @@ Re-running `./install.sh` will re-link it. To permanently exclude a plugin, remo
 | Meta & Growth | ROI, workflows, templates | #25-#30 |
 | Infrastructure | Memory, adaptive intelligence | #31-#32 |
 
-> **Note**: Plugins #31 (Memory Hub) and #32 (Adaptive Intel) are infrastructure plugins that enhance all other plugins. They are installed alongside the four-pillar plugins but operate transparently in the background.
+> **Note**: Namespaces #31 (Memory Hub) and #32 (Adaptive Intel) are infrastructure namespaces that enhance all other namespaces. They operate transparently in the background.
 
 ## Updating
 
@@ -79,11 +81,11 @@ git pull
 ./install.sh
 ```
 
-The installer picks up new plugins, updated configurations, and any new Notion databases.
+The installer picks up updated configurations and any new Notion databases.
 
 ### What about my existing Notion databases?
 
-If you had older plugin-specific Notion databases (before the HQ consolidation), they're preserved. Plugins search for HQ databases first, then fall back to legacy names. See `_infrastructure/notion-hq/MIGRATION.md` for details.
+If you had older plugin-specific Notion databases (before the HQ consolidation), they're preserved. Namespaces search for HQ databases first, then fall back to legacy names. See `_infrastructure/notion-hq/MIGRATION.md` for details.
 
 ## Troubleshooting
 
@@ -91,4 +93,4 @@ If you had older plugin-specific Notion databases (before the HQ consolidation),
 
 1. Check `docs/getting-started/TROUBLESHOOTING.md` for common issues
 2. Run `./install.sh --verify` to diagnose problems
-3. Run `/setup:verify` inside Claude Code for detailed checks
+3. Run `/founder-os:setup:verify` inside Claude Code for detailed checks

@@ -1,0 +1,10 @@
+{
+  "name": "founder-os",
+  "version": "1.0.0",
+  "description": "32-plugin AI automation ecosystem for SMB founders. Email triage, meeting prep, report generation, CRM sync, and 28 more tools — all powered by Claude Code.",
+  "platform": "claude-code",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  }
+}

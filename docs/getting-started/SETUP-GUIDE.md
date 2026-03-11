@@ -1,10 +1,10 @@
 # Founder OS Setup Guide
 
-This guide walks you through installing and configuring Founder OS — a 32-plugin AI automation ecosystem for SMB founders, built on Claude Code.
+This guide walks you through installing and configuring Founder OS — a single-plugin AI automation ecosystem for SMB founders, built on Claude Code with 32 command namespaces.
 
 ## What You're Installing
 
-- **32 AI plugins** organized into 4 pillars (Daily Work, Code Without Coding, MCP & Integrations, Meta & Growth)
+- **1 AI plugin with 32 command namespaces** organized into 4 pillars (Daily Work, Code Without Coding, MCP & Integrations, Meta & Growth)
 - **22 Notion databases** (CRM, tasks, meetings, reports, and more — all interconnected)
 - **MCP server connections** (Notion, Filesystem)
 - **Google Workspace access** via gws CLI (Gmail, Calendar, Drive)
@@ -15,7 +15,7 @@ Install these before running the Founder OS installer:
 
 ### 1. Claude Code
 
-The AI coding assistant that runs Founder OS plugins.
+The AI coding assistant that runs Founder OS.
 
 Install: https://docs.anthropic.com/en/docs/claude-code
 
@@ -38,7 +38,7 @@ npx --version    # Should be available
 
 ### 3. gws CLI
 
-Command-line tool for Gmail, Calendar, and Drive access. Used by 20+ plugins for email, scheduling, and document operations.
+Command-line tool for Gmail, Calendar, and Drive access. Used by 20+ namespaces for email, scheduling, and document operations.
 
 Install: Follow the gws CLI installation instructions for your platform.
 
@@ -92,7 +92,7 @@ Only needed for P19 Slack Digest. Skip this if you don't use Slack.
 
 ### Web Search API Key (Optional)
 
-Only needed for P08 Newsletter Engine and P15 Competitive Intel. Skip if not using these plugins.
+Only needed for P08 Newsletter Engine and P15 Competitive Intel. Skip if not using these namespaces.
 
 ## Installation
 
@@ -128,7 +128,7 @@ The installer runs 6 phases:
 | 1. Prerequisites | Checks Node.js, npx, Claude Code, gws CLI |
 | 2. Environment | Loads `.env`, validates API keys against live APIs |
 | 3. Google Auth | Runs `gws auth login` if not already authenticated |
-| 4. Plugins | Symlinks 32 plugins into `.claude/plugins/`, configures MCP |
+| 4. Plugin Config | Configures MCP servers in the root `.mcp.json` |
 | 5. Notion HQ | Creates 22 databases in your Notion workspace |
 | 6. Verification | Tests all connections and reports results |
 
@@ -139,10 +139,10 @@ The installer runs 6 phases:
 Open Claude Code in the `founderOS` directory and try:
 
 ```
-/inbox:triage                          # Triage your inbox
-/report:generate --type=weekly         # Generate a weekly report
-/client:load --company="Acme Corp"     # Load client context
-/setup:verify                          # Check installation health
+/founder-os:inbox:triage                          # Triage your inbox
+/founder-os:report:generate --type=weekly         # Generate a weekly report
+/founder-os:client:load --company="Acme Corp"     # Load client context
+/founder-os:setup:verify                          # Check installation health
 ```
 
 ### Updating Founder OS
@@ -160,5 +160,5 @@ git pull
 |------|---------|
 | `--verify` | Run only the verification phase |
 | `--skip-notion` | Skip Notion database setup |
-| `--reset` | Remove symlinks and MCP entries (clean slate) |
+| `--reset` | Remove MCP entries and reset config (clean slate) |
 | `--help` | Show usage information |

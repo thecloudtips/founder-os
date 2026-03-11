@@ -1,0 +1,70 @@
+{
+  "pattern": "pipeline-batch",
+  "description": "Invoice Processor: 5-agent sequential pipeline per invoice, batch processing across a folder or email inbox",
+  "execution": "batch_parallel_pipelines",
+  "batch": {
+    "max_concurrent": 5,
+    "item_source": "invoices_folder_or_gws_gmail_attachments",
+    "item_type": "invoice_file"
+  },
+  "pipeline": {
+    "agents": [
+      {
+        "name": "extraction-agent",
+        "role": "OCR and structured data extraction from invoice files",
+        "file": "agents/extraction-agent.md",
+        "order": 1,
+        "tools": ["filesystem"]
+      },
+      {
+        "name": "validation-agent",
+        "role": "Verify extracted amounts, dates, and vendor information for correctness",
+        "file": "agents/validation-agent.md",
+        "order": 2,
+        "tools": []
+      },
+      {
+        "name": "categorization-agent",
+        "role": "Assign expense categories to invoice line items",
+        "file": "agents/categorization-agent.md",
+        "order": 3,
+        "tools": []
+      },
+      {
+        "name": "approval-agent",
+        "role": "Detect anomalies and route invoices for approval via Notion",
+        "file": "agents/approval-agent.md",
+        "order": 4,
+        "tools": ["notion"]
+      },
+      {
+        "name": "integration-agent",
+        "role": "Record fully processed invoice in Notion accounting database",
+        "file": "agents/integration-agent.md",
+        "order": 5,
+        "tools": ["notion"]
+      }
+    ]
+  },
+  "coordination": {
+    "handoff": "output_of_previous_is_input_of_next",
+    "data_format": "structured_json",
+    "error_handling_per_item": "skip_failed_continue_batch",
+    "error_handling_pipeline": "stop_pipeline_on_failure",
+    "timeout_per_agent": "60s",
+    "batch_progress": "report_every_n_items",
+    "progress_interval": 5,
+    "retry_failed_items": false
+  },
+  "aggregation": {
+    "collect_results": true,
+    "summary_after_batch": true,
+    "failed_items_report": true
+  },
+  "observability": {
+    "log_handoffs": true,
+    "log_agent_output": true,
+    "report_timing": true,
+    "report_batch_progress": true
+  }
+}

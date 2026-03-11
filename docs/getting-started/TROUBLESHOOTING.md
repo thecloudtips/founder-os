@@ -92,15 +92,15 @@ chmod +x install.sh
 
 ### "Database not found" or missing databases
 
-**Symptom:** `/setup:verify` shows fewer than 22 databases, or plugins report "database not found".
+**Symptom:** `/founder-os:setup:verify` shows fewer than 22 databases, or commands report "database not found".
 
 **Cause:** Notion HQ setup didn't complete, or the integration doesn't have access.
 
 **Fix:**
-1. Run `/setup:notion-hq` in Claude Code (creates missing databases)
+1. Run `/founder-os:setup:notion-hq` in Claude Code (creates missing databases)
 2. If databases exist but aren't found: open the Founder OS HQ page in Notion → Click **...** → **Connections** → Ensure your integration is connected
 
-**Verify:** Run `/setup:verify` — should show 22/22 databases.
+**Verify:** Run `/founder-os:setup:verify` — should show 22/22 databases.
 
 ---
 
@@ -110,9 +110,9 @@ chmod +x install.sh
 
 **Cause:** Notion API allows ~3 requests/second. Batch operations can exceed this.
 
-**Fix:** Wait 60 seconds and re-run `/setup:notion-hq`. It's idempotent — it picks up where it left off.
+**Fix:** Wait 60 seconds and re-run `/founder-os:setup:notion-hq`. It's idempotent — it picks up where it left off.
 
-**Verify:** Run `/setup:verify` — should show 22/22 databases.
+**Verify:** Run `/founder-os:setup:verify` — should show 22/22 databases.
 
 ---
 
@@ -149,49 +149,33 @@ chmod +x install.sh
 
 ## Plugin Issues
 
-### Plugins not showing in Claude Code
+### Commands not recognized
 
-**Symptom:** Slash commands like `/inbox:triage` aren't recognized.
+**Symptom:** Slash commands like `/founder-os:inbox:triage` aren't recognized.
 
-**Cause:** Symlinks are missing or Claude Code needs a restart.
+**Cause:** The plugin manifest is missing or Claude Code needs a restart.
 
 **Fix:**
-1. Check symlinks exist: `ls -la .claude/plugins/`
-2. If empty, re-run `./install.sh`
+1. Verify `.claude-plugin/plugin.json` exists at the repository root
+2. Verify the command file exists: `ls commands/inbox/triage.md`
 3. Restart Claude Code (close and reopen)
 
-**Verify:** Open Claude Code and type `/inbox:` — autocomplete should show available commands.
+**Verify:** Open Claude Code and type `/founder-os:inbox:` — autocomplete should show available commands.
 
 ---
 
 ### "MCP server connection failed"
 
-**Symptom:** Plugin commands fail with MCP connection errors.
+**Symptom:** Commands fail with MCP connection errors.
 
-**Cause:** `.mcp.json` is missing server entries, or environment variables aren't set.
+**Cause:** The root `.mcp.json` is missing server entries, or environment variables aren't set.
 
 **Fix:**
-1. Check `.mcp.json` has `notion` and `filesystem` entries: `cat .mcp.json`
+1. Check the root `.mcp.json` has `notion` and `filesystem` entries: `cat .mcp.json`
 2. Verify `.env` has `NOTION_API_KEY` and `WORKSPACE_DIR` set
 3. Re-run `./install.sh` to regenerate MCP config
 
-**Verify:** Run `/setup:verify` — MCP Config check should pass.
-
----
-
-### Broken symlinks after moving the repository
-
-**Symptom:** Plugins stop working after moving the founderOS directory.
-
-**Cause:** Symlinks use absolute paths that break when the repo moves.
-
-**Fix:**
-```bash
-./install.sh --reset
-./install.sh
-```
-
-**Verify:** `ls -la .claude/plugins/` shows valid symlinks pointing to the new location.
+**Verify:** Run `/founder-os:setup:verify` — MCP Config check should pass.
 
 ---
 
@@ -211,7 +195,7 @@ chmod +x install.sh
 
 ### Workspace directory permission errors
 
-**Symptom:** File-based plugins (Report Generator, Contract Analyzer) fail to write output.
+**Symptom:** File-based commands (Report Generator, Contract Analyzer) fail to write output.
 
 **Cause:** `WORKSPACE_DIR` doesn't exist or has wrong permissions.
 

@@ -34,7 +34,7 @@ for arg in "$@"; do
       echo "Options:"
       echo "  --verify        Run verification checks only (Phase 6)"
       echo "  --skip-notion   Skip Notion HQ database setup (Phase 5)"
-      echo "  --reset         Remove symlinks and installer-generated MCP entries"
+      echo "  --reset         Remove installer-generated MCP entries"
       echo "  --help, -h      Show this help message"
       exit 0
       ;;
@@ -47,37 +47,30 @@ for arg in "$@"; do
 done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PLUGINS_DIR="$SCRIPT_DIR/.claude/plugins"
 
 # ── Reset Mode ───────────────────────────────────────────────────
 if $RESET; then
-  header "Resetting Founder OS installation..."
-
-  # Remove plugin symlinks
-  if [ -d "$PLUGINS_DIR" ]; then
-    rm -rf "$PLUGINS_DIR"
-    ok "Removed .claude/plugins/"
-  fi
+  header "Resetting Founder OS configuration..."
 
   # Remove installer-generated MCP entries from .mcp.json
   if [ -f "$SCRIPT_DIR/.mcp.json" ] && command -v python3 &>/dev/null; then
     python3 -c "
 import json, sys
 try:
-    with open('$SCRIPT_DIR/.mcp.json', 'r') as f:
+    with open(sys.argv[1], 'r') as f:
         config = json.load(f)
     for key in ['notion', 'filesystem']:
         config.get('mcpServers', {}).pop(key, None)
-    with open('$SCRIPT_DIR/.mcp.json', 'w') as f:
+    with open(sys.argv[1], 'w') as f:
         json.dump(config, f, indent=2)
         f.write('\n')
     print('Removed notion and filesystem entries from .mcp.json')
 except Exception as e:
     print(f'Warning: could not update .mcp.json: {e}', file=sys.stderr)
-" && ok "Cleaned .mcp.json" || warn "Could not clean .mcp.json"
+" "$SCRIPT_DIR/.mcp.json" && ok "Cleaned .mcp.json" || warn "Could not clean .mcp.json"
   fi
 
-  ok "Reset complete. Run ./install.sh to reinstall."
+  ok "Reset complete. Run ./install.sh to reconfigure."
   exit 0
 fi
 
@@ -262,54 +255,9 @@ if ! $VERIFY_ONLY; then
   fi
 fi
 
-# ── Phase 4: Plugin Installation ────────────────────────────────
+# ── Phase 4: Configure MCP ──────────────────────────────────────
 if ! $VERIFY_ONLY; then
-  header "Phase 4: Installing plugins..."
-
-  # Create project-level plugins directory
-  mkdir -p "$PLUGINS_DIR"
-
-  # Symlink all founder-os-* plugin directories
-  PLUGIN_COUNT=0
-  SKIP_COUNT=0
-  for plugin_dir in "$SCRIPT_DIR"/founder-os-*/; do
-    if [ -d "$plugin_dir/.claude-plugin" ]; then
-      plugin_name=$(basename "$plugin_dir")
-      target="$PLUGINS_DIR/$plugin_name"
-      if [ -L "$target" ]; then
-        SKIP_COUNT=$((SKIP_COUNT + 1))
-      else
-        ln -sf "$plugin_dir" "$target"
-        PLUGIN_COUNT=$((PLUGIN_COUNT + 1))
-      fi
-    fi
-  done
-
-  if [ $PLUGIN_COUNT -gt 0 ]; then
-    ok "Symlinked $PLUGIN_COUNT plugins to .claude/plugins/"
-  fi
-  if [ $SKIP_COUNT -gt 0 ]; then
-    info "Skipped $SKIP_COUNT already-linked plugins"
-  fi
-
-  # Fix P01 Inbox Zero missing .mcp.json
-  P01_DIR="$SCRIPT_DIR/founder-os-inbox-zero"
-  if [ -d "$P01_DIR" ] && [ ! -f "$P01_DIR/.mcp.json" ]; then
-    cat > "$P01_DIR/.mcp.json" <<'MCPEOF'
-{
-  "mcpServers": {
-    "notion": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-notion"],
-      "env": {
-        "NOTION_API_KEY": "${NOTION_API_KEY}"
-      }
-    }
-  }
-}
-MCPEOF
-    ok "Created missing .mcp.json for P01 Inbox Zero"
-  fi
+  header "Phase 4: Configuring MCP servers..."
 
   # Merge Notion + Filesystem into project-level .mcp.json
   info "Updating project .mcp.json..."
@@ -350,14 +298,14 @@ with open(mcp_path, 'w') as f:
     f.write('\n')
 
 print('done')
-" && ok "Merged Notion + Filesystem into .mcp.json (preserved existing entries)" \
+" "$SCRIPT_DIR" && ok "MCP config: notion + filesystem configured" \
   || { fail "Could not update .mcp.json"; exit 1; }
   else
-    fail "python3 is required for .mcp.json merging"
+    fail "python3 is required for .mcp.json configuration"
     exit 1
   fi
 
-  ok "Plugin installation complete"
+  ok "MCP configuration complete"
 fi
 
 # ── Phase 5: Notion HQ Setup ────────────────────────────────────
@@ -442,16 +390,16 @@ else
   fail "gws CLI: not authenticated"
 fi
 
-# 3. Plugin symlinks
+# 3. Plugin commands
 TOTAL=$((TOTAL + 1))
-LINKED=$(find "$PLUGINS_DIR" -maxdepth 1 -type l 2>/dev/null | wc -l | tr -d ' ')
-if [ "$LINKED" -ge 32 ]; then
-  ok "Plugins: $LINKED symlinked"
+CMD_COUNT=$(find "$SCRIPT_DIR/commands" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+if [ "$CMD_COUNT" -ge 90 ]; then
+  ok "Commands: $CMD_COUNT found"
   PASS=$((PASS + 1))
-elif [ "$LINKED" -gt 0 ]; then
-  warn "Plugins: only $LINKED of 32+ symlinked"
+elif [ "$CMD_COUNT" -gt 0 ]; then
+  warn "Commands: only $CMD_COUNT found (expected 94+)"
 else
-  fail "Plugins: no symlinks found in .claude/plugins/"
+  fail "Commands: no command files found in commands/"
 fi
 
 # 4. .mcp.json has required entries

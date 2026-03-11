@@ -1,38 +1,40 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with Founder OS plugins.
+This file provides guidance to Claude Code when working with Founder OS.
 
 ## Project Overview
 
-Founder OS is a 32-plugin AI automation ecosystem for SMB founders, built on Claude Code using the official Anthropic plugin format. Each plugin is a working tool with slash commands, skills, and Notion HQ integration.
+Founder OS is a single-plugin AI automation ecosystem for SMB founders, built on Claude Code using the official Anthropic plugin format. 32 command namespaces cover email triage, meeting prep, report generation, CRM sync, and more — all invoked as `/founder-os:namespace:action`.
 
 ## Architecture
 
-### Plugin Format (Anthropic-compatible)
+### Single Plugin Structure
 
-Every plugin follows this structure:
+Founder OS ships as one Anthropic-compatible plugin at the repository root:
 ```
-founder-os-[plugin-name]/
+founderOS/
 ├── .claude-plugin/
-│   └── plugin.json           # Manifest
+│   └── plugin.json           # Single plugin manifest
 ├── .mcp.json                 # MCP server connections
-├── commands/                 # Slash commands (markdown)
+├── commands/
+│   └── [namespace]/          # One directory per namespace
+│       └── [action].md       # Slash command (e.g., commands/inbox/triage.md)
 ├── skills/
-│   └── [skill-name]/
-│       └── SKILL.md          # Domain knowledge (one dir per skill)
-├── teams/                    # Agent Teams (Priority 5 only)
-│   ├── config.json
-│   └── agents/*.md
-├── tests/
-│   └── integration-test-plan.md
-├── INSTALL.md
-├── QUICKSTART.md
-└── README.md
+│   └── [namespace]/
+│       └── [skill-name]/
+│           └── SKILL.md      # Domain knowledge
+├── agents/
+│   └── [namespace]/          # Agent Teams (Priority 5 namespaces)
+│       └── *.md
+├── _infrastructure/          # Shared skills, templates, MCP configs
+└── _templates/               # Scaffolding and examples
 ```
+
+Commands are invoked as `/founder-os:namespace:action` (e.g., `/founder-os:inbox:triage`).
 
 ### Four Pillars
 
-| Pillar | Emoji | Plugins | Focus |
+| Pillar | Emoji | Namespaces | Focus |
 |--------|-------|---------|-------|
 | Daily Work | 📧 | #01-#08 | Email, meetings, reviews |
 | Code Without Coding | 🛠️ | #09-#16 | Reports, invoices, contracts |
@@ -41,9 +43,9 @@ founder-os-[plugin-name]/
 
 ### Platform
 
-All 32 plugins run on **Claude Code**. The `"platform": "claude-code"` field in each plugin.json confirms this.
+All 32 namespaces run as a single plugin on **Claude Code**. The `"platform": "claude-code"` field in `.claude-plugin/plugin.json` confirms this.
 
-### Agent Teams Patterns (Priority 5 plugins)
+### Agent Teams Patterns (Priority 5 namespaces)
 
 | Pattern | Used By | How It Works |
 |---------|---------|--------------|
@@ -54,23 +56,23 @@ All 32 plugins run on **Claude Code**. The `"platform": "claude-code"` field in 
 
 ### Autonomous Spectrum
 
-Plugins operate at different autonomy levels:
+Namespaces operate at different autonomy levels:
 
 | Level | Trigger | Examples |
 |-------|---------|---------|
-| Interactive | User runs command | All 32 plugins (default) |
+| Interactive | User runs command | All 32 namespaces (default) |
 | Scheduled | Cron/timer | P02, P05, P06, P10, P18, P19, P21, P22, P29 (via `--schedule`) |
-| Workflow | P27 orchestration | Any plugin via `/workflow:create` |
+| Workflow | P27 orchestration | Any namespace via `/founder-os:workflow:create` |
 
 ## MCP Servers & External Tools
 
-Plugins use these MCP servers and tools (install in priority order):
+The plugin uses these MCP servers and tools (install in priority order):
 
-1. **Notion** MCP (21 plugins) - CRM backbone, task tracking, output storage
-2. **gws CLI** (20 plugins) - Gmail, Calendar, and Drive access via `gws` CLI tool. Install once, authenticate with `gws auth login`. No per-plugin config needed.
-3. **Filesystem** MCP (8 plugins) - Local file processing, document generation
-4. **Slack** MCP (2 plugins) - Team communication digests
-5. **Web Search** MCP (1 plugin) - Competitive research
+1. **Notion** MCP (21 namespaces) - CRM backbone, task tracking, output storage
+2. **gws CLI** (20 namespaces) - Gmail, Calendar, and Drive access via `gws` CLI tool. Install once, authenticate with `gws auth login`. No per-namespace config needed.
+3. **Filesystem** MCP (8 namespaces) - Local file processing, document generation
+4. **Slack** MCP (2 namespaces) - Team communication digests
+5. **Web Search** MCP (1 namespace) - Competitive research
 
 ### MCP Package Names
 - Notion: `@modelcontextprotocol/server-notion`
@@ -87,53 +89,53 @@ Plugins use these MCP servers and tools (install in priority order):
 | Time savings tracking | Pre-defined task type estimates (not manual input) |
 | Client health metrics | 5 scores 0-100: contact, response, tasks, payment, sentiment |
 
-## Plugin Quick Reference (all 32 plugins)
+## Namespace Quick Reference (all 32 namespaces)
 
-Each plugin's own files (SKILL.md, commands/, README) contain full implementation details. Read those when working with a specific plugin.
+Each namespace's own files (SKILL.md, commands/, agents/) contain full implementation details. Read those when working with a specific namespace.
 
-| # | Plugin | Folder | Pattern | Required Tools | HQ DB |
-|---|--------|--------|---------|---------------|-------|
-| 01 | Inbox Zero | `founder-os-inbox-zero/` | Pipeline | gws (Gmail) | Tasks (Email Task), Content (Email Draft) |
-| 02 | Daily Briefing | `founder-os-daily-briefing-generator/` | Parallel Gathering | gws (Calendar, Gmail), Notion | Briefings (Daily Briefing) |
-| 03 | Meeting Prep | `founder-os-meeting-prep-autopilot/` | Parallel Gathering | gws (Calendar, Gmail, Drive), Notion | Meetings |
-| 04 | Action Items | `founder-os-action-item-extractor/` | None | Notion | Tasks (Action Item) |
-| 05 | Weekly Review | `founder-os-weekly-review-compiler/` | None | gws (Calendar, Gmail), Notion | Briefings (Weekly Review) |
-| 06 | Follow-Up Tracker | `founder-os-follow-up-tracker/` | None | gws (Gmail, Calendar), Notion | Tasks (Follow-Up) |
-| 07 | Meeting Intel | `founder-os-meeting-intelligence-hub/` | None | Notion, Filesystem | Meetings |
-| 08 | Newsletter Engine | `founder-os-newsletter-draft-engine/` | None | WebSearch, Filesystem | Content (Newsletter), Research (Newsletter Research) |
-| 09 | Report Generator | `founder-os-report-generator/` | Pipeline | Filesystem, Notion | Reports (Business Report) |
-| 10 | Client Health | `founder-os-client-health-dashboard/` | None | gws (Gmail, Calendar), Notion | Companies (health props) |
-| 11 | Invoice Processor | `founder-os-invoice-processor/` | Pipeline + Batch | Filesystem, Notion | Finance (Invoice) |
-| 12 | Proposal Automator | `founder-os-proposal-automator/` | None | Filesystem, Notion | Deliverables (Proposal) |
-| 13 | Contract Analyzer | `founder-os-contract-analyzer/` | None | Filesystem | Deliverables (Contract) |
-| 14 | SOW Generator | `founder-os-sow-generator/` | Competing Hypotheses | Filesystem, Notion | Deliverables (SOW) |
-| 15 | Competitive Intel | `founder-os-competitive-intel-compiler/` | None | WebSearch, Filesystem | Research (Competitive Analysis) |
-| 16 | Expense Report | `founder-os-expense-report-builder/` | None | Filesystem, Notion | Reports (Expense Report), Finance (reads) |
-| 17 | Notion Command Center | `founder-os-notion-command-center/` | None | Notion | (stateless) |
-| 18 | Drive Brain | `founder-os-google-drive-brain/` | None | gws (Drive), Notion | Activity Log |
-| 19 | Slack Digest | `founder-os-slack-digest-engine/` | None | Slack | Briefings (Slack Digest) |
-| 20 | Client Context | `founder-os-client-context-loader/` | Parallel Gathering | gws (Gmail, Calendar, Drive), Notion | Companies (dossier props) |
-| 21 | CRM Sync | `founder-os-crm-sync-hub/` | None | gws (Gmail, Calendar), Notion | Communications |
-| 22 | Morning Sync | `founder-os-multi-tool-morning-sync/` | None | gws (Gmail, Calendar), Notion | Briefings (Morning Sync) |
-| 23 | Knowledge Base | `founder-os-knowledge-base-qa/` | None | Notion | Knowledge Base |
-| 24 | LinkedIn Post | `founder-os-linkedin-post-generator/` | None | Filesystem | Content (LinkedIn Post) |
-| 25 | Time Savings | `founder-os-time-savings-calculator/` | None | Notion, Filesystem | Reports (ROI Report) |
-| 26 | Prompt Library | `founder-os-team-prompt-library/` | None | Notion | Prompts |
-| 27 | Workflow Automator | `founder-os-workflow-automator/` | None | Filesystem | Workflows (Execution) |
-| 28 | Workflow Documenter | `founder-os-workflow-documenter/` | None | Notion, Filesystem | Workflows (SOP) |
-| 29 | Learning Log | `founder-os-learning-log-tracker/` | None | Notion | Learnings, Weekly Insights |
-| 30 | Goal Tracker | `founder-os-goal-progress-tracker/` | None | Notion | Goals, Milestones |
-| 31 | Memory Hub | `founder-os-memory-hub/` | None | Notion | Memory |
-| 32 | Adaptive Intel | `founder-os-adaptive-intel/` | None | Notion | Intelligence |
+| # | Namespace | Command Prefix | Pattern | Required Tools | HQ DB |
+|---|-----------|---------------|---------|---------------|-------|
+| 01 | Inbox Zero | `/founder-os:inbox:` | Pipeline | gws (Gmail) | Tasks (Email Task), Content (Email Draft) |
+| 02 | Daily Briefing | `/founder-os:briefing:` | Parallel Gathering | gws (Calendar, Gmail), Notion | Briefings (Daily Briefing) |
+| 03 | Meeting Prep | `/founder-os:prep:` | Parallel Gathering | gws (Calendar, Gmail, Drive), Notion | Meetings |
+| 04 | Action Items | `/founder-os:actions:` | None | Notion | Tasks (Action Item) |
+| 05 | Weekly Review | `/founder-os:review:` | None | gws (Calendar, Gmail), Notion | Briefings (Weekly Review) |
+| 06 | Follow-Up Tracker | `/founder-os:followup:` | None | gws (Gmail, Calendar), Notion | Tasks (Follow-Up) |
+| 07 | Meeting Intel | `/founder-os:meeting:` | None | Notion, Filesystem | Meetings |
+| 08 | Newsletter Engine | `/founder-os:newsletter:` | None | WebSearch, Filesystem | Content (Newsletter), Research (Newsletter Research) |
+| 09 | Report Generator | `/founder-os:report:` | Pipeline | Filesystem, Notion | Reports (Business Report) |
+| 10 | Client Health | `/founder-os:health:` | None | gws (Gmail, Calendar), Notion | Companies (health props) |
+| 11 | Invoice Processor | `/founder-os:invoice:` | Pipeline + Batch | Filesystem, Notion | Finance (Invoice) |
+| 12 | Proposal Automator | `/founder-os:proposal:` | None | Filesystem, Notion | Deliverables (Proposal) |
+| 13 | Contract Analyzer | `/founder-os:contract:` | None | Filesystem | Deliverables (Contract) |
+| 14 | SOW Generator | `/founder-os:sow:` | Competing Hypotheses | Filesystem, Notion | Deliverables (SOW) |
+| 15 | Competitive Intel | `/founder-os:compete:` | None | WebSearch, Filesystem | Research (Competitive Analysis) |
+| 16 | Expense Report | `/founder-os:expense:` | None | Filesystem, Notion | Reports (Expense Report), Finance (reads) |
+| 17 | Notion Command Center | `/founder-os:notion:` | None | Notion | (stateless) |
+| 18 | Drive Brain | `/founder-os:drive:` | None | gws (Drive), Notion | Activity Log |
+| 19 | Slack Digest | `/founder-os:slack:` | None | Slack | Briefings (Slack Digest) |
+| 20 | Client Context | `/founder-os:client:` | Parallel Gathering | gws (Gmail, Calendar, Drive), Notion | Companies (dossier props) |
+| 21 | CRM Sync | `/founder-os:crm:` | None | gws (Gmail, Calendar), Notion | Communications |
+| 22 | Morning Sync | `/founder-os:morning:` | None | gws (Gmail, Calendar), Notion | Briefings (Morning Sync) |
+| 23 | Knowledge Base | `/founder-os:kb:` | None | Notion | Knowledge Base |
+| 24 | LinkedIn Post | `/founder-os:linkedin:` | None | Filesystem | Content (LinkedIn Post) |
+| 25 | Time Savings | `/founder-os:savings:` | None | Notion, Filesystem | Reports (ROI Report) |
+| 26 | Prompt Library | `/founder-os:prompt:` | None | Notion | Prompts |
+| 27 | Workflow Automator | `/founder-os:workflow:` | None | Filesystem | Workflows (Execution) |
+| 28 | Workflow Documenter | `/founder-os:workflow-doc:` | None | Notion, Filesystem | Workflows (SOP) |
+| 29 | Learning Log | `/founder-os:learn:` | None | Notion | Learnings, Weekly Insights |
+| 30 | Goal Tracker | `/founder-os:goal:` | None | Notion | Goals, Milestones |
+| 31 | Memory Hub | `/founder-os:memory:` | None | Notion | Memory |
+| 32 | Adaptive Intel | `/founder-os:intel:` | None | Notion | Intelligence |
 
-### Plugin Dependencies (chained plugins)
+### Namespace Dependencies (chained namespaces)
 ```
 #01 Inbox Zero -> #06 Follow-Up Tracker
 #07 Voice Note -> #04 Action Item Extractor
 #11 Invoice Processor -> #16 Expense Report Builder
 #12 Proposal Automator -> #14 SOW Generator
 #20 Client Context <-> #21 CRM Sync <-> #10 Client Health Dashboard
-#27 Workflow Automator -> chains ANY plugins
+#27 Workflow Automator -> chains ANY namespaces
 ```
 
 ## Infrastructure Commands
@@ -148,14 +150,16 @@ Shared commands that live under `_infrastructure/`. Discovered via this section 
 
 ## Conventions
 
-- Plugin folders: `founder-os-[kebab-case-name]/`
-- Slash commands: `/namespace:action` (e.g., `/inbox:triage`, `/client:load`)
+- Commands: `commands/[namespace]/[action].md` invoked as `/founder-os:namespace:action`
+- Skills: `skills/[namespace]/[skill-name]/SKILL.md`
+- Agents: `agents/[namespace]/*.md`
+- Slash commands: `/founder-os:namespace:action` (e.g., `/founder-os:inbox:triage`, `/founder-os:client:load`)
 - Skills are markdown files describing domain knowledge
 - Commands are markdown files describing slash command behavior
 - Agent definitions are markdown files with role, tools, and instructions
 
-### Universal Plugin Patterns (apply to ALL plugins)
-- **HQ DB discovery** — search "[FOS] [Name]" first, then "Founder OS HQ - [Name]", then plugin-specific legacy DB name (backward compat)
+### Universal Patterns (apply to ALL namespaces)
+- **HQ DB discovery** — search "[FOS] [Name]" first, then "Founder OS HQ - [Name]", then namespace-specific legacy DB name (backward compat)
 - **No lazy DB creation** — databases are pre-created in the HQ template; only fall back to lazy creation for non-HQ users
 - **Type column** — every write to a merged DB MUST include the correct Type value (e.g., Type="Email Task" for P01 → Tasks DB)
 - **Company relation** — populate when client context is available (email domain match, user input, CRM lookup)
@@ -164,19 +168,19 @@ Shared commands that live under `_infrastructure/`. Discovered via this section 
 - Dual-mode commands — default fast single-agent mode + `--team` flag for full agent pipeline
 - Idempotent re-runs — update existing output, never duplicate; add Type to compound keys for merged DBs
 - `status: "complete"` standardized across all agent outputs
-- **Business context loading** — all 32 plugins check `_infrastructure/context/active/` for business context files at command start. See `_infrastructure/context/SKILL.md`.
-- **Scheduling support** — 9 plugins accept `--schedule "expression"` flag for recurring execution. Generates P27 workflows automatically. Supported: P02, P05, P06, P10, P18, P19, P21, P22, P29. See `_infrastructure/scheduling/SKILL.md`.
-- **Memory integration** — all 32 plugins inject relevant memories at start (Step 0) and log observations at end (Final step). See `_infrastructure/memory/SKILL.md`.
+- **Business context loading** — all 32 namespaces check `_infrastructure/context/active/` for business context files at command start. See `_infrastructure/context/SKILL.md`.
+- **Scheduling support** — 9 namespaces accept `--schedule "expression"` flag for recurring execution. Generates P27 workflows automatically. Supported: P02, P05, P06, P10, P18, P19, P21, P22, P29. See `_infrastructure/scheduling/SKILL.md`.
+- **Memory integration** — all 32 namespaces inject relevant memories at start (Step 0) and log observations at end (Final step). See `_infrastructure/memory/SKILL.md`.
 
 ## Memory Engine
 
-Cross-plugin shared memory with adaptive behavior. Two components:
+Cross-namespace shared memory with adaptive behavior. Two components:
 
 - **Infrastructure** (`_infrastructure/memory/`): 3 shared skills — core memory API, context injection, pattern detection
-- **Plugin** (`founder-os-memory-hub/`): User-facing commands `/memory:show`, `/memory:teach`, `/memory:forget`, `/memory:sync`
+- **Commands**: User-facing commands `/founder-os:memory:show`, `/founder-os:memory:teach`, `/founder-os:memory:forget`, `/founder-os:memory:sync`
 - **Notion DB**: `[FOS] Memory` in HQ template — syncs with local SQLite store
 
-**How it works**: Before any plugin runs, the context-injection skill queries the local memory store and injects the top 5 relevant memories. After execution, the pattern-detection skill logs observations and promotes patterns to memories when confidence reaches threshold. Auto-adaptations apply after 3+ confirmations and notify the user.
+**How it works**: Before any command runs, the context-injection skill queries the local memory store and injects the top 5 relevant memories. After execution, the pattern-detection skill logs observations and promotes patterns to memories when confidence reaches threshold. Auto-adaptations apply after 3+ confirmations and notify the user.
 
 **Local store**: `.memory/memory.db` (SQLite + HNSW). Auto-initializes on first use.
 

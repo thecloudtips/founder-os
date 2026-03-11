@@ -1,0 +1,61 @@
+{
+  "pattern": "parallel-gathering",
+  "description": "Client Context Loader: Gather client data from all sources simultaneously, merge into unified dossier",
+  "execution": "parallel",
+  "agents": [
+    {
+      "name": "crm-agent",
+      "role": "Pull Notion CRM data for the client",
+      "file": "agents/crm-agent.md",
+      "parallel_group": "gatherers",
+      "tools": ["notion"]
+    },
+    {
+      "name": "email-agent",
+      "role": "Gather email history with the client",
+      "file": "agents/email-agent.md",
+      "parallel_group": "gatherers",
+      "tools": ["Bash"]
+    },
+    {
+      "name": "docs-agent",
+      "role": "Find related documents in Google Drive",
+      "file": "agents/docs-agent.md",
+      "parallel_group": "gatherers",
+      "tools": ["Bash"]
+    },
+    {
+      "name": "calendar-agent",
+      "role": "Retrieve meeting history from Google Calendar",
+      "file": "agents/calendar-agent.md",
+      "parallel_group": "gatherers",
+      "tools": ["Bash"]
+    },
+    {
+      "name": "notes-agent",
+      "role": "Pull meeting notes and decisions from Notion",
+      "file": "agents/notes-agent.md",
+      "parallel_group": "gatherers",
+      "tools": ["notion"]
+    },
+    {
+      "name": "context-lead",
+      "role": "Merge all gathered data into a unified client dossier, cache in Notion, write enrichments back to CRM",
+      "file": "agents/context-lead.md",
+      "parallel_group": "lead",
+      "tools": ["notion"]
+    }
+  ],
+  "coordination": {
+    "parallel_group_execution": "all_gatherers_then_lead",
+    "merge_strategy": "lead_agent_synthesizes",
+    "timeout_per_agent": "30s",
+    "failure_handling": "continue_with_partial_results",
+    "minimum_gatherers_required": 1
+  },
+  "observability": {
+    "log_agent_output": true,
+    "report_timing": true,
+    "report_partial_failures": true
+  }
+}
