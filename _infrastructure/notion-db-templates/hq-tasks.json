@@ -1,0 +1,87 @@
+{
+  "title": "Founder OS HQ - Tasks",
+  "description": "Consolidated task database merging P01 Inbox Zero action items, P04 Action Item Extractor tasks, and P06 Follow-Up Tracker follow-ups. Each record has a Type column indicating its source.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Task description"
+    },
+    "Description": {
+      "type": "rich_text",
+      "description": "Detailed task description"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Task origin type",
+      "options": ["Action Item", "Follow-Up", "Email Task"]
+    },
+    "Source Plugin": {
+      "type": "select",
+      "description": "Plugin that created this record",
+      "options": ["Inbox Zero", "Action Extractor", "Follow-Up Tracker"]
+    },
+    "Owner": {
+      "type": "rich_text",
+      "description": "Person responsible for the task"
+    },
+    "Status": {
+      "type": "select",
+      "description": "Current status",
+      "options": ["To Do", "In Progress", "Done", "Waiting"]
+    },
+    "Priority": {
+      "type": "number",
+      "description": "Priority level 1-5 (1=highest)"
+    },
+    "Deadline": {
+      "type": "date",
+      "description": "Due date"
+    },
+    "Company": {
+      "type": "relation",
+      "description": "Optional: associated company",
+      "relation_database": "Founder OS HQ - Companies"
+    },
+    "Contact": {
+      "type": "relation",
+      "description": "Optional: associated contact",
+      "relation_database": "Founder OS HQ - Contacts"
+    },
+    "Source Type": {
+      "type": "select",
+      "description": "Where the task was extracted from",
+      "options": ["Email", "Meeting", "Document", "Manual"]
+    },
+    "Source Title": {
+      "type": "rich_text",
+      "description": "Title/subject of the source document/email"
+    },
+    "Promise Type": {
+      "type": "select",
+      "description": "P06: Direction of commitment",
+      "options": ["Outbound", "Inbound"]
+    },
+    "Days Waiting": {
+      "type": "number",
+      "description": "P06: Days since follow-up was created"
+    },
+    "Nudge Count": {
+      "type": "number",
+      "description": "P06: Number of nudges sent"
+    },
+    "Thread ID": {
+      "type": "rich_text",
+      "description": "Gmail Thread ID for deduplication of email-sourced tasks"
+    },
+    "Extracted At": {
+      "type": "date",
+      "description": "When the task was extracted/created"
+    }
+  },
+  "default_values": {
+    "Status": "To Do",
+    "Priority": 3
+  },
+  "notes": "Merged database for all task-like records. Plugins filter by Type when reading (e.g., P06 queries Type='Follow-Up'). Deduplication: P01 and P04 use Title + Source Title within their Type; P06 uses Thread ID. Company/Contact relations are populated when email domain or attendee info maps to a CRM record. Discovery: search 'Founder OS HQ - Tasks' first, then fall back to plugin-specific DB names ('Inbox Zero - Action Items', 'Action Item Extractor - Tasks', 'Follow-Up Tracker - Follow-Ups')."
+}

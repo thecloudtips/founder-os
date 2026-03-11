@@ -1,0 +1,10 @@
+{
+  "name": "founder-os-invoice-processor",
+  "version": "1.0.0",
+  "description": "AI-powered invoice processing pipeline that extracts data from PDFs and images, validates amounts and dates, categorizes expenses, routes for approval, and records everything in Notion — process a year of invoices in minutes with a 5-agent pipeline",
+  "platform": "claude-code",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  }
+}

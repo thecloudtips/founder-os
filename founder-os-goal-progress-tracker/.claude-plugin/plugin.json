@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-goal-progress-tracker",
+  "version": "1.0.0",
+  "description": "Manages goals with milestones and progress tracking, auto-calculates on-track vs behind status using RAG health scoring, detects blockers, projects completion dates from velocity, and generates dashboard reports with Mermaid Gantt charts. Backed by Notion for persistent storage.",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Goal Progress Tracker",
+  "platform": "claude-code",
+  "pillar": "Meta & Growth",
+  "plugin_number": "30",
+  "type": "standalone",
+  "difficulty": "intermediate",
+  "release_week": 30,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}

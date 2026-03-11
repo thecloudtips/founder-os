@@ -1,0 +1,50 @@
+{
+  "title": "Slack Digest Engine - Digests",
+  "description": "Slack channel digest history including decisions, action items, mentions, and key threads. Created on first run via lazy DB creation.",
+  "plugin": "founder-os-slack-digest-engine",
+  "properties": {
+    "Digest Title": {
+      "type": "title",
+      "description": "Formatted as 'Slack Digest YYYY-MM-DD' for daily digests."
+    },
+    "Channel(s)": {
+      "type": "rich_text",
+      "description": "Comma-separated list of channel names that were scanned for this digest."
+    },
+    "Time Window": {
+      "type": "rich_text",
+      "description": "Human-readable time window description (e.g., 'Last 24 hours', 'Last 8 hours', 'Since 2026-03-01')."
+    },
+    "Messages Analyzed": {
+      "type": "number",
+      "description": "Total number of messages scanned before noise filtering."
+    },
+    "Decisions Count": {
+      "type": "number",
+      "description": "Number of decisions detected (high and medium confidence)."
+    },
+    "Action Items Count": {
+      "type": "number",
+      "description": "Number of explicit action items extracted."
+    },
+    "Mentions Count": {
+      "type": "number",
+      "description": "Number of @mentions of the current user detected."
+    },
+    "Digest Content": {
+      "type": "rich_text",
+      "description": "Full digest markdown content including all sections (decisions, action items, mentions, key threads, channel summaries)."
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "Timestamp when the digest was generated. Used with Channel(s) for idempotent same-day updates."
+    }
+  },
+  "default_values": {
+    "Messages Analyzed": 0,
+    "Decisions Count": 0,
+    "Action Items Count": 0,
+    "Mentions Count": 0
+  },
+  "notes": "The plugin searches for this database by name before creating it (lazy creation). Idempotent updates use the combination of Channel(s) + Generated At (same calendar day) to prevent duplicates — re-running a digest for the same channels on the same day overwrites the existing record. The /slack:catch-up command does NOT write to this database (ephemeral by design)."
+}

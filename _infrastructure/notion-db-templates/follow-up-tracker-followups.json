@@ -1,0 +1,59 @@
+{
+  "title": "Follow-Up Tracker - Follow-Ups",
+  "description": "Emails awaiting response and tracked promises managed by the Smart Follow-Up Tracker plugin. Created on first run via lazy DB creation.",
+  "plugin": "founder-os-follow-up-tracker",
+  "properties": {
+    "Thread ID": {
+      "type": "title",
+      "description": "Gmail thread ID for deduplication and linking back to the original email thread."
+    },
+    "Subject": {
+      "type": "rich_text",
+      "description": "Email subject line for quick identification in the tracker."
+    },
+    "Recipient": {
+      "type": "rich_text",
+      "description": "Primary recipient email address or name."
+    },
+    "Sent Date": {
+      "type": "date",
+      "description": "Date the original email was sent."
+    },
+    "Days Waiting": {
+      "type": "number",
+      "description": "Number of days since the email was sent without a reply. Recalculated on each /followup:check run."
+    },
+    "Status": {
+      "type": "select",
+      "description": "Current follow-up status.",
+      "options": ["Awaiting Reply", "Nudge Sent", "Resolved", "Expired"]
+    },
+    "Priority": {
+      "type": "number",
+      "description": "Priority score 1-5. Based on age, relationship importance, and promise urgency. 5 = urgent, 1 = low."
+    },
+    "Promise Type": {
+      "type": "select",
+      "description": "Type of commitment detected in the email thread.",
+      "options": ["Awaiting Response", "Promise Made", "Promise Received"]
+    },
+    "Nudge Count": {
+      "type": "number",
+      "description": "Number of follow-up nudges sent for this thread. Incremented by /followup:nudge."
+    },
+    "Last Nudge Date": {
+      "type": "date",
+      "description": "Date of the most recent nudge email sent."
+    },
+    "Source": {
+      "type": "select",
+      "description": "How this follow-up was detected.",
+      "options": ["Sent Mail", "Promise Detected"]
+    }
+  },
+  "default_values": {
+    "Status": "Awaiting Reply",
+    "Nudge Count": 0
+  },
+  "notes": "The plugin searches for this database by name before creating it (lazy creation). Thread ID serves as the unique key for idempotent updates — existing records are updated rather than duplicated on re-runs."
+}

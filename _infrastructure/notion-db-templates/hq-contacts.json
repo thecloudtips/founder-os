@@ -1,0 +1,46 @@
+{
+  "title": "Founder OS HQ - Contacts",
+  "description": "CRM contacts database for individual people/stakeholders associated with companies.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Name": {
+      "type": "title",
+      "description": "Contact full name"
+    },
+    "Email": {
+      "type": "email",
+      "description": "Contact email address"
+    },
+    "Phone": {
+      "type": "phone_number",
+      "description": "Contact phone number"
+    },
+    "Role": {
+      "type": "rich_text",
+      "description": "Job title or role description"
+    },
+    "Company": {
+      "type": "relation",
+      "description": "Associated company",
+      "relation_database": "Founder OS HQ - Companies"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Stakeholder classification",
+      "options": ["Decision Maker", "Champion", "User", "Influencer", "Blocker"]
+    },
+    "Last Contact": {
+      "type": "date",
+      "description": "Date of most recent interaction"
+    },
+    "Communications": {
+      "type": "relation",
+      "description": "Linked communication records",
+      "relation_database": "Founder OS HQ - Communications"
+    }
+  },
+  "default_values": {
+    "Type": "User"
+  },
+  "notes": "Part of the CRM core. Company relation is bidirectional with the Companies DB. Discovery: search 'Founder OS HQ - Contacts' first, then 'Contacts' or 'CRM - Contacts'."
+}

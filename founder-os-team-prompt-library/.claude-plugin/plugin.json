@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-team-prompt-library",
+  "version": "1.0.0",
+  "description": "Stores, retrieves, and shares reusable AI prompts through a team library backed by Notion. Supports interactive variable substitution, usage tracking, prompt quality scoring, and Personal/Shared visibility controls.",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Team Prompt Library",
+  "platform": "claude-code",
+  "pillar": "Meta & Growth",
+  "plugin_number": "26",
+  "type": "standalone",
+  "difficulty": "beginner",
+  "release_week": 26,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}

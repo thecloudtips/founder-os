@@ -1,0 +1,60 @@
+{
+  "database_name": "[FOS] Intelligence",
+  "description": "Learned patterns, healing events, and intelligence configuration for the Adaptive Intelligence Engine",
+  "icon": "🧠",
+  "properties": {
+    "Pattern": { "type": "title" },
+    "Plugin": {
+      "type": "select",
+      "options": [
+        "inbox-zero", "daily-briefing", "meeting-prep", "action-items",
+        "weekly-review", "follow-up-tracker", "meeting-intel", "newsletter-engine",
+        "report-generator", "client-health", "invoice-processor", "proposal-automator",
+        "contract-analyzer", "sow-generator", "competitive-intel", "expense-report",
+        "notion-command-center", "drive-brain", "slack-digest", "client-context",
+        "crm-sync", "morning-sync", "knowledge-base", "linkedin-post",
+        "time-savings", "prompt-library", "workflow-automator", "workflow-documenter",
+        "learning-log", "goal-tracker", "Cross-Plugin"
+      ]
+    },
+    "Type": {
+      "type": "select",
+      "options": ["Taste", "Workflow", "Autonomy", "Healing"]
+    },
+    "Confidence": {
+      "type": "number",
+      "format": "percent"
+    },
+    "Status": {
+      "type": "status",
+      "options": ["Candidate", "Active", "Approved", "Rejected"],
+      "groups": [
+        { "name": "Pending", "options": ["Candidate"] },
+        { "name": "In Use", "options": ["Active", "Approved"] },
+        { "name": "Inactive", "options": ["Rejected"] }
+      ]
+    },
+    "Observations": { "type": "number" },
+    "Confirmations": { "type": "number" },
+    "Rejections": { "type": "number" },
+    "Last Applied": { "type": "date" },
+    "Instruction": { "type": "rich_text" }
+  },
+  "views": [
+    {
+      "name": "All Patterns",
+      "type": "table",
+      "sort": [{ "property": "Confidence", "direction": "descending" }]
+    },
+    {
+      "name": "Active",
+      "type": "table",
+      "filter": { "property": "Status", "status": { "equals": "Active" } }
+    },
+    {
+      "name": "By Plugin",
+      "type": "board",
+      "group_by": "Plugin"
+    }
+  ]
+}

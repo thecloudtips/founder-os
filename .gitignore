@@ -1,0 +1,45 @@
+# Secrets
+.env
+.env.*
+!.env.example
+credentials.json
+credentials/
+*.key
+*.pem
+*_key
+*_secret
+
+# Local plugin symlinks
+.claude/plugins/
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and temp
+*.log
+logs/
+tmp/
+temp/
+
+# gws auth cache
+.gws/
+
+# Build artifacts
+dist/
+build/
+
+# Memory store (local SQLite — auto-initializes, not committed)
+.memory/
+
+# Intelligence database (local SQLite — auto-initializes, not committed)
+_infrastructure/intelligence/.data/intelligence.db

@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-notion-command-center",
+  "version": "1.0.0",
+  "description": "Control your Notion workspace with plain English. Create pages and databases, search and query content, update properties and blocks, and deploy pre-built database templates — all through natural language commands translated to Notion API operations.",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Notion Command Center",
+  "platform": "claude-code",
+  "pillar": "MCP & Integrations",
+  "plugin_number": "17",
+  "type": "standalone",
+  "difficulty": "intermediate",
+  "release_week": 18,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}

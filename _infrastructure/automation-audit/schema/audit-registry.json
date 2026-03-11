@@ -1,0 +1,387 @@
+{
+  "version": "1.0.0",
+  "business_areas": [
+    "Operations", "Finance", "Sales/CRM", "Marketing",
+    "Content", "HR/People", "Client Delivery", "Product/Dev", "Admin"
+  ],
+  "plugins": [
+    {
+      "id": "P01",
+      "name": "Inbox Zero",
+      "directory": "founder-os-inbox-zero",
+      "areas": ["Operations"],
+      "automates": ["Email triage and prioritization", "Draft reply generation", "Action item extraction from emails"],
+      "detection": {
+        "directory": "founder-os-inbox-zero/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Tasks",
+        "notion_type": "Email Task"
+      },
+      "coverage_weight": { "Operations": 15 }
+    },
+    {
+      "id": "P02",
+      "name": "Daily Briefing",
+      "directory": "founder-os-daily-briefing-generator",
+      "areas": ["Operations"],
+      "automates": ["Morning briefing synthesis from email, calendar, and Notion"],
+      "detection": {
+        "directory": "founder-os-daily-briefing-generator/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Briefings",
+        "notion_type": "Daily Briefing"
+      },
+      "coverage_weight": { "Operations": 10 }
+    },
+    {
+      "id": "P03",
+      "name": "Meeting Prep",
+      "directory": "founder-os-meeting-prep-autopilot",
+      "areas": ["Operations", "Client Delivery"],
+      "automates": ["Pre-meeting research and preparation notes"],
+      "detection": {
+        "directory": "founder-os-meeting-prep-autopilot/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Meetings"
+      },
+      "coverage_weight": { "Operations": 10, "Client Delivery": 5 }
+    },
+    {
+      "id": "P04",
+      "name": "Action Items",
+      "directory": "founder-os-action-item-extractor",
+      "areas": ["Operations"],
+      "automates": ["Extract action items from meeting notes and documents"],
+      "detection": {
+        "directory": "founder-os-action-item-extractor/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Tasks",
+        "notion_type": "Action Item"
+      },
+      "coverage_weight": { "Operations": 10 }
+    },
+    {
+      "id": "P05",
+      "name": "Weekly Review",
+      "directory": "founder-os-weekly-review-compiler",
+      "areas": ["Operations", "Admin"],
+      "automates": ["Weekly review compilation from all data sources"],
+      "detection": {
+        "directory": "founder-os-weekly-review-compiler/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Briefings",
+        "notion_type": "Weekly Review"
+      },
+      "coverage_weight": { "Operations": 10, "Admin": 5 }
+    },
+    {
+      "id": "P06",
+      "name": "Follow-Up Tracker",
+      "directory": "founder-os-follow-up-tracker",
+      "areas": ["Operations", "Sales/CRM"],
+      "automates": ["Follow-up detection and reminders from email threads"],
+      "detection": {
+        "directory": "founder-os-follow-up-tracker/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Tasks",
+        "notion_type": "Follow-Up"
+      },
+      "coverage_weight": { "Operations": 10, "Sales/CRM": 10 }
+    },
+    {
+      "id": "P07",
+      "name": "Meeting Intel",
+      "directory": "founder-os-meeting-intelligence-hub",
+      "areas": ["Operations", "Client Delivery"],
+      "automates": ["Meeting transcript analysis and intelligence extraction"],
+      "detection": {
+        "directory": "founder-os-meeting-intelligence-hub/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Meetings"
+      },
+      "coverage_weight": { "Operations": 5, "Client Delivery": 10 }
+    },
+    {
+      "id": "P08",
+      "name": "Newsletter Engine",
+      "directory": "founder-os-newsletter-draft-engine",
+      "areas": ["Content", "Marketing"],
+      "automates": ["Newsletter research, drafting, and outline generation"],
+      "detection": {
+        "directory": "founder-os-newsletter-draft-engine/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Content",
+        "notion_type": "Newsletter"
+      },
+      "coverage_weight": { "Content": 15, "Marketing": 10 }
+    },
+    {
+      "id": "P09",
+      "name": "Report Generator",
+      "directory": "founder-os-report-generator",
+      "areas": ["Client Delivery", "Admin"],
+      "automates": ["Business report generation from templates and data"],
+      "detection": {
+        "directory": "founder-os-report-generator/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Reports",
+        "notion_type": "Business Report"
+      },
+      "coverage_weight": { "Client Delivery": 15, "Admin": 5 }
+    },
+    {
+      "id": "P10",
+      "name": "Client Health",
+      "directory": "founder-os-client-health-dashboard",
+      "areas": ["Sales/CRM", "Client Delivery"],
+      "automates": ["Client health scoring across 5 dimensions"],
+      "detection": {
+        "directory": "founder-os-client-health-dashboard/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Companies"
+      },
+      "coverage_weight": { "Sales/CRM": 15, "Client Delivery": 10 }
+    },
+    {
+      "id": "P11",
+      "name": "Invoice Processor",
+      "directory": "founder-os-invoice-processor",
+      "areas": ["Finance"],
+      "automates": ["Invoice extraction, validation, and Notion logging"],
+      "detection": {
+        "directory": "founder-os-invoice-processor/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Finance",
+        "notion_type": "Invoice"
+      },
+      "coverage_weight": { "Finance": 20 }
+    },
+    {
+      "id": "P12",
+      "name": "Proposal Automator",
+      "directory": "founder-os-proposal-automator",
+      "areas": ["Sales/CRM", "Client Delivery"],
+      "automates": ["Proposal generation from briefs and templates"],
+      "detection": {
+        "directory": "founder-os-proposal-automator/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Deliverables",
+        "notion_type": "Proposal"
+      },
+      "coverage_weight": { "Sales/CRM": 15, "Client Delivery": 10 }
+    },
+    {
+      "id": "P13",
+      "name": "Contract Analyzer",
+      "directory": "founder-os-contract-analyzer",
+      "areas": ["Finance", "Admin"],
+      "automates": ["Contract clause analysis, risk identification, comparison"],
+      "detection": {
+        "directory": "founder-os-contract-analyzer/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Deliverables",
+        "notion_type": "Contract"
+      },
+      "coverage_weight": { "Finance": 10, "Admin": 10 }
+    },
+    {
+      "id": "P14",
+      "name": "SOW Generator",
+      "directory": "founder-os-sow-generator",
+      "areas": ["Client Delivery"],
+      "automates": ["Statement of Work generation with competing hypotheses"],
+      "detection": {
+        "directory": "founder-os-sow-generator/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Deliverables",
+        "notion_type": "SOW"
+      },
+      "coverage_weight": { "Client Delivery": 15 }
+    },
+    {
+      "id": "P15",
+      "name": "Competitive Intel",
+      "directory": "founder-os-competitive-intel-compiler",
+      "areas": ["Marketing", "Sales/CRM"],
+      "automates": ["Competitive research and comparison matrices"],
+      "detection": {
+        "directory": "founder-os-competitive-intel-compiler/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Research",
+        "notion_type": "Competitive Analysis"
+      },
+      "coverage_weight": { "Marketing": 15, "Sales/CRM": 5 }
+    },
+    {
+      "id": "P16",
+      "name": "Expense Report",
+      "directory": "founder-os-expense-report-builder",
+      "areas": ["Finance"],
+      "automates": ["Expense report compilation and categorization"],
+      "detection": {
+        "directory": "founder-os-expense-report-builder/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Reports",
+        "notion_type": "Expense Report"
+      },
+      "coverage_weight": { "Finance": 15 }
+    },
+    {
+      "id": "P17",
+      "name": "Notion Command Center",
+      "directory": "founder-os-notion-command-center",
+      "areas": ["Admin"],
+      "automates": ["Notion database CRUD operations and template management"],
+      "detection": {
+        "directory": "founder-os-notion-command-center/.claude-plugin/plugin.json"
+      },
+      "coverage_weight": { "Admin": 15 }
+    },
+    {
+      "id": "P18",
+      "name": "Drive Brain",
+      "directory": "founder-os-google-drive-brain",
+      "areas": ["Admin", "Operations"],
+      "automates": ["Google Drive search, organization, and summarization"],
+      "detection": {
+        "directory": "founder-os-google-drive-brain/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Activity Log"
+      },
+      "coverage_weight": { "Admin": 10, "Operations": 5 }
+    },
+    {
+      "id": "P19",
+      "name": "Slack Digest",
+      "directory": "founder-os-slack-digest-engine",
+      "areas": ["Operations"],
+      "automates": ["Slack channel digest and catch-up summaries"],
+      "detection": {
+        "directory": "founder-os-slack-digest-engine/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Briefings",
+        "notion_type": "Slack Digest"
+      },
+      "coverage_weight": { "Operations": 10 }
+    },
+    {
+      "id": "P20",
+      "name": "Client Context",
+      "directory": "founder-os-client-context-loader",
+      "areas": ["Sales/CRM", "Client Delivery"],
+      "automates": ["Client context aggregation and dossier building"],
+      "detection": {
+        "directory": "founder-os-client-context-loader/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Companies"
+      },
+      "coverage_weight": { "Sales/CRM": 10, "Client Delivery": 10 }
+    },
+    {
+      "id": "P21",
+      "name": "CRM Sync",
+      "directory": "founder-os-crm-sync-hub",
+      "areas": ["Sales/CRM"],
+      "automates": ["Email and meeting data sync to CRM communications log"],
+      "detection": {
+        "directory": "founder-os-crm-sync-hub/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Communications"
+      },
+      "coverage_weight": { "Sales/CRM": 15 }
+    },
+    {
+      "id": "P22",
+      "name": "Morning Sync",
+      "directory": "founder-os-multi-tool-morning-sync",
+      "areas": ["Operations"],
+      "automates": ["Multi-source morning sync from Gmail, Calendar, Notion"],
+      "detection": {
+        "directory": "founder-os-multi-tool-morning-sync/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Briefings",
+        "notion_type": "Morning Sync"
+      },
+      "coverage_weight": { "Operations": 10 }
+    },
+    {
+      "id": "P23",
+      "name": "Knowledge Base",
+      "directory": "founder-os-knowledge-base-qa",
+      "areas": ["Admin", "Client Delivery"],
+      "automates": ["Knowledge base indexing, search, and Q&A"],
+      "detection": {
+        "directory": "founder-os-knowledge-base-qa/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Knowledge Base"
+      },
+      "coverage_weight": { "Admin": 10, "Client Delivery": 5 }
+    },
+    {
+      "id": "P24",
+      "name": "LinkedIn Post",
+      "directory": "founder-os-linkedin-post-generator",
+      "areas": ["Content", "Marketing"],
+      "automates": ["LinkedIn post generation with variations and document-based content"],
+      "detection": {
+        "directory": "founder-os-linkedin-post-generator/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Content",
+        "notion_type": "LinkedIn Post"
+      },
+      "coverage_weight": { "Content": 15, "Marketing": 10 }
+    },
+    {
+      "id": "P25",
+      "name": "Time Savings",
+      "directory": "founder-os-time-savings-calculator",
+      "areas": ["Admin"],
+      "automates": ["ROI and time savings tracking across all plugins"],
+      "detection": {
+        "directory": "founder-os-time-savings-calculator/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Reports",
+        "notion_type": "ROI Report"
+      },
+      "coverage_weight": { "Admin": 10 }
+    },
+    {
+      "id": "P26",
+      "name": "Prompt Library",
+      "directory": "founder-os-team-prompt-library",
+      "areas": ["Admin", "Product/Dev"],
+      "automates": ["Team prompt storage, sharing, and optimization"],
+      "detection": {
+        "directory": "founder-os-team-prompt-library/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Prompts"
+      },
+      "coverage_weight": { "Admin": 5, "Product/Dev": 10 }
+    },
+    {
+      "id": "P27",
+      "name": "Workflow Automator",
+      "directory": "founder-os-workflow-automator",
+      "areas": ["Operations", "Admin"],
+      "automates": ["Workflow creation, scheduling, and execution"],
+      "detection": {
+        "directory": "founder-os-workflow-automator/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Workflows",
+        "notion_type": "Execution"
+      },
+      "coverage_weight": { "Operations": 10, "Admin": 10 }
+    },
+    {
+      "id": "P28",
+      "name": "Workflow Documenter",
+      "directory": "founder-os-workflow-documenter",
+      "areas": ["Admin"],
+      "automates": ["SOP documentation and workflow diagramming"],
+      "detection": {
+        "directory": "founder-os-workflow-documenter/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Workflows",
+        "notion_type": "SOP"
+      },
+      "coverage_weight": { "Admin": 10 }
+    },
+    {
+      "id": "P29",
+      "name": "Learning Log",
+      "directory": "founder-os-learning-log-tracker",
+      "areas": ["Admin"],
+      "automates": ["Learning capture, search, and weekly insight compilation"],
+      "detection": {
+        "directory": "founder-os-learning-log-tracker/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Learnings"
+      },
+      "coverage_weight": { "Admin": 5 }
+    },
+    {
+      "id": "P30",
+      "name": "Goal Tracker",
+      "directory": "founder-os-goal-progress-tracker",
+      "areas": ["Admin"],
+      "automates": ["Goal creation, progress tracking, and milestone management"],
+      "detection": {
+        "directory": "founder-os-goal-progress-tracker/.claude-plugin/plugin.json",
+        "notion_db": "[FOS] Goals"
+      },
+      "coverage_weight": { "Admin": 10 }
+    }
+  ]
+}

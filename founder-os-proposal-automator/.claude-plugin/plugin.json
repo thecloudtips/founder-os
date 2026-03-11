@@ -1,0 +1,29 @@
+{
+  "name": "founder-os-proposal-automator",
+  "version": "1.0.0",
+  "description": "Generates professional client proposals with 7 sections and 3 pricing packages from briefs, scope notes, and CRM context. Produces SOW-compatible brief files for #14 SOW Generator integration.",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Proposal Automator",
+  "platform": "claude-code",
+  "pillar": "Code Without Coding",
+  "plugin_number": "12",
+  "type": "standalone",
+  "difficulty": "intermediate",
+  "release_week": 14,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": {
+    "plugins": ["#14 SOW Generator"],
+    "mcp_servers": {
+      "required": ["filesystem"],
+      "optional": ["notion"]
+    }
+  }
+}

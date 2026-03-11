@@ -1,0 +1,1471 @@
+{
+  "name": "Founder OS HQ",
+  "version": "1.0.0",
+  "description": "Complete Notion workspace template for the Founder OS ecosystem. Consolidates all 30 plugin databases into 20 unified databases organized by functional area. Each database schema includes property definitions, default values, relation mappings, and plugin attribution notes. Use this template to provision a new Founder OS HQ workspace or to validate an existing installation.",
+  "total_databases": 20,
+  "databases": {
+    "companies": {
+      "title": "Founder OS HQ - Companies",
+      "description": "Central CRM hub for all client/company records. Enhanced with P10 Client Health Dashboard scoring properties and P20 Client Context Loader dossier caching. All client-facing databases relate back to this table.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Name": {
+          "type": "title",
+          "description": "Company name"
+        },
+        "Industry": {
+          "type": "select",
+          "description": "Company industry",
+          "options": ["Technology", "Healthcare", "Finance", "Education", "Retail", "Manufacturing", "Consulting", "Media", "Real Estate", "Other"]
+        },
+        "Size": {
+          "type": "select",
+          "description": "Company size classification",
+          "options": ["Startup", "SMB", "Mid-Market", "Enterprise"]
+        },
+        "Status": {
+          "type": "select",
+          "description": "Company relationship status",
+          "options": ["Active", "Prospect", "Churned", "Partner"]
+        },
+        "Website": {
+          "type": "url",
+          "description": "Company website"
+        },
+        "Contacts": {
+          "type": "relation",
+          "description": "Linked contacts/people",
+          "relation_database": "Founder OS HQ - Contacts"
+        },
+        "Deals": {
+          "type": "relation",
+          "description": "Linked sales deals",
+          "relation_database": "Founder OS HQ - Deals"
+        },
+        "Communications": {
+          "type": "relation",
+          "description": "Linked communication records",
+          "relation_database": "Founder OS HQ - Communications"
+        },
+        "Health Score": {
+          "type": "number",
+          "description": "P10: Composite health score 0-100"
+        },
+        "Health Status": {
+          "type": "select",
+          "description": "P10: RAG classification",
+          "options": ["Green", "Yellow", "Red"]
+        },
+        "Risk Flags": {
+          "type": "multi_select",
+          "description": "P10: Detected risk indicators",
+          "options": ["No Recent Contact", "Slow Response Time", "Overdue Tasks", "Payment Issues", "Negative Sentiment", "Declining Engagement", "Contract Expiring", "Missing Stakeholder"]
+        },
+        "Dossier": {
+          "type": "rich_text",
+          "description": "P20: Cached client context dossier (JSON format)"
+        },
+        "Dossier Completeness": {
+          "type": "number",
+          "description": "P20: Completeness score 0.0-1.0"
+        },
+        "Dossier Generated At": {
+          "type": "date",
+          "description": "P20: When dossier was last generated"
+        },
+        "Dossier Stale": {
+          "type": "checkbox",
+          "description": "P20: Whether dossier needs refresh (24h TTL)"
+        },
+        "Last Scanned": {
+          "type": "date",
+          "description": "P10: When health score was last calculated (24h cache TTL)"
+        },
+        "Notes": {
+          "type": "rich_text",
+          "description": "General notes"
+        }
+      },
+      "default_values": {
+        "Health Status": "Yellow",
+        "Dossier Stale": false,
+        "Health Score": 50
+      },
+      "notes": "Central hub of the Founder OS HQ workspace. All client-facing databases (Tasks, Meetings, Finance, Deliverables, Content, Research) link to Companies via Notion relations. P10 Client Health Dashboard writes health scoring properties directly to this database instead of a standalone Health Scores DB. P20 Client Context Loader writes dossier properties directly here instead of a standalone Client Dossiers DB. Both use 24h TTL caching. Discovery: plugins search for 'Founder OS HQ - Companies' first, then 'Companies'."
+    },
+    "contacts": {
+      "title": "Founder OS HQ - Contacts",
+      "description": "CRM contacts database for individual people/stakeholders associated with companies.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Name": {
+          "type": "title",
+          "description": "Contact full name"
+        },
+        "Email": {
+          "type": "email",
+          "description": "Contact email address"
+        },
+        "Phone": {
+          "type": "phone_number",
+          "description": "Contact phone number"
+        },
+        "Role": {
+          "type": "rich_text",
+          "description": "Job title or role description"
+        },
+        "Company": {
+          "type": "relation",
+          "description": "Associated company",
+          "relation_database": "Founder OS HQ - Companies"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Stakeholder classification",
+          "options": ["Decision Maker", "Champion", "User", "Influencer", "Blocker"]
+        },
+        "Last Contact": {
+          "type": "date",
+          "description": "Date of most recent interaction"
+        },
+        "Communications": {
+          "type": "relation",
+          "description": "Linked communication records",
+          "relation_database": "Founder OS HQ - Communications"
+        }
+      },
+      "default_values": {
+        "Type": "User"
+      },
+      "notes": "Part of the CRM core. Company relation is bidirectional with the Companies DB. Discovery: search 'Founder OS HQ - Contacts' first, then 'Contacts' or 'CRM - Contacts'."
+    },
+    "deals": {
+      "title": "Founder OS HQ - Deals",
+      "description": "Sales pipeline tracking with stage progression, probability scoring, and links to deliverables.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Name": {
+          "type": "title",
+          "description": "Deal name"
+        },
+        "Value": {
+          "type": "number",
+          "description": "Deal monetary value"
+        },
+        "Stage": {
+          "type": "select",
+          "description": "Pipeline stage",
+          "options": ["Lead", "Qualified", "Proposal", "Negotiation", "Closed Won", "Closed Lost"]
+        },
+        "Company": {
+          "type": "relation",
+          "description": "Associated company",
+          "relation_database": "Founder OS HQ - Companies"
+        },
+        "Close Date": {
+          "type": "date",
+          "description": "Expected or actual close date"
+        },
+        "Probability": {
+          "type": "number",
+          "description": "Win probability 0-100"
+        },
+        "Risk Level": {
+          "type": "select",
+          "description": "Deal risk assessment",
+          "options": ["Low", "Medium", "High"]
+        },
+        "Deliverables": {
+          "type": "relation",
+          "description": "Linked proposals/contracts/SOWs",
+          "relation_database": "Founder OS HQ - Deliverables"
+        }
+      },
+      "default_values": {
+        "Stage": "Lead",
+        "Probability": 50,
+        "Risk Level": "Medium"
+      },
+      "notes": "Part of the CRM core. Deliverables relation links to proposals, contracts, and SOWs generated by P12/P13/P14. Discovery: search 'Founder OS HQ - Deals' first, then 'Deals' or 'CRM - Deals'."
+    },
+    "communications": {
+      "title": "Founder OS HQ - Communications",
+      "description": "Client communication activity log populated by CRM Sync Hub. Contains email and meeting records with AI-generated summaries, sentiment classification, and client associations. Created via lazy DB creation on first sync.",
+      "plugin": "founder-os-crm-sync-hub",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "AI-generated summary headline of the activity (max 80 characters)."
+        },
+        "Type": {
+          "type": "select",
+          "description": "Activity type indicating the communication channel and direction.",
+          "options": ["Email Sent", "Email Received", "Meeting Held", "Meeting Scheduled"]
+        },
+        "Date": {
+          "type": "date",
+          "description": "ISO 8601 timestamp of when the activity occurred."
+        },
+        "Contact": {
+          "type": "relation",
+          "description": "Related contact from the Contacts database.",
+          "relation_database": "Founder OS HQ - Contacts"
+        },
+        "Company": {
+          "type": "relation",
+          "description": "Related company from the Companies database.",
+          "relation_database": "Founder OS HQ - Companies"
+        },
+        "Summary": {
+          "type": "rich_text",
+          "description": "AI-generated 2-3 sentence summary of the communication content."
+        },
+        "Sentiment": {
+          "type": "select",
+          "description": "AI-classified sentiment of the communication.",
+          "options": ["Positive", "Neutral", "Negative"]
+        },
+        "Thread ID": {
+          "type": "rich_text",
+          "description": "Gmail Thread ID or Calendar Event ID for deduplication. Used as the unique key to prevent duplicate records."
+        },
+        "Participants": {
+          "type": "rich_text",
+          "description": "Comma-separated list of participants in the format 'Name (Role)'."
+        },
+        "Direction": {
+          "type": "select",
+          "description": "Communication direction relative to the user.",
+          "options": ["Outbound", "Inbound"]
+        },
+        "Source": {
+          "type": "select",
+          "description": "Source system the activity was synced from.",
+          "options": ["Gmail", "Google Calendar"]
+        },
+        "Synced At": {
+          "type": "date",
+          "description": "Timestamp when the record was created or last updated by CRM Sync Hub."
+        }
+      },
+      "default_values": {
+        "Sentiment": "Neutral",
+        "Source": "Gmail"
+      },
+      "notes": "The plugin searches for this database by name ('Founder OS HQ - Communications' first, then 'Communications' or 'CRM - Communications') before creating it (lazy creation). Title serves as part of the compound deduplication key (Title + Date + Type). If the Thread ID property exists, exact deduplication by Thread ID/Event ID is preferred over the compound key approach. Sentiment defaults to Neutral when AI classification is ambiguous."
+    },
+    "tasks": {
+      "title": "Founder OS HQ - Tasks",
+      "description": "Consolidated task database merging P01 Inbox Zero action items, P04 Action Item Extractor tasks, and P06 Follow-Up Tracker follow-ups. Each record has a Type column indicating its source.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Task description"
+        },
+        "Description": {
+          "type": "rich_text",
+          "description": "Detailed task description"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Task origin type",
+          "options": ["Action Item", "Follow-Up", "Email Task"]
+        },
+        "Source Plugin": {
+          "type": "select",
+          "description": "Plugin that created this record",
+          "options": ["Inbox Zero", "Action Extractor", "Follow-Up Tracker"]
+        },
+        "Owner": {
+          "type": "rich_text",
+          "description": "Person responsible for the task"
+        },
+        "Status": {
+          "type": "select",
+          "description": "Current status",
+          "options": ["To Do", "In Progress", "Done", "Waiting"]
+        },
+        "Priority": {
+          "type": "number",
+          "description": "Priority level 1-5 (1=highest)"
+        },
+        "Deadline": {
+          "type": "date",
+          "description": "Due date"
+        },
+        "Company": {
+          "type": "relation",
+          "description": "Optional: associated company",
+          "relation_database": "Founder OS HQ - Companies"
+        },
+        "Contact": {
+          "type": "relation",
+          "description": "Optional: associated contact",
+          "relation_database": "Founder OS HQ - Contacts"
+        },
+        "Source Type": {
+          "type": "select",
+          "description": "Where the task was extracted from",
+          "options": ["Email", "Meeting", "Document", "Manual"]
+        },
+        "Source Title": {
+          "type": "rich_text",
+          "description": "Title/subject of the source document/email"
+        },
+        "Promise Type": {
+          "type": "select",
+          "description": "P06: Direction of commitment",
+          "options": ["Outbound", "Inbound"]
+        },
+        "Days Waiting": {
+          "type": "number",
+          "description": "P06: Days since follow-up was created"
+        },
+        "Nudge Count": {
+          "type": "number",
+          "description": "P06: Number of nudges sent"
+        },
+        "Thread ID": {
+          "type": "rich_text",
+          "description": "Gmail Thread ID for deduplication of email-sourced tasks"
+        },
+        "Extracted At": {
+          "type": "date",
+          "description": "When the task was extracted/created"
+        }
+      },
+      "default_values": {
+        "Status": "To Do",
+        "Priority": 3
+      },
+      "notes": "Merged database for all task-like records. Plugins filter by Type when reading (e.g., P06 queries Type='Follow-Up'). Deduplication: P01 and P04 use Title + Source Title within their Type; P06 uses Thread ID. Company/Contact relations are populated when email domain or attendee info maps to a CRM record. Discovery: search 'Founder OS HQ - Tasks' first, then fall back to plugin-specific DB names ('Inbox Zero - Action Items', 'Action Item Extractor - Tasks', 'Follow-Up Tracker - Follow-Ups')."
+    },
+    "meetings": {
+      "title": "Founder OS HQ - Meetings",
+      "description": "Consolidated meetings database merging P03 Meeting Prep Autopilot prep notes and P07 Meeting Intelligence Hub analyses. A single meeting record holds both prep and analysis data, linked by Event ID.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Meeting Title": {
+          "type": "title",
+          "description": "Calendar event title"
+        },
+        "Event ID": {
+          "type": "rich_text",
+          "description": "Google Calendar Event ID, idempotent key shared between P03 and P07"
+        },
+        "Date": {
+          "type": "date",
+          "description": "Meeting date and time"
+        },
+        "Meeting Type": {
+          "type": "select",
+          "description": "Meeting type classification",
+          "options": ["External Client", "One-on-One", "Internal Sync", "Ad-Hoc", "Recurring", "Group"]
+        },
+        "Attendees": {
+          "type": "rich_text",
+          "description": "Comma-separated attendee list"
+        },
+        "Company": {
+          "type": "relation",
+          "description": "Optional: associated company for external meetings",
+          "relation_database": "Founder OS HQ - Companies"
+        },
+        "Importance Score": {
+          "type": "number",
+          "description": "P03: Meeting importance 1-5"
+        },
+        "Prep Notes": {
+          "type": "rich_text",
+          "description": "P03: Preparation notes and context"
+        },
+        "Talking Points": {
+          "type": "rich_text",
+          "description": "P03: Generated talking points"
+        },
+        "Sources Used": {
+          "type": "multi_select",
+          "description": "P03: Data sources used for prep",
+          "options": ["Gmail", "Calendar", "Notion", "Drive"]
+        },
+        "Source Type": {
+          "type": "select",
+          "description": "P07: Transcript source",
+          "options": ["Fireflies", "Otter", "Gemini", "Notion", "Generic"]
+        },
+        "Transcript File": {
+          "type": "rich_text",
+          "description": "P07: Path to saved transcript file"
+        },
+        "Summary": {
+          "type": "rich_text",
+          "description": "P07: AI-generated meeting summary"
+        },
+        "Decisions": {
+          "type": "rich_text",
+          "description": "P07: Key decisions log"
+        },
+        "Follow-Ups": {
+          "type": "rich_text",
+          "description": "P07: Follow-up commitments extracted"
+        },
+        "Topics": {
+          "type": "multi_select",
+          "description": "P07: Topic tags"
+        },
+        "Duration": {
+          "type": "number",
+          "description": "P07: Meeting duration in minutes"
+        },
+        "Generated At": {
+          "type": "date",
+          "description": "When record was created/last updated"
+        }
+      },
+      "default_values": {
+        "Meeting Type": "Internal Sync"
+      },
+      "notes": "Both P03 and P07 share the Event ID as idempotent key. When P03 creates a record for prep, P07 updates the same record with analysis fields (and vice versa). Company relation populated when meeting attendees match CRM contacts. Discovery: search 'Founder OS HQ - Meetings' first, then fall back to 'Meeting Prep Autopilot - Prep Notes' or 'Meeting Intelligence Hub - Analyses'."
+    },
+    "finance": {
+      "title": "Founder OS HQ - Finance",
+      "description": "Consolidated financial records merging P11 Invoice Processor invoices and P16 Expense Report Builder expense reports. Each record has a Type column (Invoice or Expense).",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Invoice number or Report title"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Record type",
+          "options": ["Invoice", "Expense"]
+        },
+        "Company": {
+          "type": "relation",
+          "description": "Vendor or client company",
+          "relation_database": "Founder OS HQ - Companies"
+        },
+        "Amount": {
+          "type": "number",
+          "description": "Monetary amount"
+        },
+        "Currency": {
+          "type": "select",
+          "description": "Currency code",
+          "options": ["USD", "EUR", "GBP", "CAD", "AUD", "Other"]
+        },
+        "Date": {
+          "type": "date",
+          "description": "Invoice date or report date"
+        },
+        "Due Date": {
+          "type": "date",
+          "description": "Payment due date (invoices only)"
+        },
+        "Category": {
+          "type": "select",
+          "description": "Expense category",
+          "options": ["Office Supplies", "Software & SaaS", "Professional Services", "Travel & Transport", "Meals & Entertainment", "Marketing & Advertising", "Equipment & Hardware", "Utilities", "Insurance", "Rent & Facilities", "Subscriptions", "Training & Education", "Contractor Fees", "Other"]
+        },
+        "Tax Deductible": {
+          "type": "select",
+          "description": "Tax deductibility status",
+          "options": ["Full", "Partial", "No"]
+        },
+        "Budget Code": {
+          "type": "select",
+          "description": "Budget allocation code",
+          "options": ["OPS", "TECH", "SVC", "TRV", "FAC", "ADM", "MKT", "HR", "GEN"]
+        },
+        "Status": {
+          "type": "select",
+          "description": "Processing status",
+          "options": ["Pending", "Approved", "Rejected", "Paid"]
+        },
+        "Extraction Confidence": {
+          "type": "number",
+          "description": "P11: OCR extraction confidence 0-1 (invoices only)"
+        },
+        "Source File": {
+          "type": "rich_text",
+          "description": "Path to source document"
+        },
+        "Line Items": {
+          "type": "rich_text",
+          "description": "P11: JSON array of invoice line items (invoices only)"
+        },
+        "Date Range": {
+          "type": "rich_text",
+          "description": "P16: Report date range (expense reports only)"
+        },
+        "Processed At": {
+          "type": "date",
+          "description": "When record was processed"
+        }
+      },
+      "default_values": {
+        "Status": "Pending",
+        "Currency": "USD",
+        "Tax Deductible": "No"
+      },
+      "notes": "P16 reads from this DB filtered by Type='Invoice' (replacing the old P11-specific 'Invoice Processor - Invoices' DB read). P16 writes expense report summaries to the Reports DB, not here. Company relation links vendors to CRM for automatic vendor tracking. Discovery: search 'Founder OS HQ - Finance' first, then fall back to 'Invoice Processor - Invoices'."
+    },
+    "briefings": {
+      "title": "Founder OS HQ - Briefings",
+      "description": "Consolidated briefings database merging P02 Daily Briefings, P05 Weekly Reviews, P19 Slack Digests, and P22 Morning Sync briefings. Each record has a Type column.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Briefing title"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Briefing type",
+          "options": ["Daily Briefing", "Weekly Review", "Slack Digest", "Morning Sync"]
+        },
+        "Date": {
+          "type": "date",
+          "description": "Primary date for idempotent upsert (combined with Type)"
+        },
+        "Content": {
+          "type": "rich_text",
+          "description": "The briefing/review body"
+        },
+        "Meeting Count": {
+          "type": "number",
+          "description": "Number of meetings in the period"
+        },
+        "Email Count": {
+          "type": "number",
+          "description": "Number of emails in the period"
+        },
+        "Task Count": {
+          "type": "number",
+          "description": "Number of tasks tracked"
+        },
+        "Overdue Tasks": {
+          "type": "number",
+          "description": "P02: Count of overdue tasks"
+        },
+        "Slack Highlights": {
+          "type": "rich_text",
+          "description": "P19/P22: Key Slack highlights"
+        },
+        "Drive Updates": {
+          "type": "rich_text",
+          "description": "P22: Google Drive update summaries"
+        },
+        "Sources Used": {
+          "type": "multi_select",
+          "description": "Data sources used for this briefing",
+          "options": ["Gmail", "Calendar", "Notion", "Slack", "Drive"]
+        },
+        "Time Window": {
+          "type": "rich_text",
+          "description": "P19/P22: Time window covered (e.g. \"12h\", \"24h\")"
+        },
+        "Week Ending": {
+          "type": "date",
+          "description": "P05: Week ending date for weekly reviews"
+        },
+        "Blockers": {
+          "type": "rich_text",
+          "description": "P05: Identified blockers and risks"
+        },
+        "Carryover Items": {
+          "type": "rich_text",
+          "description": "P05: Tasks carried to next week"
+        },
+        "Next Week Priorities": {
+          "type": "rich_text",
+          "description": "P05: Recommended priorities for next week"
+        },
+        "Generated At": {
+          "type": "date",
+          "description": "Timestamp of generation"
+        }
+      },
+      "default_values": {
+        "Type": "Daily Briefing"
+      },
+      "notes": "Idempotent upsert uses Date + Type as compound key (e.g., one Daily Briefing per day, one Weekly Review per Week Ending date). P05 Weekly Review uses Week Ending as its date key. Discovery: search 'Founder OS HQ - Briefings' first, then fall back to plugin-specific names."
+    },
+    "knowledge_base": {
+      "title": "Founder OS HQ - Knowledge Base",
+      "description": "Consolidated knowledge base merging P23 Knowledge Base Q&A sources and queries. Type column distinguishes indexed sources from user queries.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Source title or query text"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Record type",
+          "options": ["Source", "Query"]
+        },
+        "URL": {
+          "type": "url",
+          "description": "Source URL (sources only)"
+        },
+        "Source Type": {
+          "type": "select",
+          "description": "Origin of the source",
+          "options": ["Notion Page", "Notion Database", "Drive Document", "Drive Spreadsheet", "Drive Presentation", "Other"]
+        },
+        "Classification": {
+          "type": "select",
+          "description": "Content classification",
+          "options": ["Wiki", "Meeting Notes", "Project Docs", "Process", "Reference", "Template", "Database", "Archive", "Other"]
+        },
+        "Topic Keywords": {
+          "type": "multi_select",
+          "description": "Extracted topic tags"
+        },
+        "Word Count": {
+          "type": "number",
+          "description": "Source word count (sources only)"
+        },
+        "Freshness": {
+          "type": "select",
+          "description": "Content freshness tier",
+          "options": ["Fresh", "Current", "Aging", "Stale"]
+        },
+        "Answered": {
+          "type": "checkbox",
+          "description": "Whether query was successfully answered (queries only)"
+        },
+        "Confidence": {
+          "type": "select",
+          "description": "Answer confidence level (queries only)",
+          "options": ["High", "Medium", "Low"]
+        },
+        "Sources Used": {
+          "type": "number",
+          "description": "Number of sources searched (queries only)"
+        },
+        "Answer Excerpt": {
+          "type": "rich_text",
+          "description": "Brief answer excerpt (queries only)"
+        },
+        "Status": {
+          "type": "select",
+          "description": "Record status",
+          "options": ["Active", "Archived"]
+        },
+        "Indexed At": {
+          "type": "date",
+          "description": "When source was indexed or query was asked"
+        }
+      },
+      "default_values": {
+        "Status": "Active",
+        "Freshness": "Fresh"
+      },
+      "notes": "Merges P23's two databases (Sources and Queries) into one with Type column. Sources are idempotent by URL. Queries are idempotent by Title (query text) + same calendar day. Discovery: search 'Founder OS HQ - Knowledge Base' first, then fall back to 'Knowledge Base Q&A - Sources' and 'Knowledge Base Q&A - Queries'."
+    },
+    "research": {
+      "title": "Founder OS HQ - Research",
+      "description": "Consolidated research database merging P08 Newsletter Engine research sessions and P15 Competitive Intel Compiler research entries.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Research topic or company name"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Research type",
+          "options": ["Newsletter Research", "Competitive Analysis"]
+        },
+        "Company": {
+          "type": "relation",
+          "description": "Related company (competitive entries)",
+          "relation_database": "Founder OS HQ - Companies"
+        },
+        "Date Range": {
+          "type": "rich_text",
+          "description": "P08: Time period researched"
+        },
+        "Total Findings": {
+          "type": "number",
+          "description": "P08: Number of findings collected"
+        },
+        "Sources Searched": {
+          "type": "multi_select",
+          "description": "P08: Sources searched",
+          "options": ["Web", "GitHub", "Reddit", "Quora"]
+        },
+        "Key Themes": {
+          "type": "rich_text",
+          "description": "P08: Major themes identified"
+        },
+        "Domain": {
+          "type": "url",
+          "description": "P15: Competitor website domain"
+        },
+        "Pricing Model": {
+          "type": "rich_text",
+          "description": "P15: Pricing structure description"
+        },
+        "Starting Price": {
+          "type": "rich_text",
+          "description": "P15: Lowest price point"
+        },
+        "Positioning Archetype": {
+          "type": "select",
+          "description": "P15: Market positioning",
+          "options": ["Premium", "Value", "Disruptor", "Niche", "Platform", "Freemium"]
+        },
+        "Review Score": {
+          "type": "number",
+          "description": "P15: Average review score 0-5"
+        },
+        "Strengths": {
+          "type": "rich_text",
+          "description": "P15: Key competitive strengths"
+        },
+        "Weaknesses": {
+          "type": "rich_text",
+          "description": "P15: Key competitive weaknesses"
+        },
+        "Strategic Recommendations": {
+          "type": "rich_text",
+          "description": "P15: Recommended actions"
+        },
+        "Report File": {
+          "type": "rich_text",
+          "description": "Path to generated report file"
+        },
+        "Researched At": {
+          "type": "date",
+          "description": "When research was conducted"
+        }
+      },
+      "default_values": {
+        "Type": "Newsletter Research"
+      },
+      "notes": "P15 Competitive Analysis entries should have Company relation populated (create or find company in Companies DB). P08 entries are idempotent by Topic + same calendar day. P15 entries are idempotent by Company Name. Discovery: search 'Founder OS HQ - Research' first, then fall back to plugin-specific names."
+    },
+    "reports": {
+      "title": "Founder OS HQ - Reports",
+      "description": "Consolidated reports database merging P09 Report Generator business reports and P25 Time Savings Calculator ROI reports.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Report title"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Report type",
+          "options": ["Business Report", "ROI Report"]
+        },
+        "Status": {
+          "type": "select",
+          "description": "Report status",
+          "options": ["Draft", "Complete", "Archived"]
+        },
+        "Date Range": {
+          "type": "rich_text",
+          "description": "Period covered by the report"
+        },
+        "Data Sources": {
+          "type": "multi_select",
+          "description": "P09: Data sources used",
+          "options": ["Notion", "Drive", "Filesystem", "Manual Input"]
+        },
+        "Template Used": {
+          "type": "rich_text",
+          "description": "P09: Report template name"
+        },
+        "Executive Summary": {
+          "type": "rich_text",
+          "description": "P09: Executive summary section"
+        },
+        "QA Notes": {
+          "type": "rich_text",
+          "description": "P09: QA agent review notes"
+        },
+        "Total Hours Saved": {
+          "type": "number",
+          "description": "P25: Total hours saved by automation"
+        },
+        "Dollar Value": {
+          "type": "number",
+          "description": "P25: Dollar value of time saved"
+        },
+        "Tasks Automated": {
+          "type": "number",
+          "description": "P25: Number of automated tasks counted"
+        },
+        "Active Plugins": {
+          "type": "number",
+          "description": "P25: Number of active plugins detected"
+        },
+        "Top Category": {
+          "type": "rich_text",
+          "description": "P25: Highest-saving category"
+        },
+        "Output Path": {
+          "type": "rich_text",
+          "description": "File path to generated report"
+        },
+        "Generated At": {
+          "type": "date",
+          "description": "When report was generated"
+        }
+      },
+      "default_values": {
+        "Status": "Complete",
+        "Type": "Business Report"
+      },
+      "notes": "P09 writes Type='Business Report', P25 writes Type='ROI Report'. P16 Expense Report Builder also writes here with Type='Expense Report' (note: P16's expense REPORT output is a report document, distinct from the Finance DB invoice/expense records). Idempotent by Title + same calendar day. Discovery: search 'Founder OS HQ - Reports' first, then fall back to plugin-specific names."
+    },
+    "content": {
+      "title": "Founder OS HQ - Content",
+      "description": "Consolidated content database merging P08 Newsletter Draft Engine newsletter drafts, P24 LinkedIn Post Generator posts, and P01 Inbox Zero email drafts.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Post topic, email subject, or newsletter title"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Content type",
+          "options": ["Newsletter", "LinkedIn Post", "Email Draft"]
+        },
+        "Content": {
+          "type": "rich_text",
+          "description": "The body content"
+        },
+        "Status": {
+          "type": "select",
+          "description": "Content lifecycle status",
+          "options": ["Draft", "To Review", "Approved", "Published", "Sent to Gmail"]
+        },
+        "Company": {
+          "type": "relation",
+          "description": "Optional: for client-related content",
+          "relation_database": "Founder OS HQ - Companies"
+        },
+        "Framework": {
+          "type": "select",
+          "description": "P24: Post framework used",
+          "options": ["Story", "Listicle", "Contrarian", "HowTo", "Lesson", "Insight", "Question"]
+        },
+        "Audience": {
+          "type": "select",
+          "description": "P24: Target audience",
+          "options": ["Founder", "Technical", "Marketer", "CXO"]
+        },
+        "Length": {
+          "type": "select",
+          "description": "P24: Content length tier",
+          "options": ["Short", "Medium", "Long"]
+        },
+        "Hashtags": {
+          "type": "rich_text",
+          "description": "P24: Generated hashtags"
+        },
+        "Style Notes": {
+          "type": "rich_text",
+          "description": "P24: Style guidance or voice notes"
+        },
+        "Output File": {
+          "type": "rich_text",
+          "description": "Path to saved file"
+        },
+        "Generated At": {
+          "type": "date",
+          "description": "When content was generated"
+        }
+      },
+      "default_values": {
+        "Status": "Draft",
+        "Type": "Newsletter"
+      },
+      "notes": "P01 Inbox Zero writes email drafts with Type='Email Draft' and Status lifecycle: To Review -> Approved -> Sent to Gmail. P08 writes newsletters with Type='Newsletter'. P24 writes LinkedIn posts with Type='LinkedIn Post'. Company relation is populated when content is related to a specific client. Idempotent: P24 by Post Topic + Framework + same calendar day; P08 by Topic + same calendar day; P01 by email subject. Discovery: search 'Founder OS HQ - Content' first, then fall back to plugin-specific names."
+    },
+    "deliverables": {
+      "title": "Founder OS HQ - Deliverables",
+      "description": "Consolidated deliverables database merging P12 Proposal Automator proposals, P13 Contract Analyzer contract analyses, and P14 SOW Generator statements of work.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Project title, contract name, or SOW title"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Deliverable type",
+          "options": ["Proposal", "Contract", "SOW"]
+        },
+        "Company": {
+          "type": "relation",
+          "description": "Associated client/company",
+          "relation_database": "Founder OS HQ - Companies"
+        },
+        "Deal": {
+          "type": "relation",
+          "description": "Optional: associated sales deal",
+          "relation_database": "Founder OS HQ - Deals"
+        },
+        "Status": {
+          "type": "select",
+          "description": "Deliverable lifecycle",
+          "options": ["Draft", "Sent", "Under Review", "Signed", "Rejected", "Expired"]
+        },
+        "Amount": {
+          "type": "number",
+          "description": "Total monetary value (proposals/SOWs)"
+        },
+        "Package Selected": {
+          "type": "select",
+          "description": "P12: Pricing tier selected",
+          "options": ["Good", "Better", "Best"]
+        },
+        "Risk Level": {
+          "type": "select",
+          "description": "P13: Contract risk assessment",
+          "options": ["Green", "Yellow", "Red"]
+        },
+        "Risk Flags": {
+          "type": "rich_text",
+          "description": "P13: Detailed risk flag descriptions (JSON)"
+        },
+        "Contract Type": {
+          "type": "select",
+          "description": "P13: Type of contract",
+          "options": ["SaaS", "Freelance", "Agency", "NDA", "Employment", "Vendor"]
+        },
+        "Key Terms": {
+          "type": "rich_text",
+          "description": "P13: Extracted key contract terms"
+        },
+        "File Path": {
+          "type": "rich_text",
+          "description": "Path to generated document"
+        },
+        "Brief File": {
+          "type": "rich_text",
+          "description": "P12/P14: Path to the brief file used"
+        },
+        "Sources Used": {
+          "type": "multi_select",
+          "description": "Data sources consulted",
+          "options": ["CRM", "Notion", "Drive", "Email", "Manual"]
+        },
+        "Generated At": {
+          "type": "date",
+          "description": "When deliverable was generated"
+        }
+      },
+      "default_values": {
+        "Status": "Draft",
+        "Type": "Proposal"
+      },
+      "notes": "P12 Proposal Automator writes Type='Proposal' with Company relation from client name lookup and optional Deal relation. P13 Contract Analyzer writes Type='Contract' with Company relation when contract parties match CRM. P14 SOW Generator writes Type='SOW' with Company + Deal relations. The Deals DB has a reverse relation to Deliverables. Idempotent: by Title + Company (case-insensitive). Discovery: search 'Founder OS HQ - Deliverables' first, then fall back to plugin-specific names."
+    },
+    "prompts": {
+      "title": "Founder OS HQ - Prompts",
+      "description": "Stores reusable AI prompts with categories, variable templates, usage tracking, and Personal/Shared visibility for team collaboration.",
+      "plugin": "founder-os-team-prompt-library",
+      "properties": {
+        "Name": {
+          "type": "title",
+          "description": "Unique prompt name for retrieval (e.g., 'Client Onboarding Email', 'Code Review Checklist')"
+        },
+        "Content": {
+          "type": "rich_text",
+          "description": "Full prompt text with optional {{variable}} placeholders for interactive substitution"
+        },
+        "Category": {
+          "type": "select",
+          "options": ["Email Templates", "Meeting Prompts", "Analysis Prompts", "Content Creation", "Code Assistance", "Research Prompts"],
+          "description": "Prompt category for filtering and organization. Custom categories can be added."
+        },
+        "Variables": {
+          "type": "rich_text",
+          "description": "Comma-separated list of {{variable}} names detected in the prompt content (e.g., 'client_name, project, deadline')"
+        },
+        "Visibility": {
+          "type": "select",
+          "options": ["Personal", "Shared"],
+          "description": "Access control: Personal (only creator) or Shared (visible to team). Defaults to Personal on creation."
+        },
+        "Times Used": {
+          "type": "number",
+          "description": "Usage counter incremented each time the prompt is retrieved via /prompt:get"
+        },
+        "Author": {
+          "type": "rich_text",
+          "description": "Name of the person who added the prompt"
+        },
+        "Tags": {
+          "type": "multi_select",
+          "description": "Optional tags for cross-category search and discovery (e.g., 'onboarding', 'weekly', 'client-facing')"
+        },
+        "Created At": {
+          "type": "date",
+          "description": "Timestamp when the prompt was first added to the library"
+        },
+        "Last Used": {
+          "type": "date",
+          "description": "Timestamp of the most recent retrieval via /prompt:get"
+        }
+      },
+      "default_values": {
+        "Visibility": "Personal",
+        "Times Used": 0
+      },
+      "idempotent_key": "Name",
+      "notes": "Lazy creation by database name on first /prompt:add. Idempotent upsert by Name property (case-insensitive match). Times Used starts at 0 and increments on each /prompt:get retrieval. Visibility defaults to Personal; changed to Shared via /prompt:share. Discovery: search 'Founder OS HQ - Prompts' first, then 'Team Prompt Library - Prompts'."
+    },
+    "goals": {
+      "title": "Founder OS HQ - Goals",
+      "description": "Stores goals with progress tracking, RAG health status, milestone rollup, velocity-based completion projections, and blocker detection.",
+      "plugin": "founder-os-goal-progress-tracker",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Goal name as provided by the user"
+        },
+        "Description": {
+          "type": "rich_text",
+          "description": "Detailed description of the goal including success criteria"
+        },
+        "Status": {
+          "type": "select",
+          "options": ["Not Started", "In Progress", "On Hold", "Completed", "Archived"],
+          "description": "Current lifecycle status of the goal"
+        },
+        "Progress": {
+          "type": "number",
+          "format": "percent",
+          "description": "Overall progress 0-100. Auto-calculated from milestones when present, or manually set via /goal:update."
+        },
+        "Target Date": {
+          "type": "date",
+          "description": "Deadline for goal completion"
+        },
+        "Start Date": {
+          "type": "date",
+          "description": "When work on the goal began. Defaults to creation date."
+        },
+        "Category": {
+          "type": "select",
+          "options": ["Revenue", "Product", "Operations", "Team", "Personal", "Technical", "Marketing", "Other"],
+          "description": "Goal category for grouping and filtering"
+        },
+        "RAG Status": {
+          "type": "select",
+          "options": ["Green", "Yellow", "Red", "Not Started"],
+          "description": "Red/Amber/Green health indicator. Auto-calculated by comparing actual vs expected progress."
+        },
+        "Projected Completion": {
+          "type": "date",
+          "description": "Estimated completion date based on current velocity. Updated on each /goal:report or /goal:check."
+        },
+        "Milestone Count": {
+          "type": "number",
+          "description": "Total number of milestones linked to this goal"
+        },
+        "Completed Milestones": {
+          "type": "number",
+          "description": "Number of milestones marked as Done"
+        },
+        "Progress Snapshots": {
+          "type": "rich_text",
+          "description": "JSON array of {date, progress} objects for velocity calculation fallback when no milestones exist. E.g. [{\"date\":\"2026-03-01\",\"progress\":25}]"
+        },
+        "Notes": {
+          "type": "rich_text",
+          "description": "Append-only log of status updates, blocker notes, and context. Each entry prefixed with [YYYY-MM-DD]."
+        },
+        "Created At": {
+          "type": "date",
+          "description": "Timestamp when the goal was created"
+        }
+      },
+      "default_values": {
+        "Status": "Not Started",
+        "Progress": 0,
+        "RAG Status": "Not Started"
+      },
+      "idempotent_key": "Title (case-insensitive unique)",
+      "notes": "Lazy creation by database name on first /goal:create. Idempotent upsert by Title to prevent duplicate goals. Progress auto-calculated from milestones when Milestone Count > 0. Progress Snapshots stored as JSON rich_text for velocity fallback on goals without milestones. Notes are append-only -- never overwrite, always prepend new entries. Discovery: search 'Founder OS HQ - Goals' first, then 'Goal Progress Tracker - Goals'."
+    },
+    "milestones": {
+      "title": "Founder OS HQ - Milestones",
+      "description": "Stores milestones as sub-goals linked to parent goals via relation property. Milestone completion drives automatic goal progress calculation.",
+      "plugin": "founder-os-goal-progress-tracker",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Milestone name describing the deliverable or checkpoint"
+        },
+        "Goal": {
+          "type": "relation",
+          "related_database": "Founder OS HQ - Goals",
+          "description": "Link to the parent goal. Goals DB must be created before Milestones DB."
+        },
+        "Status": {
+          "type": "select",
+          "options": ["Not Started", "In Progress", "Done", "Skipped"],
+          "description": "Current status of the milestone"
+        },
+        "Due Date": {
+          "type": "date",
+          "description": "Target completion date for this milestone"
+        },
+        "Completed At": {
+          "type": "date",
+          "description": "Actual completion date. Set automatically when Status changes to Done."
+        },
+        "Order": {
+          "type": "number",
+          "description": "Sequence number (1-based) for display ordering within the goal"
+        },
+        "Notes": {
+          "type": "rich_text",
+          "description": "Optional context or completion notes for this milestone"
+        },
+        "Created At": {
+          "type": "date",
+          "description": "Timestamp when the milestone was created"
+        }
+      },
+      "default_values": {
+        "Status": "Not Started",
+        "Order": 1
+      },
+      "idempotent_key": "Title + Goal relation (unique per goal)",
+      "notes": "Lazy creation by database name on first milestone addition. Requires Goals DB to exist first for the relation property. Milestone completion (Status = Done) triggers parent goal progress recalculation. Skipped milestones are excluded from progress calculation. Order field determines display sequence in reports and dashboards. Discovery: search 'Founder OS HQ - Milestones' first, then 'Goal Progress Tracker - Milestones'."
+    },
+    "learnings": {
+      "title": "Founder OS HQ - Learnings",
+      "description": "Stores daily learning insights with auto-detected topics, source classification, and cross-references to related past learnings.",
+      "plugin": "founder-os-learning-log-tracker",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Auto-generated 5-8 word summary of the learning insight"
+        },
+        "Insight": {
+          "type": "rich_text",
+          "description": "Full learning text as provided by the user (15-2000 characters)"
+        },
+        "Topics": {
+          "type": "multi_select",
+          "options": ["Technical", "Process", "Business", "People", "Tool", "Strategy", "Mistake", "Win", "Idea", "Industry"],
+          "description": "Auto-detected topic categories (1-3 per learning). 10 predefined + custom topics allowed."
+        },
+        "Source Type": {
+          "type": "select",
+          "options": ["Experience", "Reading", "Conversation", "Experiment", "Observation"],
+          "description": "How the learning was acquired. Auto-detected from context or specified via --source flag."
+        },
+        "Context": {
+          "type": "rich_text",
+          "description": "Optional additional context provided via --context flag"
+        },
+        "Related IDs": {
+          "type": "rich_text",
+          "description": "Comma-separated page IDs of 2-3 most related past learnings (stored as rich_text for lazy-creation compatibility)"
+        },
+        "Related Titles": {
+          "type": "rich_text",
+          "description": "Comma-separated titles of related past learnings for quick scanning"
+        },
+        "Week": {
+          "type": "rich_text",
+          "description": "ISO week identifier as YYYY-WNN text (e.g., '2026-W10') for weekly aggregation queries"
+        },
+        "Logged At": {
+          "type": "date",
+          "description": "Timestamp when the learning was captured"
+        }
+      },
+      "default_values": {
+        "Source Type": "Experience"
+      },
+      "idempotent_key": "Title + same calendar day (Logged At)",
+      "notes": "Lazy creation by database name on first /learn:log. Idempotent upsert by Title + same calendar day to allow multiple distinct learnings per day but prevent accidental duplicates. Related IDs/Titles stored as rich_text (not Notion relation type) for lazy-creation compatibility. Week field enables ISO week queries for /learn:weekly synthesis. Discovery: search 'Founder OS HQ - Learnings' first, then 'Learning Log Tracker - Learnings'."
+    },
+    "weekly_insights": {
+      "title": "Founder OS HQ - Weekly Insights",
+      "description": "Stores synthesized weekly learning summaries with theme analysis, streak tracking, and trend comparison to previous weeks.",
+      "plugin": "founder-os-learning-log-tracker",
+      "properties": {
+        "Week": {
+          "type": "title",
+          "description": "ISO week identifier as YYYY-WNN (e.g., '2026-W10'). Used as primary key for upsert."
+        },
+        "Summary": {
+          "type": "rich_text",
+          "description": "Narrative 3-5 sentence synthesis of the week's learnings, themes, and notable patterns"
+        },
+        "Top Themes": {
+          "type": "multi_select",
+          "description": "2-4 most frequent topic categories from the week's learnings"
+        },
+        "Learning Count": {
+          "type": "number",
+          "description": "Total number of learnings logged during this week"
+        },
+        "Most Active Topic": {
+          "type": "select",
+          "options": ["Technical", "Process", "Business", "People", "Tool", "Strategy", "Mistake", "Win", "Idea", "Industry"],
+          "description": "Single topic with highest frequency for the week"
+        },
+        "Key Connections": {
+          "type": "rich_text",
+          "description": "Prose identifying 2-3 cross-learning patterns where insights from different topics reinforce or contrast each other"
+        },
+        "Learnings List": {
+          "type": "rich_text",
+          "description": "Scannable bulleted index of all learning titles logged during the week"
+        },
+        "Streak Days": {
+          "type": "number",
+          "description": "Consecutive weeks with at least one learning logged, calculated by backwards scan until gap"
+        },
+        "Vs Last Week": {
+          "type": "select",
+          "options": ["More active", "Same pace", "Less active"],
+          "description": "Trend comparison using 20% threshold: More active (>20% increase), Same pace (within +/-20%), Less active (>20% decrease)"
+        },
+        "Source Mix": {
+          "type": "rich_text",
+          "description": "Breakdown of learning sources for the week (e.g., 'Experience: 3, Reading: 2, Conversation: 1')"
+        },
+        "Generated At": {
+          "type": "date",
+          "description": "Timestamp when the weekly synthesis was generated or last updated"
+        }
+      },
+      "default_values": {},
+      "idempotent_key": "Week",
+      "notes": "Lazy creation by database name on first /learn:weekly. Idempotent upsert by Week title to prevent duplicate weekly entries. Streak Days recalculated from scratch on each run by scanning backwards through Weekly Insights until finding a week gap. Vs Last Week compares Learning Count to prior week using 20% thresholds. Discovery: search 'Founder OS HQ - Weekly Insights' first, then 'Learning Log Tracker - Weekly Insights'."
+    },
+    "workflows": {
+      "title": "Founder OS HQ - Workflows",
+      "description": "Consolidated workflows database merging P27 Workflow Automator execution logs and P28 Workflow Documenter SOPs. Type column distinguishes execution records from SOP documents.",
+      "plugin": "founder-os-hq",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Workflow/SOP name or Run ID"
+        },
+        "Type": {
+          "type": "select",
+          "description": "Record type",
+          "options": ["Execution", "SOP"]
+        },
+        "Status": {
+          "type": "select",
+          "description": "Status varies by type",
+          "options": ["Running", "Completed", "Failed", "Cancelled", "Draft", "Published"]
+        },
+        "Description": {
+          "type": "rich_text",
+          "description": "Workflow or SOP description"
+        },
+        "Steps Count": {
+          "type": "number",
+          "description": "Total number of steps"
+        },
+        "Steps Completed": {
+          "type": "number",
+          "description": "Execution: steps that completed successfully"
+        },
+        "Steps Failed": {
+          "type": "number",
+          "description": "Execution: steps that failed"
+        },
+        "Steps Skipped": {
+          "type": "number",
+          "description": "Execution: steps that were skipped"
+        },
+        "Started At": {
+          "type": "date",
+          "description": "Execution: when the run started"
+        },
+        "Completed At": {
+          "type": "date",
+          "description": "Execution: when the run finished"
+        },
+        "Duration": {
+          "type": "rich_text",
+          "description": "Execution: human-readable duration string"
+        },
+        "Triggered By": {
+          "type": "select",
+          "description": "Execution: what initiated the run",
+          "options": ["Manual", "Schedule", "Chained", "API"]
+        },
+        "Workflow Version": {
+          "type": "rich_text",
+          "description": "Execution: version of the workflow definition"
+        },
+        "Context Snapshot": {
+          "type": "rich_text",
+          "description": "Execution: JSON snapshot of context variables"
+        },
+        "Error Summary": {
+          "type": "rich_text",
+          "description": "Execution: error details if failed"
+        },
+        "Tools Used": {
+          "type": "multi_select",
+          "description": "SOP: Tools referenced in the procedure"
+        },
+        "Handoff Points": {
+          "type": "number",
+          "description": "SOP: Number of actor handoffs"
+        },
+        "Complexity": {
+          "type": "select",
+          "description": "SOP: Assessed complexity level",
+          "options": ["Simple", "Moderate", "Complex", "Very Complex"]
+        },
+        "SOP File Path": {
+          "type": "rich_text",
+          "description": "SOP: Path to saved SOP file"
+        },
+        "Diagram Included": {
+          "type": "checkbox",
+          "description": "SOP: Whether Mermaid diagram was generated"
+        },
+        "Generated At": {
+          "type": "date",
+          "description": "When record was created"
+        }
+      },
+      "default_values": {
+        "Type": "Execution",
+        "Status": "Running"
+      },
+      "notes": "P27 writes Type='Execution' with Run ID as the idempotent key (UUID). P28 writes Type='SOP' idempotent by Title + same calendar day. Status values are shared but used differently: Executions use Running/Completed/Failed/Cancelled; SOPs use Draft/Published. Discovery: search 'Founder OS HQ - Workflows' first, then fall back to 'Workflow Automator - Executions' or 'Workflow Documenter - SOPs'."
+    },
+    "activity_log": {
+      "title": "Founder OS HQ - Activity Log",
+      "description": "Tracks Google Drive operations performed via /drive:search, /drive:summarize, /drive:ask, and /drive:organize commands for usage analytics and result caching.",
+      "plugin": "founder-os-google-drive-brain",
+      "properties": {
+        "Query": {
+          "type": "title",
+          "description": "The search query, question, or folder path used in the command"
+        },
+        "Command Type": {
+          "type": "select",
+          "options": ["search", "summarize", "ask", "organize"],
+          "default": "search",
+          "description": "Which /drive: command was executed"
+        },
+        "Files Found": {
+          "type": "number",
+          "description": "Number of files found or processed by the command"
+        },
+        "Top Result": {
+          "type": "rich_text",
+          "description": "Title or name of the top/primary result file"
+        },
+        "File IDs": {
+          "type": "rich_text",
+          "description": "Comma-separated Google Drive file IDs of processed files"
+        },
+        "Folder Context": {
+          "type": "rich_text",
+          "description": "Folder path or scope context for the operation"
+        },
+        "Sources Used": {
+          "type": "multi_select",
+          "options": ["Google Drive", "Notion"],
+          "description": "Which data sources were accessed during the operation"
+        },
+        "Generated At": {
+          "type": "date",
+          "description": "Timestamp when the operation was performed"
+        }
+      },
+      "default_values": {
+        "Command Type": "search"
+      },
+      "idempotent_key": "Query + Generated At (same calendar day)",
+      "notes": "Idempotent by Query text (case-insensitive) + same calendar day: update if found, create if not. Activity tracking is optional and only writes when Notion is available. The /drive:organize command logs recommendations but never executes file moves. Discovery: search 'Founder OS HQ - Activity Log' first, then 'Google Drive Brain - Activity'."
+    }
+  },
+  "creation_order": [
+    "companies",
+    "contacts",
+    "communications",
+    "deliverables",
+    "deals",
+    "tasks",
+    "meetings",
+    "finance",
+    "briefings",
+    "knowledge_base",
+    "research",
+    "reports",
+    "content",
+    "prompts",
+    "goals",
+    "milestones",
+    "learnings",
+    "weekly_insights",
+    "workflows",
+    "activity_log"
+  ],
+  "relations": [
+    { "from": "contacts", "property": "Company", "to": "companies", "bidirectional": true },
+    { "from": "deals", "property": "Company", "to": "companies", "bidirectional": true },
+    { "from": "deals", "property": "Deliverables", "to": "deliverables", "bidirectional": true },
+    { "from": "companies", "property": "Contacts", "to": "contacts", "bidirectional": true },
+    { "from": "companies", "property": "Deals", "to": "deals", "bidirectional": true },
+    { "from": "companies", "property": "Communications", "to": "communications", "bidirectional": true },
+    { "from": "communications", "property": "Contact", "to": "contacts", "bidirectional": false },
+    { "from": "communications", "property": "Company", "to": "companies", "bidirectional": true },
+    { "from": "contacts", "property": "Communications", "to": "communications", "bidirectional": true },
+    { "from": "tasks", "property": "Company", "to": "companies", "bidirectional": false },
+    { "from": "tasks", "property": "Contact", "to": "contacts", "bidirectional": false },
+    { "from": "meetings", "property": "Company", "to": "companies", "bidirectional": false },
+    { "from": "finance", "property": "Company", "to": "companies", "bidirectional": false },
+    { "from": "research", "property": "Company", "to": "companies", "bidirectional": false },
+    { "from": "content", "property": "Company", "to": "companies", "bidirectional": false },
+    { "from": "deliverables", "property": "Company", "to": "companies", "bidirectional": false },
+    { "from": "deliverables", "property": "Deal", "to": "deals", "bidirectional": true },
+    { "from": "milestones", "property": "Goal", "to": "goals", "bidirectional": false }
+  ],
+  "workspace_structure": {
+    "title": "Founder OS HQ",
+    "sections": [
+      {
+        "name": "CRM",
+        "databases": ["companies", "contacts", "deals", "communications"]
+      },
+      {
+        "name": "Operations",
+        "databases": ["tasks", "meetings", "finance"]
+      },
+      {
+        "name": "Intelligence",
+        "databases": ["briefings", "knowledge_base", "research", "reports"]
+      },
+      {
+        "name": "Content & Deliverables",
+        "databases": ["content", "deliverables", "prompts"]
+      },
+      {
+        "name": "Growth & Meta",
+        "databases": ["goals", "milestones", "learnings", "weekly_insights", "workflows", "activity_log"]
+      }
+    ]
+  }
+}

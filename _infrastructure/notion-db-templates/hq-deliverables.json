@@ -1,0 +1,80 @@
+{
+  "title": "Founder OS HQ - Deliverables",
+  "description": "Consolidated deliverables database merging P12 Proposal Automator proposals, P13 Contract Analyzer contract analyses, and P14 SOW Generator statements of work.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Project title, contract name, or SOW title"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Deliverable type",
+      "options": ["Proposal", "Contract", "SOW"]
+    },
+    "Company": {
+      "type": "relation",
+      "description": "Associated client/company",
+      "relation_database": "Founder OS HQ - Companies"
+    },
+    "Deal": {
+      "type": "relation",
+      "description": "Optional: associated sales deal",
+      "relation_database": "Founder OS HQ - Deals"
+    },
+    "Status": {
+      "type": "select",
+      "description": "Deliverable lifecycle",
+      "options": ["Draft", "Sent", "Under Review", "Signed", "Rejected", "Expired"]
+    },
+    "Amount": {
+      "type": "number",
+      "description": "Total monetary value (proposals/SOWs)"
+    },
+    "Package Selected": {
+      "type": "select",
+      "description": "P12: Pricing tier selected",
+      "options": ["Good", "Better", "Best"]
+    },
+    "Risk Level": {
+      "type": "select",
+      "description": "P13: Contract risk assessment",
+      "options": ["Green", "Yellow", "Red"]
+    },
+    "Risk Flags": {
+      "type": "rich_text",
+      "description": "P13: Detailed risk flag descriptions (JSON)"
+    },
+    "Contract Type": {
+      "type": "select",
+      "description": "P13: Type of contract",
+      "options": ["SaaS", "Freelance", "Agency", "NDA", "Employment", "Vendor"]
+    },
+    "Key Terms": {
+      "type": "rich_text",
+      "description": "P13: Extracted key contract terms"
+    },
+    "File Path": {
+      "type": "rich_text",
+      "description": "Path to generated document"
+    },
+    "Brief File": {
+      "type": "rich_text",
+      "description": "P12/P14: Path to the brief file used"
+    },
+    "Sources Used": {
+      "type": "multi_select",
+      "description": "Data sources consulted",
+      "options": ["CRM", "Notion", "Drive", "Email", "Manual"]
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "When deliverable was generated"
+    }
+  },
+  "default_values": {
+    "Status": "Draft",
+    "Type": "Proposal"
+  },
+  "notes": "P12 Proposal Automator writes Type='Proposal' with Company relation from client name lookup and optional Deal relation. P13 Contract Analyzer writes Type='Contract' with Company relation when contract parties match CRM. P14 SOW Generator writes Type='SOW' with Company + Deal relations. The Deals DB has a reverse relation to Deliverables. Idempotent: by Title + Company (case-insensitive). Discovery: search 'Founder OS HQ - Deliverables' first, then fall back to plugin-specific names."
+}

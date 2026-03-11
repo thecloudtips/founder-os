@@ -1,0 +1,10 @@
+{
+  "name": "founder-os-inbox-zero",
+  "version": "1.0.0",
+  "description": "AI-powered email triage that categorizes, prioritizes, extracts actions, drafts responses, and archives — achieving Inbox Zero with a 4-agent pipeline",
+  "platform": "claude-code",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  }
+}

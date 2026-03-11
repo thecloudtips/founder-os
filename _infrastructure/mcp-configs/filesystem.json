@@ -1,0 +1,27 @@
+{
+  "filesystem": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-filesystem", "${WORKSPACE_DIR}"],
+    "env": {},
+    "capabilities": {
+      "read": "Read file contents",
+      "write": "Write/create files",
+      "list": "List directory contents",
+      "search": "Search files by name/content",
+      "move": "Move/rename files"
+    },
+    "required_by": [
+      "#07", "#08", "#09", "#11", "#12",
+      "#13", "#14", "#15", "#16",
+      "#25", "#26", "#27", "#28"
+    ],
+    "setup": {
+      "steps": [
+        "No authentication required",
+        "Set WORKSPACE_DIR to the desired root directory for file operations",
+        "The server restricts access to files within this directory only",
+        "Ensure the directory exists and has appropriate read/write permissions"
+      ]
+    }
+  }
+}

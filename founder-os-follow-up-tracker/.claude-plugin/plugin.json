@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-follow-up-tracker",
+  "version": "1.0.0",
+  "description": "Scans Gmail sent folder for emails awaiting response, detects bidirectional promises, drafts follow-up nudge emails, and creates calendar reminders for pending follow-ups",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Smart Follow-Up Tracker",
+  "platform": "claude-code",
+  "pillar": "Daily Work",
+  "plugin_number": "06",
+  "type": "chained",
+  "difficulty": "intermediate",
+  "release_week": 10,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": ["founder-os-inbox-zero"]
+}

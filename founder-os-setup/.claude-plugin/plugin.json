@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-setup",
+  "version": "1.0.0",
+  "description": "Installer and maintenance commands for the Founder OS ecosystem. Creates Notion HQ databases, validates integrations, and provides health checks.",
+  "platform": "claude-code",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Founder OS Setup",
+  "pillar": "Infrastructure",
+  "plugin_number": "00",
+  "type": "infrastructure",
+  "difficulty": "beginner",
+  "release_week": 0,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}

@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-knowledge-base-qa",
+  "version": "1.0.0",
+  "description": "Searches Notion pages/databases and Google Drive documents (via gws CLI) to answer questions with sourced citations. Indexes knowledge sources, retrieves relevant content, and synthesizes accurate answers with document references.",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Knowledge Base Q&A",
+  "platform": "claude-code",
+  "pillar": "MCP & Integrations",
+  "plugin_number": "23",
+  "type": "standalone",
+  "difficulty": "intermediate",
+  "release_week": 23,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}

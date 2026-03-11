@@ -1,0 +1,17 @@
+{
+  "_comment": "Example .mcp.json for a plugin that requires Notion + Filesystem. Google services (Gmail, Calendar, Drive) are now accessed via the gws CLI tool instead of MCP servers.",
+  "mcpServers": {
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-notion"],
+      "env": {
+        "NOTION_API_KEY": "${NOTION_API_KEY}"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${WORKSPACE_DIR}"],
+      "env": {}
+    }
+  }
+}

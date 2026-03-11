@@ -1,0 +1,54 @@
+{
+  "database_name": "Learning Log Tracker - Weekly Insights",
+  "description": "Stores synthesized weekly learning summaries with theme analysis, streak tracking, and trend comparison to previous weeks.",
+  "properties": {
+    "Week": {
+      "type": "title",
+      "description": "ISO week identifier as YYYY-WNN (e.g., '2026-W10'). Used as primary key for upsert."
+    },
+    "Summary": {
+      "type": "rich_text",
+      "description": "Narrative 3-5 sentence synthesis of the week's learnings, themes, and notable patterns"
+    },
+    "Top Themes": {
+      "type": "multi_select",
+      "description": "2-4 most frequent topic categories from the week's learnings"
+    },
+    "Learning Count": {
+      "type": "number",
+      "description": "Total number of learnings logged during this week"
+    },
+    "Most Active Topic": {
+      "type": "select",
+      "options": ["Technical", "Process", "Business", "People", "Tool", "Strategy", "Mistake", "Win", "Idea", "Industry"],
+      "description": "Single topic with highest frequency for the week"
+    },
+    "Key Connections": {
+      "type": "rich_text",
+      "description": "Prose identifying 2-3 cross-learning patterns where insights from different topics reinforce or contrast each other"
+    },
+    "Learnings List": {
+      "type": "rich_text",
+      "description": "Scannable bulleted index of all learning titles logged during the week"
+    },
+    "Streak Days": {
+      "type": "number",
+      "description": "Consecutive weeks with at least one learning logged, calculated by backwards scan until gap"
+    },
+    "Vs Last Week": {
+      "type": "select",
+      "options": ["More active", "Same pace", "Less active"],
+      "description": "Trend comparison using 20% threshold: More active (>20% increase), Same pace (within ±20%), Less active (>20% decrease)"
+    },
+    "Source Mix": {
+      "type": "rich_text",
+      "description": "Breakdown of learning sources for the week (e.g., 'Experience: 3, Reading: 2, Conversation: 1')"
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "Timestamp when the weekly synthesis was generated or last updated"
+    }
+  },
+  "idempotent_key": "Week",
+  "notes": "Lazy creation by database name on first /learn:weekly. Idempotent upsert by Week title to prevent duplicate weekly entries. Streak Days recalculated from scratch on each run by scanning backwards through Weekly Insights until finding a week gap. Vs Last Week compares Learning Count to prior week using 20% thresholds."
+}

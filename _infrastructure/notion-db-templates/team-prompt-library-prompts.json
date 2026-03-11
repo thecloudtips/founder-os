@@ -1,0 +1,50 @@
+{
+  "database_name": "Team Prompt Library - Prompts",
+  "description": "Stores reusable AI prompts with categories, variable templates, usage tracking, and Personal/Shared visibility for team collaboration.",
+  "properties": {
+    "Name": {
+      "type": "title",
+      "description": "Unique prompt name for retrieval (e.g., 'Client Onboarding Email', 'Code Review Checklist')"
+    },
+    "Content": {
+      "type": "rich_text",
+      "description": "Full prompt text with optional {{variable}} placeholders for interactive substitution"
+    },
+    "Category": {
+      "type": "select",
+      "options": ["Email Templates", "Meeting Prompts", "Analysis Prompts", "Content Creation", "Code Assistance", "Research Prompts"],
+      "description": "Prompt category for filtering and organization. Custom categories can be added."
+    },
+    "Variables": {
+      "type": "rich_text",
+      "description": "Comma-separated list of {{variable}} names detected in the prompt content (e.g., 'client_name, project, deadline')"
+    },
+    "Visibility": {
+      "type": "select",
+      "options": ["Personal", "Shared"],
+      "description": "Access control: Personal (only creator) or Shared (visible to team). Defaults to Personal on creation."
+    },
+    "Times Used": {
+      "type": "number",
+      "description": "Usage counter incremented each time the prompt is retrieved via /prompt:get"
+    },
+    "Author": {
+      "type": "rich_text",
+      "description": "Name of the person who added the prompt"
+    },
+    "Tags": {
+      "type": "multi_select",
+      "description": "Optional tags for cross-category search and discovery (e.g., 'onboarding', 'weekly', 'client-facing')"
+    },
+    "Created At": {
+      "type": "date",
+      "description": "Timestamp when the prompt was first added to the library"
+    },
+    "Last Used": {
+      "type": "date",
+      "description": "Timestamp of the most recent retrieval via /prompt:get"
+    }
+  },
+  "idempotent_key": "Name",
+  "notes": "Lazy creation by database name on first /prompt:add. Idempotent upsert by Name property (case-insensitive match). Times Used starts at 0 and increments on each /prompt:get retrieval. Visibility defaults to Personal; changed to Shared via /prompt:share."
+}

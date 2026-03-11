@@ -1,0 +1,70 @@
+{
+  "database_name": "Workflow Automator - Executions",
+  "description": "Tracks each workflow execution with run metadata, step completion counts, duration, trigger source, and final output or error summary.",
+  "properties": {
+    "Run ID": {
+      "type": "title",
+      "description": "UUID identifier for this execution"
+    },
+    "Workflow Name": {
+      "type": "rich_text",
+      "description": "Name from workflow.name"
+    },
+    "Status": {
+      "type": "select",
+      "options": ["Running", "Completed", "Failed", "Partial"],
+      "description": "Current execution status"
+    },
+    "Started At": {
+      "type": "date",
+      "description": "Execution start timestamp"
+    },
+    "Completed At": {
+      "type": "date",
+      "description": "Execution end timestamp"
+    },
+    "Duration": {
+      "type": "rich_text",
+      "description": "Human-readable duration (e.g., \"2m 34s\")"
+    },
+    "Steps Total": {
+      "type": "number",
+      "description": "Total step count in the workflow"
+    },
+    "Steps Completed": {
+      "type": "number",
+      "description": "Number of successfully completed steps"
+    },
+    "Steps Failed": {
+      "type": "number",
+      "description": "Number of failed steps"
+    },
+    "Steps Skipped": {
+      "type": "number",
+      "description": "Number of skipped steps (e.g., due to conditional logic or upstream failure)"
+    },
+    "Triggered By": {
+      "type": "select",
+      "options": ["Manual", "Schedule", "Chain"],
+      "description": "How the workflow execution was initiated"
+    },
+    "Workflow Version": {
+      "type": "rich_text",
+      "description": "Version from workflow.version"
+    },
+    "Context Snapshot": {
+      "type": "rich_text",
+      "description": "JSON of final context state at execution end"
+    },
+    "Error Summary": {
+      "type": "rich_text",
+      "description": "First error message if execution failed"
+    },
+    "Output": {
+      "type": "rich_text",
+      "description": "Final workflow output or summary"
+    }
+  },
+  "idempotent_key": "Run ID (UUID unique)",
+  "notes": "Lazy creation by database name on first workflow execution. Idempotent upsert by Run ID (UUID guarantees uniqueness). Status transitions: Running -> Completed | Failed | Partial. Steps Total = Steps Completed + Steps Failed + Steps Skipped. Context Snapshot stored as JSON rich_text. Error Summary populated only when Status is Failed or Partial."
+}

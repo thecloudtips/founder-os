@@ -1,0 +1,20 @@
+{
+  "web-search": {
+    "command": "npx",
+    "args": ["-y", "@anthropic/mcp-server-web-search"],
+    "env": {},
+    "capabilities": {
+      "search": "Search the web for information",
+      "fetch": "Fetch and parse web page content"
+    },
+    "required_by": [
+      "#15"
+    ],
+    "setup": {
+      "steps": [
+        "No authentication required",
+        "Built-in web search capabilities"
+      ]
+    }
+  }
+}

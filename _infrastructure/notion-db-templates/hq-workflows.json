@@ -1,0 +1,100 @@
+{
+  "title": "Founder OS HQ - Workflows",
+  "description": "Consolidated workflows database merging P27 Workflow Automator execution logs and P28 Workflow Documenter SOPs. Type column distinguishes execution records from SOP documents.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Workflow/SOP name or Run ID"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Record type",
+      "options": ["Execution", "SOP"]
+    },
+    "Status": {
+      "type": "select",
+      "description": "Status varies by type",
+      "options": ["Running", "Completed", "Failed", "Cancelled", "Draft", "Published"]
+    },
+    "Description": {
+      "type": "rich_text",
+      "description": "Workflow or SOP description"
+    },
+    "Steps Count": {
+      "type": "number",
+      "description": "Total number of steps"
+    },
+    "Steps Completed": {
+      "type": "number",
+      "description": "Execution: steps that completed successfully"
+    },
+    "Steps Failed": {
+      "type": "number",
+      "description": "Execution: steps that failed"
+    },
+    "Steps Skipped": {
+      "type": "number",
+      "description": "Execution: steps that were skipped"
+    },
+    "Started At": {
+      "type": "date",
+      "description": "Execution: when the run started"
+    },
+    "Completed At": {
+      "type": "date",
+      "description": "Execution: when the run finished"
+    },
+    "Duration": {
+      "type": "rich_text",
+      "description": "Execution: human-readable duration string"
+    },
+    "Triggered By": {
+      "type": "select",
+      "description": "Execution: what initiated the run",
+      "options": ["Manual", "Schedule", "Chained", "API"]
+    },
+    "Workflow Version": {
+      "type": "rich_text",
+      "description": "Execution: version of the workflow definition"
+    },
+    "Context Snapshot": {
+      "type": "rich_text",
+      "description": "Execution: JSON snapshot of context variables"
+    },
+    "Error Summary": {
+      "type": "rich_text",
+      "description": "Execution: error details if failed"
+    },
+    "Tools Used": {
+      "type": "multi_select",
+      "description": "SOP: Tools referenced in the procedure"
+    },
+    "Handoff Points": {
+      "type": "number",
+      "description": "SOP: Number of actor handoffs"
+    },
+    "Complexity": {
+      "type": "select",
+      "description": "SOP: Assessed complexity level",
+      "options": ["Simple", "Moderate", "Complex", "Very Complex"]
+    },
+    "SOP File Path": {
+      "type": "rich_text",
+      "description": "SOP: Path to saved SOP file"
+    },
+    "Diagram Included": {
+      "type": "checkbox",
+      "description": "SOP: Whether Mermaid diagram was generated"
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "When record was created"
+    }
+  },
+  "default_values": {
+    "Type": "Execution",
+    "Status": "Running"
+  },
+  "notes": "P27 writes Type='Execution' with Run ID as the idempotent key (UUID). P28 writes Type='SOP' idempotent by Title + same calendar day. Status values are shared but used differently: Executions use Running/Completed/Failed/Cancelled; SOPs use Draft/Published. Discovery: search 'Founder OS HQ - Workflows' first, then fall back to 'Workflow Automator - Executions' or 'Workflow Documenter - SOPs'."
+}

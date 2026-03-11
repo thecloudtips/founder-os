@@ -1,0 +1,87 @@
+{
+  "title": "Founder OS HQ - Meetings",
+  "description": "Consolidated meetings database merging P03 Meeting Prep Autopilot prep notes and P07 Meeting Intelligence Hub analyses. A single meeting record holds both prep and analysis data, linked by Event ID.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Meeting Title": {
+      "type": "title",
+      "description": "Calendar event title"
+    },
+    "Event ID": {
+      "type": "rich_text",
+      "description": "Google Calendar Event ID, idempotent key shared between P03 and P07"
+    },
+    "Date": {
+      "type": "date",
+      "description": "Meeting date and time"
+    },
+    "Meeting Type": {
+      "type": "select",
+      "description": "Meeting type classification",
+      "options": ["External Client", "One-on-One", "Internal Sync", "Ad-Hoc", "Recurring", "Group"]
+    },
+    "Attendees": {
+      "type": "rich_text",
+      "description": "Comma-separated attendee list"
+    },
+    "Company": {
+      "type": "relation",
+      "description": "Optional: associated company for external meetings",
+      "relation_database": "Founder OS HQ - Companies"
+    },
+    "Importance Score": {
+      "type": "number",
+      "description": "P03: Meeting importance 1-5"
+    },
+    "Prep Notes": {
+      "type": "rich_text",
+      "description": "P03: Preparation notes and context"
+    },
+    "Talking Points": {
+      "type": "rich_text",
+      "description": "P03: Generated talking points"
+    },
+    "Sources Used": {
+      "type": "multi_select",
+      "description": "P03: Data sources used for prep",
+      "options": ["Gmail", "Calendar", "Notion", "Drive"]
+    },
+    "Source Type": {
+      "type": "select",
+      "description": "P07: Transcript source",
+      "options": ["Fireflies", "Otter", "Gemini", "Notion", "Generic"]
+    },
+    "Transcript File": {
+      "type": "rich_text",
+      "description": "P07: Path to saved transcript file"
+    },
+    "Summary": {
+      "type": "rich_text",
+      "description": "P07: AI-generated meeting summary"
+    },
+    "Decisions": {
+      "type": "rich_text",
+      "description": "P07: Key decisions log"
+    },
+    "Follow-Ups": {
+      "type": "rich_text",
+      "description": "P07: Follow-up commitments extracted"
+    },
+    "Topics": {
+      "type": "multi_select",
+      "description": "P07: Topic tags"
+    },
+    "Duration": {
+      "type": "number",
+      "description": "P07: Meeting duration in minutes"
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "When record was created/last updated"
+    }
+  },
+  "default_values": {
+    "Meeting Type": "Internal Sync"
+  },
+  "notes": "Both P03 and P07 share the Event ID as idempotent key. When P03 creates a record for prep, P07 updates the same record with analysis fields (and vice versa). Company relation populated when meeting attendees match CRM contacts. Discovery: search 'Founder OS HQ - Meetings' first, then fall back to 'Meeting Prep Autopilot - Prep Notes' or 'Meeting Intelligence Hub - Analyses'."
+}

@@ -1,0 +1,81 @@
+{
+  "title": "Founder OS HQ - Briefings",
+  "description": "Consolidated briefings database merging P02 Daily Briefings, P05 Weekly Reviews, P19 Slack Digests, and P22 Morning Sync briefings. Each record has a Type column.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Briefing title"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Briefing type",
+      "options": ["Daily Briefing", "Weekly Review", "Slack Digest", "Morning Sync"]
+    },
+    "Date": {
+      "type": "date",
+      "description": "Primary date for idempotent upsert (combined with Type)"
+    },
+    "Content": {
+      "type": "rich_text",
+      "description": "The briefing/review body"
+    },
+    "Meeting Count": {
+      "type": "number",
+      "description": "Number of meetings in the period"
+    },
+    "Email Count": {
+      "type": "number",
+      "description": "Number of emails in the period"
+    },
+    "Task Count": {
+      "type": "number",
+      "description": "Number of tasks tracked"
+    },
+    "Overdue Tasks": {
+      "type": "number",
+      "description": "P02: Count of overdue tasks"
+    },
+    "Slack Highlights": {
+      "type": "rich_text",
+      "description": "P19/P22: Key Slack highlights"
+    },
+    "Drive Updates": {
+      "type": "rich_text",
+      "description": "P22: Google Drive update summaries"
+    },
+    "Sources Used": {
+      "type": "multi_select",
+      "description": "Data sources used for this briefing",
+      "options": ["Gmail", "Calendar", "Notion", "Slack", "Drive"]
+    },
+    "Time Window": {
+      "type": "rich_text",
+      "description": "P19/P22: Time window covered (e.g. \"12h\", \"24h\")"
+    },
+    "Week Ending": {
+      "type": "date",
+      "description": "P05: Week ending date for weekly reviews"
+    },
+    "Blockers": {
+      "type": "rich_text",
+      "description": "P05: Identified blockers and risks"
+    },
+    "Carryover Items": {
+      "type": "rich_text",
+      "description": "P05: Tasks carried to next week"
+    },
+    "Next Week Priorities": {
+      "type": "rich_text",
+      "description": "P05: Recommended priorities for next week"
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "Timestamp of generation"
+    }
+  },
+  "default_values": {
+    "Type": "Daily Briefing"
+  },
+  "notes": "Idempotent upsert uses Date + Type as compound key (e.g., one Daily Briefing per day, one Weekly Review per Week Ending date). P05 Weekly Review uses Week Ending as its date key. Discovery: search 'Founder OS HQ - Briefings' first, then fall back to plugin-specific names."
+}

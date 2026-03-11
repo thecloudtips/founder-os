@@ -1,0 +1,63 @@
+{
+  "pattern": "competing-hypotheses",
+  "description": "SOW Generator: Three scope agents propose independent SOW options, risk and pricing agents evaluate each, synthesis lead creates final deliverable with 3 client-ready packages and comparison table",
+  "execution": "parallel_then_synthesis",
+  "agents": [
+    {
+      "name": "scope-agent-a",
+      "role": "Conservative scope interpretation - minimize risk, deliver core value",
+      "file": "teams/agents/scope-agent-a.md",
+      "parallel_group": "hypotheses",
+      "tools": ["filesystem"]
+    },
+    {
+      "name": "scope-agent-b",
+      "role": "Balanced scope interpretation - optimize value-to-effort ratio",
+      "file": "teams/agents/scope-agent-b.md",
+      "parallel_group": "hypotheses",
+      "tools": ["filesystem"]
+    },
+    {
+      "name": "scope-agent-c",
+      "role": "Ambitious scope interpretation - maximize impact and deliverables",
+      "file": "teams/agents/scope-agent-c.md",
+      "parallel_group": "hypotheses",
+      "tools": ["filesystem"]
+    },
+    {
+      "name": "risk-agent",
+      "role": "Identify and assess risks for each proposed scope option",
+      "file": "teams/agents/risk-agent.md",
+      "parallel_group": "analysis",
+      "tools": []
+    },
+    {
+      "name": "pricing-agent",
+      "role": "Cost estimation and value-for-money analysis for each proposed scope option",
+      "file": "teams/agents/pricing-agent.md",
+      "parallel_group": "analysis",
+      "tools": []
+    },
+    {
+      "name": "sow-lead",
+      "role": "Synthesize evaluated proposals into final SOW document with 3 named client packages",
+      "file": "teams/agents/sow-lead.md",
+      "parallel_group": "lead",
+      "tools": ["filesystem", "notion"]
+    }
+  ],
+  "coordination": {
+    "phase_1": "all_hypothesis_agents_propose_independently",
+    "phase_2": "analysis_agents_evaluate_each_proposal",
+    "phase_3": "lead_synthesizes_best_approach",
+    "scoring": "comparative_matrix",
+    "timeout_per_agent": "60s",
+    "failure_handling": "continue_with_remaining_hypotheses",
+    "minimum_hypotheses_required": 2
+  },
+  "observability": {
+    "log_agent_output": true,
+    "report_timing": true,
+    "report_scoring_matrix": true
+  }
+}

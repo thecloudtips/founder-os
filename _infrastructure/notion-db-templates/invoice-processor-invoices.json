@@ -1,0 +1,110 @@
+{
+  "database_name": "Invoice Processor - Invoices",
+  "description": "All invoices processed by the Invoice Processor plugin. Each row represents one invoice that has been extracted, validated, categorized, and reviewed.",
+  "properties": {
+    "Invoice #": {
+      "type": "title",
+      "description": "Invoice number as extracted from the document (e.g., INV-2024-0042)"
+    },
+    "Vendor": {
+      "type": "rich_text",
+      "description": "Vendor/supplier name"
+    },
+    "Amount": {
+      "type": "number",
+      "format": "dollar",
+      "description": "Grand total amount due"
+    },
+    "Currency": {
+      "type": "select",
+      "options": ["USD", "EUR", "GBP", "CAD", "AUD", "Other"],
+      "description": "Invoice currency (ISO 4217)"
+    },
+    "Invoice Date": {
+      "type": "date",
+      "description": "Date the invoice was issued (ISO 8601)"
+    },
+    "Due Date": {
+      "type": "date",
+      "description": "Payment due date (ISO 8601) — may be empty"
+    },
+    "Category": {
+      "type": "select",
+      "options": [
+        "office_supplies",
+        "software",
+        "hardware",
+        "professional_services",
+        "travel",
+        "meals",
+        "shipping",
+        "utilities",
+        "rent",
+        "insurance",
+        "marketing",
+        "training",
+        "subscriptions",
+        "other"
+      ],
+      "description": "Primary expense category (highest total amount)"
+    },
+    "Tax Deductible": {
+      "type": "checkbox",
+      "description": "Whether the primary expense category is tax deductible"
+    },
+    "Budget Code": {
+      "type": "rich_text",
+      "description": "Budget code assigned based on category (e.g., OPS-001, TECH-001)"
+    },
+    "Approval Status": {
+      "type": "select",
+      "options": [
+        {"name": "Approved", "color": "green"},
+        {"name": "Needs Review", "color": "yellow"},
+        {"name": "Pending Approval", "color": "orange"},
+        {"name": "Rejected", "color": "red"}
+      ],
+      "description": "Approval routing status from the approval agent"
+    },
+    "Extraction Confidence": {
+      "type": "number",
+      "format": "percent",
+      "description": "Confidence score from OCR/extraction (0.0–1.0)"
+    },
+    "Source File": {
+      "type": "rich_text",
+      "description": "Original file path or email source reference"
+    },
+    "Processed At": {
+      "type": "date",
+      "description": "Timestamp when the invoice was processed"
+    },
+    "Line Items": {
+      "type": "rich_text",
+      "description": "JSON summary of categorized line items from the invoice"
+    },
+    "Approval Request": {
+      "type": "relation",
+      "related_database": "Invoice Processor - Approvals",
+      "description": "Link to the approval request page (if flagged for review)"
+    }
+  },
+  "views": [
+    {
+      "name": "All Invoices",
+      "type": "table",
+      "sort": [{"property": "Processed At", "direction": "descending"}]
+    },
+    {
+      "name": "Needs Review",
+      "type": "table",
+      "filter": {"property": "Approval Status", "select": {"equals": "Needs Review"}}
+    },
+    {
+      "name": "By Category",
+      "type": "table",
+      "group_by": "Category",
+      "sort": [{"property": "Amount", "direction": "descending"}]
+    }
+  ]
+}

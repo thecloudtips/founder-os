@@ -1,0 +1,74 @@
+{
+  "title": "Founder OS HQ - Knowledge Base",
+  "description": "Consolidated knowledge base merging P23 Knowledge Base Q&A sources and queries. Type column distinguishes indexed sources from user queries.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Source title or query text"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Record type",
+      "options": ["Source", "Query"]
+    },
+    "URL": {
+      "type": "url",
+      "description": "Source URL (sources only)"
+    },
+    "Source Type": {
+      "type": "select",
+      "description": "Origin of the source",
+      "options": ["Notion Page", "Notion Database", "Drive Document", "Drive Spreadsheet", "Drive Presentation", "Other"]
+    },
+    "Classification": {
+      "type": "select",
+      "description": "Content classification",
+      "options": ["Wiki", "Meeting Notes", "Project Docs", "Process", "Reference", "Template", "Database", "Archive", "Other"]
+    },
+    "Topic Keywords": {
+      "type": "multi_select",
+      "description": "Extracted topic tags"
+    },
+    "Word Count": {
+      "type": "number",
+      "description": "Source word count (sources only)"
+    },
+    "Freshness": {
+      "type": "select",
+      "description": "Content freshness tier",
+      "options": ["Fresh", "Current", "Aging", "Stale"]
+    },
+    "Answered": {
+      "type": "checkbox",
+      "description": "Whether query was successfully answered (queries only)"
+    },
+    "Confidence": {
+      "type": "select",
+      "description": "Answer confidence level (queries only)",
+      "options": ["High", "Medium", "Low"]
+    },
+    "Sources Used": {
+      "type": "number",
+      "description": "Number of sources searched (queries only)"
+    },
+    "Answer Excerpt": {
+      "type": "rich_text",
+      "description": "Brief answer excerpt (queries only)"
+    },
+    "Status": {
+      "type": "select",
+      "description": "Record status",
+      "options": ["Active", "Archived"]
+    },
+    "Indexed At": {
+      "type": "date",
+      "description": "When source was indexed or query was asked"
+    }
+  },
+  "default_values": {
+    "Status": "Active",
+    "Freshness": "Fresh"
+  },
+  "notes": "Merges P23's two databases (Sources and Queries) into one with Type column. Sources are idempotent by URL. Queries are idempotent by Title (query text) + same calendar day. Discovery: search 'Founder OS HQ - Knowledge Base' first, then fall back to 'Knowledge Base Q&A - Sources' and 'Knowledge Base Q&A - Queries'."
+}

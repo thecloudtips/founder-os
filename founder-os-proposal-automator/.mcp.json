@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceRoot}"
+      ],
+      "_purpose": "Read brief files and input documents, write generated proposals and SOW-compatible briefs to output directory",
+      "_required": true
+    },
+    "notion": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-notion"
+      ],
+      "env": {
+        "NOTION_API_KEY": "${NOTION_API_KEY}"
+      },
+      "_purpose": "Search CRM Pro databases for client context, track proposals in lazy-created Notion DB, load briefs from Notion pages",
+      "_required": false
+    }
+  }
+}

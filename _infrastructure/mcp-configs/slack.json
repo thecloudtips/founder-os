@@ -1,0 +1,27 @@
+{
+  "slack": {
+    "command": "npx",
+    "args": ["-y", "@anthropic/mcp-server-slack"],
+    "env": {
+      "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}"
+    },
+    "capabilities": {
+      "read-channels": "Read channel messages",
+      "read-dms": "Read direct messages",
+      "send-message": "Send messages to channels/DMs",
+      "search": "Search messages across workspace",
+      "list-channels": "List available channels"
+    },
+    "required_by": [
+      "#02", "#19", "#22"
+    ],
+    "setup": {
+      "steps": [
+        "Create Slack App at https://api.slack.com/apps",
+        "Add bot scopes: channels:history, channels:read, chat:write, search:read",
+        "Install app to workspace",
+        "Set SLACK_BOT_TOKEN environment variable"
+      ]
+    }
+  }
+}

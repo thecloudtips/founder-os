@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-contract-analyzer",
+  "version": "1.0.0",
+  "description": "Analyzes legal contracts to extract key terms (payment, IP, termination, liability), flags risky clauses using RAG classification, and compares contract terms against standard templates for freelancers and agencies",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Contract Analyzer",
+  "platform": "claude-code",
+  "pillar": "Code Without Coding",
+  "plugin_number": "13",
+  "type": "standalone",
+  "difficulty": "advanced",
+  "release_week": 15,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}

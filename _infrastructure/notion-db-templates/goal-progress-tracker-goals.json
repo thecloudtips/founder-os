@@ -1,0 +1,68 @@
+{
+  "database_name": "Goal Progress Tracker - Goals",
+  "description": "Stores goals with progress tracking, RAG health status, milestone rollup, velocity-based completion projections, and blocker detection.",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Goal name as provided by the user"
+    },
+    "Description": {
+      "type": "rich_text",
+      "description": "Detailed description of the goal including success criteria"
+    },
+    "Status": {
+      "type": "select",
+      "options": ["Not Started", "In Progress", "On Hold", "Completed", "Archived"],
+      "description": "Current lifecycle status of the goal"
+    },
+    "Progress": {
+      "type": "number",
+      "format": "percent",
+      "description": "Overall progress 0-100. Auto-calculated from milestones when present, or manually set via /goal:update."
+    },
+    "Target Date": {
+      "type": "date",
+      "description": "Deadline for goal completion"
+    },
+    "Start Date": {
+      "type": "date",
+      "description": "When work on the goal began. Defaults to creation date."
+    },
+    "Category": {
+      "type": "select",
+      "options": ["Revenue", "Product", "Operations", "Team", "Personal", "Technical", "Marketing", "Other"],
+      "description": "Goal category for grouping and filtering"
+    },
+    "RAG Status": {
+      "type": "select",
+      "options": ["Green", "Yellow", "Red", "Not Started"],
+      "description": "Red/Amber/Green health indicator. Auto-calculated by comparing actual vs expected progress."
+    },
+    "Projected Completion": {
+      "type": "date",
+      "description": "Estimated completion date based on current velocity. Updated on each /goal:report or /goal:check."
+    },
+    "Milestone Count": {
+      "type": "number",
+      "description": "Total number of milestones linked to this goal"
+    },
+    "Completed Milestones": {
+      "type": "number",
+      "description": "Number of milestones marked as Done"
+    },
+    "Progress Snapshots": {
+      "type": "rich_text",
+      "description": "JSON array of {date, progress} objects for velocity calculation fallback when no milestones exist. E.g. [{\"date\":\"2026-03-01\",\"progress\":25}]"
+    },
+    "Notes": {
+      "type": "rich_text",
+      "description": "Append-only log of status updates, blocker notes, and context. Each entry prefixed with [YYYY-MM-DD]."
+    },
+    "Created At": {
+      "type": "date",
+      "description": "Timestamp when the goal was created"
+    }
+  },
+  "idempotent_key": "Title (case-insensitive unique)",
+  "notes": "Lazy creation by database name on first /goal:create. Idempotent upsert by Title to prevent duplicate goals. Progress auto-calculated from milestones when Milestone Count > 0. Progress Snapshots stored as JSON rich_text for velocity fallback on goals without milestones. Notes are append-only — never overwrite, always prepend new entries."
+}

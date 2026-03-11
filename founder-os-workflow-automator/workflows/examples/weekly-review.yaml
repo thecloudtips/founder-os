@@ -1,0 +1,74 @@
+workflow:
+  name: "weekly-review"
+  description: "End-of-week review: compile weekly stats, check goals, scan follow-ups, and generate comprehensive review"
+  version: "1.0.0"
+  tags: ["weekly", "review", "planning"]
+
+schedule:
+  enabled: true
+  cron: "0 17 * * 5"
+  timezone: "America/New_York"
+
+defaults:
+  stop_on_error: true
+  timeout_seconds: 300
+  output_format: "both"
+
+steps:
+  - id: "compile-review"
+    name: "Compile Weekly Review"
+    command: "/weekly:review"
+    args:
+      output: "chat"
+    depends_on: []
+    output_as: "weekly_review"
+
+  - id: "check-goals"
+    name: "Check Goal Progress"
+    command: "/goal:report"
+    args:
+      status: "active"
+      output: "chat"
+    depends_on: []
+    output_as: "goal_status"
+
+  - id: "scan-followups"
+    name: "Scan Pending Follow-ups"
+    command: "/followup:check"
+    args:
+      priority: "all"
+    depends_on: []
+    output_as: "followup_list"
+    continue_on_error: true
+
+  - id: "check-savings"
+    name: "Calculate Time Savings"
+    command: "/savings:weekly"
+    args:
+      output: "chat"
+    depends_on: []
+    output_as: "time_savings"
+    continue_on_error: true
+
+  - id: "log-learnings"
+    name: "Generate Learning Summary"
+    command: "/learn:weekly"
+    args:
+      output: "chat"
+    depends_on: []
+    output_as: "learning_summary"
+    continue_on_error: true
+
+  - id: "generate-report"
+    name: "Generate Combined Report"
+    command: "/report:generate"
+    args:
+      data: "Weekly Review: {{context.weekly_review}} | Goals: {{context.goal_status}} | Follow-ups: {{context.followup_list}} | Savings: {{context.time_savings}} | Learnings: {{context.learning_summary}}"
+      template: "weekly-summary"
+    depends_on:
+      - "compile-review"
+      - "check-goals"
+      - "scan-followups"
+      - "check-savings"
+      - "log-learnings"
+    output_as: "final_report"

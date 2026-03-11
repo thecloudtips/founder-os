@@ -1,0 +1,30 @@
+{
+  "name": "founder-os-sow-generator",
+  "version": "1.0.0",
+  "description": "AI-powered SOW generator using competing hypotheses — three scope agents independently propose conservative, balanced, and ambitious options; risk and pricing agents evaluate each; synthesis lead delivers final document with 3 client-ready packages and comparison table",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "SOW Generator",
+  "type": "agent-teams",
+  "platform": "claude-code",
+  "difficulty": "intermediate",
+  "release_week": 5,
+  "agent_pattern": "competing-hypotheses",
+  "capabilities": [
+    "Generate 3 SOW options (conservative, balanced, ambitious) from a single brief",
+    "Risk assessment per scope option with mitigation strategies",
+    "Cost/pricing estimation per scope option",
+    "Comparison table across all three options",
+    "Historical SOW context via Notion integration",
+    "DOCX-ready Markdown output for client delivery"
+  ],
+  "dependencies": {
+    "plugins": ["#12 Proposal Automator"],
+    "mcp_servers": {
+      "required": ["filesystem"],
+      "optional": ["notion"]
+    }
+  }
+}

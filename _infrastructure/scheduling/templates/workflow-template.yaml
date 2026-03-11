@@ -1,0 +1,27 @@
+# Auto-generated workflow — do not edit manually
+# Created by --schedule flag on {{COMMAND}}
+# To modify: re-run the command with --schedule "new expression"
+# To disable: run the command with --schedule disable
+
+workflow:
+  name: "{{WORKFLOW_NAME}}"
+  description: "{{WORKFLOW_DESCRIPTION}}"
+  version: "1.0.0"
+  tags: ["auto-scheduled"]
+
+schedule:
+  enabled: true
+  cron: "{{CRON_EXPRESSION}}"
+  timezone: "{{TIMEZONE}}"
+
+defaults:
+  stop_on_error: true
+  timeout_seconds: 300
+  output_format: "chat"
+
+steps:
+  - id: "run-command"
+    name: "Execute {{COMMAND}}"
+    command: "{{COMMAND}}"
+    args: {{COMMAND_ARGS}}
+    depends_on: []

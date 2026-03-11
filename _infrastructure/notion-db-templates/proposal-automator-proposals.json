@@ -1,0 +1,57 @@
+{
+  "title": "Proposal Automator - Proposals",
+  "description": "Tracks generated client proposals including package selection, pricing, and file paths. Created on first run via lazy DB creation.",
+  "plugin": "founder-os-proposal-automator",
+  "properties": {
+    "Project Title": {
+      "type": "title",
+      "description": "Name of the proposed project for identification and upsert matching."
+    },
+    "Client Name": {
+      "type": "select",
+      "description": "Client the proposal is for. Used with Project Title for idempotent upsert.",
+      "options": []
+    },
+    "Status": {
+      "type": "select",
+      "description": "Current lifecycle stage of the proposal.",
+      "options": ["Draft", "Sent", "Won", "Lost"]
+    },
+    "Package Selected": {
+      "type": "select",
+      "description": "Which pricing package the client selected, if known.",
+      "options": ["Starter", "Professional", "Enterprise", "None"]
+    },
+    "Total Amount": {
+      "type": "number",
+      "description": "Price of the selected package in USD.",
+      "format": "dollar"
+    },
+    "Proposal File": {
+      "type": "rich_text",
+      "description": "Local file path to the generated proposal markdown file."
+    },
+    "Brief File": {
+      "type": "rich_text",
+      "description": "Local file path to the SOW-compatible brief file for /sow:from-brief."
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "Timestamp when the proposal was generated."
+    },
+    "Sources Used": {
+      "type": "multi_select",
+      "description": "Data sources used to generate this proposal.",
+      "options": ["CRM", "Brief File", "Interactive"]
+    },
+    "Notes": {
+      "type": "rich_text",
+      "description": "Free-form notes about the proposal, client feedback, or follow-up actions."
+    }
+  },
+  "default_values": {
+    "Status": "Draft",
+    "Package Selected": "None"
+  },
+  "notes": "The plugin searches for this database by name before creating it (lazy creation). Idempotent upsert uses Client Name + Project Title as compound key. Status lifecycle: Draft → Sent → Won/Lost."
+}

@@ -1,0 +1,67 @@
+{
+  "title": "Founder OS HQ - Memory",
+  "description": "Persistent memory store for the Founder OS memory engine. Stores preferences, patterns, facts, contacts, and workflow knowledge extracted and surfaced across all 30 plugins.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Key": {
+      "type": "title",
+      "description": "Unique memory key or short label identifying this memory"
+    },
+    "Category": {
+      "type": "select",
+      "description": "Type of memory",
+      "options": ["preference", "pattern", "fact", "contact", "workflow"]
+    },
+    "Content": {
+      "type": "rich_text",
+      "description": "Full memory content — the stored knowledge or observation"
+    },
+    "Source Plugin": {
+      "type": "select",
+      "description": "Plugin or actor that created this memory",
+      "options": [
+        "P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08",
+        "P09", "P10", "P11", "P12", "P13", "P14", "P15", "P16",
+        "P17", "P18", "P19", "P20", "P21", "P22", "P23", "P24",
+        "P25", "P26", "P27", "P28", "P29", "P30",
+        "User", "System"
+      ]
+    },
+    "Confidence": {
+      "type": "number",
+      "description": "Confidence score 0-100 indicating how reliable this memory is"
+    },
+    "Status": {
+      "type": "select",
+      "description": "Lifecycle state of this memory",
+      "options": ["candidate", "confirmed", "applied", "dismissed"]
+    },
+    "Company": {
+      "type": "relation",
+      "description": "Optional: company this memory is scoped to",
+      "relation_database": "Founder OS HQ - Companies"
+    },
+    "Tags": {
+      "type": "multi_select",
+      "description": "Free-form tags for grouping and filtering memories"
+    },
+    "Times Used": {
+      "type": "number",
+      "description": "How many times this memory has been retrieved and applied"
+    },
+    "Last Used": {
+      "type": "date",
+      "description": "Most recent date this memory was retrieved or applied"
+    },
+    "Synced At": {
+      "type": "date",
+      "description": "When this memory was last written or updated by the memory engine"
+    }
+  },
+  "default_values": {
+    "Status": "candidate",
+    "Confidence": 50,
+    "Times Used": 0
+  },
+  "notes": "Created by the memory engine superpower. Memories progress through candidate → confirmed → applied as they are validated and used. Dismissed memories are retained for audit but excluded from active retrieval. Deduplication: use Key as the unique identifier within a Category. Company relation is populated when a memory is scoped to a specific client. Discovery: search '[FOS] Memory' first, then 'Founder OS HQ - Memory'."
+}

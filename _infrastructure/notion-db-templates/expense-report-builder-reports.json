@@ -1,0 +1,73 @@
+{
+  "database_name": "Expense Report Builder - Reports",
+  "description": "Generated expense reports tracking. Each row represents one expense report covering a specific date range with aggregated totals, category breakdowns, and trend data.",
+  "properties": {
+    "Report Title": {
+      "type": "title",
+      "description": "Report title (e.g., 'Expense Report — March 2024')"
+    },
+    "Date Range": {
+      "type": "rich_text",
+      "description": "Period covered (e.g., '2024-03-01 to 2024-03-31')"
+    },
+    "Total Expenses": {
+      "type": "number",
+      "format": "dollar",
+      "description": "Sum of all expenses in the report period"
+    },
+    "Invoice Count": {
+      "type": "number",
+      "description": "Number of invoices/receipts included in this report"
+    },
+    "Top Category": {
+      "type": "select",
+      "options": [
+        "office_supplies",
+        "software",
+        "hardware",
+        "professional_services",
+        "travel",
+        "meals",
+        "shipping",
+        "utilities",
+        "rent",
+        "insurance",
+        "marketing",
+        "training",
+        "subscriptions",
+        "other"
+      ],
+      "description": "Expense category with highest total amount in this report"
+    },
+    "Tax Deductible Amount": {
+      "type": "number",
+      "format": "dollar",
+      "description": "Sum of fully tax-deductible expenses in the report"
+    },
+    "Report File": {
+      "type": "rich_text",
+      "description": "Local file path where the Markdown report was saved"
+    },
+    "Sources Used": {
+      "type": "multi_select",
+      "options": ["Notion", "Local Files"],
+      "description": "Data sources used to compile this report"
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "Timestamp when this report was generated (ISO 8601)"
+    }
+  },
+  "views": [
+    {
+      "name": "All Reports",
+      "type": "table",
+      "sort": [{"property": "Generated At", "direction": "descending"}]
+    },
+    {
+      "name": "By Category",
+      "type": "table",
+      "group_by": "Top Category"
+    }
+  ]
+}

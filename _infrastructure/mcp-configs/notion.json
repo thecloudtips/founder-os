@@ -1,0 +1,31 @@
+{
+  "notion": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-notion"],
+    "env": {
+      "NOTION_API_KEY": "${NOTION_API_KEY}"
+    },
+    "capabilities": {
+      "search": "Search pages and databases",
+      "fetch": "Read page content",
+      "create-pages": "Create new pages",
+      "update-page": "Update existing pages",
+      "create-database": "Create databases",
+      "get-comments": "Read comments",
+      "create-comment": "Add comments"
+    },
+    "required_by": [
+      "#01", "#02", "#03", "#04", "#05",
+      "#07", "#09", "#10", "#11", "#12",
+      "#14", "#17", "#20", "#21", "#22",
+      "#23", "#25", "#26", "#28", "#29", "#30"
+    ],
+    "setup": {
+      "steps": [
+        "Create Notion integration at https://www.notion.so/my-integrations",
+        "Grant access to relevant workspace pages/databases",
+        "Set NOTION_API_KEY environment variable"
+      ]
+    }
+  }
+}

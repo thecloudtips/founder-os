@@ -1,0 +1,75 @@
+{
+  "title": "Founder OS HQ - Reports",
+  "description": "Consolidated reports database merging P09 Report Generator business reports and P25 Time Savings Calculator ROI reports.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Report title"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Report type",
+      "options": ["Business Report", "ROI Report"]
+    },
+    "Status": {
+      "type": "select",
+      "description": "Report status",
+      "options": ["Draft", "Complete", "Archived"]
+    },
+    "Date Range": {
+      "type": "rich_text",
+      "description": "Period covered by the report"
+    },
+    "Data Sources": {
+      "type": "multi_select",
+      "description": "P09: Data sources used",
+      "options": ["Notion", "Drive", "Filesystem", "Manual Input"]
+    },
+    "Template Used": {
+      "type": "rich_text",
+      "description": "P09: Report template name"
+    },
+    "Executive Summary": {
+      "type": "rich_text",
+      "description": "P09: Executive summary section"
+    },
+    "QA Notes": {
+      "type": "rich_text",
+      "description": "P09: QA agent review notes"
+    },
+    "Total Hours Saved": {
+      "type": "number",
+      "description": "P25: Total hours saved by automation"
+    },
+    "Dollar Value": {
+      "type": "number",
+      "description": "P25: Dollar value of time saved"
+    },
+    "Tasks Automated": {
+      "type": "number",
+      "description": "P25: Number of automated tasks counted"
+    },
+    "Active Plugins": {
+      "type": "number",
+      "description": "P25: Number of active plugins detected"
+    },
+    "Top Category": {
+      "type": "rich_text",
+      "description": "P25: Highest-saving category"
+    },
+    "Output Path": {
+      "type": "rich_text",
+      "description": "File path to generated report"
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "When report was generated"
+    }
+  },
+  "default_values": {
+    "Status": "Complete",
+    "Type": "Business Report"
+  },
+  "notes": "P09 writes Type='Business Report', P25 writes Type='ROI Report'. P16 Expense Report Builder also writes here with Type='Expense Report' (note: P16's expense REPORT output is a report document, distinct from the Finance DB invoice/expense records). Idempotent by Title + same calendar day. Discovery: search 'Founder OS HQ - Reports' first, then fall back to plugin-specific names."
+}

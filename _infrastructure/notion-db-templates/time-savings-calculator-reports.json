@@ -1,0 +1,95 @@
+{
+  "database_name": "Time Savings Calculator - Reports",
+  "description": "Tracks generated savings and ROI reports from the Time Savings Calculator plugin (P25). Each record represents one report generation run.",
+  "properties": {
+    "Report Title": {
+      "type": "title",
+      "description": "Report title, e.g., 'Weekly Savings: Mar 1-7, 2026'"
+    },
+    "Report Type": {
+      "type": "select",
+      "description": "Type of report generated",
+      "options": ["Weekly", "Monthly ROI"]
+    },
+    "Date Range": {
+      "type": "rich_text",
+      "description": "Human-readable date range covered, e.g., '2026-03-01 to 2026-03-07'"
+    },
+    "Total Hours Saved": {
+      "type": "number",
+      "format": "number",
+      "description": "Total hours saved across all active plugins in this period"
+    },
+    "Dollar Value": {
+      "type": "number",
+      "format": "dollar",
+      "description": "Total dollar value of time saved (hourly_rate × hours). 0 if rate not configured."
+    },
+    "Tasks Automated": {
+      "type": "number",
+      "format": "number",
+      "description": "Total count of automated tasks across all active plugins"
+    },
+    "Active Plugins": {
+      "type": "number",
+      "format": "number",
+      "description": "Number of Founder OS plugins with Notion databases found and scanned"
+    },
+    "Top Category": {
+      "type": "select",
+      "description": "Category that saved the most time in this period",
+      "options": [
+        "Email Triage",
+        "Meeting Prep",
+        "Action Extraction",
+        "Weekly Review",
+        "Follow-Up Tracking",
+        "Meeting Analysis",
+        "Newsletter Drafting",
+        "Report Generation",
+        "Client Health Check",
+        "Invoice Processing",
+        "Proposal Writing",
+        "Contract Analysis",
+        "SOW Generation",
+        "Competitive Research",
+        "Expense Reporting",
+        "Drive Search",
+        "Slack Digest",
+        "Client Context",
+        "CRM Sync",
+        "Morning Sync",
+        "KB Query",
+        "LinkedIn Post",
+        "Prompt Management",
+        "Workflow Documentation"
+      ]
+    },
+    "Report File": {
+      "type": "rich_text",
+      "description": "Local file path where the report was saved"
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "Timestamp when the report was generated"
+    }
+  },
+  "views": {
+    "All Reports": {
+      "type": "table",
+      "sort": [{ "property": "Generated At", "direction": "descending" }]
+    },
+    "Weekly Reports": {
+      "type": "table",
+      "filter": { "property": "Report Type", "select": { "equals": "Weekly" } },
+      "sort": [{ "property": "Generated At", "direction": "descending" }]
+    },
+    "Monthly ROI": {
+      "type": "table",
+      "filter": { "property": "Report Type", "select": { "equals": "Monthly ROI" } },
+      "sort": [{ "property": "Generated At", "direction": "descending" }]
+    }
+  },
+  "idempotent_key": ["Report Title", "Generated At"],
+  "idempotent_rule": "Same Report Title + same calendar day = update existing record"
+}

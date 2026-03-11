@@ -1,0 +1,59 @@
+{
+  "pattern": "parallel-gathering",
+  "description": "Daily Briefing Generator: Gather calendar, email, task, and Slack data simultaneously, then compile into a structured daily briefing",
+  "execution": "parallel",
+  "agents": [
+    {
+      "name": "calendar-agent",
+      "role": "Fetch today's calendar events and generate meeting preparation notes",
+      "file": "agents/calendar-agent.md",
+      "parallel_group": "gatherers",
+      "tools": ["Bash"],
+      "skills": ["meeting-prep"]
+    },
+    {
+      "name": "gmail-agent",
+      "role": "Scan unread emails and prioritize by urgency and importance",
+      "file": "agents/gmail-agent.md",
+      "parallel_group": "gatherers",
+      "tools": ["Bash"],
+      "skills": ["email-prioritization"]
+    },
+    {
+      "name": "notion-agent",
+      "role": "Pull tasks due today from Notion and organize by priority",
+      "file": "agents/notion-agent.md",
+      "parallel_group": "gatherers",
+      "tools": ["notion"],
+      "skills": ["task-curation"]
+    },
+    {
+      "name": "slack-agent",
+      "role": "Gather overnight Slack mentions and channel highlights",
+      "file": "agents/slack-agent.md",
+      "parallel_group": "gatherers",
+      "tools": ["slack"],
+      "optional": true
+    },
+    {
+      "name": "briefing-lead",
+      "role": "Synthesize all gathered data into a structured daily briefing and publish to Notion",
+      "file": "agents/briefing-lead.md",
+      "parallel_group": "lead",
+      "tools": ["notion"],
+      "skills": ["briefing-assembly"]
+    }
+  ],
+  "coordination": {
+    "parallel_group_execution": "all_gatherers_then_lead",
+    "merge_strategy": "lead_agent_synthesizes",
+    "timeout_per_agent": "30s",
+    "failure_handling": "continue_with_partial_results",
+    "minimum_gatherers_required": 2
+  },
+  "observability": {
+    "log_agent_output": true,
+    "report_timing": true,
+    "report_partial_failures": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-newsletter-draft-engine",
+  "version": "1.0.0",
+  "description": "Researches topics across web, GitHub, Reddit, and Quora, then generates structured newsletter drafts in founder voice with Substack-compatible markdown",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Newsletter Draft Engine",
+  "platform": "claude-code",
+  "pillar": "Daily Work",
+  "plugin_number": "08",
+  "type": "standalone",
+  "difficulty": "intermediate",
+  "release_week": 12,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}

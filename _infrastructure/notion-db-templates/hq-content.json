@@ -1,0 +1,66 @@
+{
+  "title": "Founder OS HQ - Content",
+  "description": "Consolidated content database merging P08 Newsletter Draft Engine newsletter drafts, P24 LinkedIn Post Generator posts, and P01 Inbox Zero email drafts.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Post topic, email subject, or newsletter title"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Content type",
+      "options": ["Newsletter", "LinkedIn Post", "Email Draft"]
+    },
+    "Content": {
+      "type": "rich_text",
+      "description": "The body content"
+    },
+    "Status": {
+      "type": "select",
+      "description": "Content lifecycle status",
+      "options": ["Draft", "To Review", "Approved", "Published", "Sent to Gmail"]
+    },
+    "Company": {
+      "type": "relation",
+      "description": "Optional: for client-related content",
+      "relation_database": "Founder OS HQ - Companies"
+    },
+    "Framework": {
+      "type": "select",
+      "description": "P24: Post framework used",
+      "options": ["Story", "Listicle", "Contrarian", "HowTo", "Lesson", "Insight", "Question"]
+    },
+    "Audience": {
+      "type": "select",
+      "description": "P24: Target audience",
+      "options": ["Founder", "Technical", "Marketer", "CXO"]
+    },
+    "Length": {
+      "type": "select",
+      "description": "P24: Content length tier",
+      "options": ["Short", "Medium", "Long"]
+    },
+    "Hashtags": {
+      "type": "rich_text",
+      "description": "P24: Generated hashtags"
+    },
+    "Style Notes": {
+      "type": "rich_text",
+      "description": "P24: Style guidance or voice notes"
+    },
+    "Output File": {
+      "type": "rich_text",
+      "description": "Path to saved file"
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "When content was generated"
+    }
+  },
+  "default_values": {
+    "Status": "Draft",
+    "Type": "Newsletter"
+  },
+  "notes": "P01 Inbox Zero writes email drafts with Type='Email Draft' and Status lifecycle: To Review -> Approved -> Sent to Gmail. P08 writes newsletters with Type='Newsletter'. P24 writes LinkedIn posts with Type='LinkedIn Post'. Company relation is populated when content is related to a specific client. Idempotent: P24 by Post Topic + Framework + same calendar day; P08 by Topic + same calendar day; P01 by email subject. Discovery: search 'Founder OS HQ - Content' first, then fall back to plugin-specific names."
+}

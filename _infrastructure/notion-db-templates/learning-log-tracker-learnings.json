@@ -1,0 +1,46 @@
+{
+  "database_name": "Learning Log Tracker - Learnings",
+  "description": "Stores daily learning insights with auto-detected topics, source classification, and cross-references to related past learnings.",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Auto-generated 5-8 word summary of the learning insight"
+    },
+    "Insight": {
+      "type": "rich_text",
+      "description": "Full learning text as provided by the user (15-2000 characters)"
+    },
+    "Topics": {
+      "type": "multi_select",
+      "options": ["Technical", "Process", "Business", "People", "Tool", "Strategy", "Mistake", "Win", "Idea", "Industry"],
+      "description": "Auto-detected topic categories (1-3 per learning). 10 predefined + custom topics allowed."
+    },
+    "Source Type": {
+      "type": "select",
+      "options": ["Experience", "Reading", "Conversation", "Experiment", "Observation"],
+      "description": "How the learning was acquired. Auto-detected from context or specified via --source flag."
+    },
+    "Context": {
+      "type": "rich_text",
+      "description": "Optional additional context provided via --context flag"
+    },
+    "Related IDs": {
+      "type": "rich_text",
+      "description": "Comma-separated page IDs of 2-3 most related past learnings (stored as rich_text for lazy-creation compatibility)"
+    },
+    "Related Titles": {
+      "type": "rich_text",
+      "description": "Comma-separated titles of related past learnings for quick scanning"
+    },
+    "Week": {
+      "type": "rich_text",
+      "description": "ISO week identifier as YYYY-WNN text (e.g., '2026-W10') for weekly aggregation queries"
+    },
+    "Logged At": {
+      "type": "date",
+      "description": "Timestamp when the learning was captured"
+    }
+  },
+  "idempotent_key": "Title + same calendar day (Logged At)",
+  "notes": "Lazy creation by database name on first /learn:log. Idempotent upsert by Title + same calendar day to allow multiple distinct learnings per day but prevent accidental duplicates. Related IDs/Titles stored as rich_text (not Notion relation type) for lazy-creation compatibility. Week field enables ISO week queries for /learn:weekly synthesis."
+}

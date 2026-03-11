@@ -1,0 +1,45 @@
+{
+  "database_name": "Knowledge Base Q&A - Queries",
+  "description": "Tracks questions asked via /kb:ask with answer quality, confidence, and source attribution for knowledge base improvement over time.",
+  "properties": {
+    "Query": {
+      "type": "title",
+      "description": "The question asked by the user"
+    },
+    "Answered": {
+      "type": "checkbox",
+      "description": "Whether the query was successfully answered (true) or returned 'I don't know' (false)"
+    },
+    "Confidence": {
+      "type": "select",
+      "options": ["High", "Medium", "Low", "None"],
+      "description": "Confidence level of the answer based on source quality and relevance. 'None' for no-answer pathway."
+    },
+    "Sources Used": {
+      "type": "number",
+      "description": "Number of sources cited in the answer"
+    },
+    "Source Names": {
+      "type": "rich_text",
+      "description": "Comma-separated names of cited source documents"
+    },
+    "Sources Searched": {
+      "type": "rich_text",
+      "description": "Comma-separated list of sources queried (e.g., 'notion, drive')"
+    },
+    "Top Score": {
+      "type": "number",
+      "description": "Highest relevance score (0-100) among retrieved sources"
+    },
+    "Answer Excerpt": {
+      "type": "rich_text",
+      "description": "First 200 characters of the synthesized answer for quick review"
+    },
+    "Asked At": {
+      "type": "date",
+      "description": "Timestamp when the query was submitted"
+    }
+  },
+  "idempotent_key": "Query + Asked At (same calendar day)",
+  "notes": "Idempotent by Query text (case-insensitive) + same calendar day: update if found, create if not. Query tracking is optional and only writes when Notion is available. The /kb:find and /kb:index commands do not write to this database."
+}

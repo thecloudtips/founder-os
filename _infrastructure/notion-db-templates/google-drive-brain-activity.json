@@ -1,0 +1,43 @@
+{
+  "database_name": "Google Drive Brain - Activity",
+  "description": "Tracks Drive operations performed via /drive:search, /drive:summarize, /drive:ask, and /drive:organize commands for usage analytics and result caching.",
+  "properties": {
+    "Query": {
+      "type": "title",
+      "description": "The search query, question, or folder path used in the command"
+    },
+    "Command Type": {
+      "type": "select",
+      "options": ["search", "summarize", "ask", "organize"],
+      "default": "search",
+      "description": "Which /drive: command was executed"
+    },
+    "Files Found": {
+      "type": "number",
+      "description": "Number of files found or processed by the command"
+    },
+    "Top Result": {
+      "type": "rich_text",
+      "description": "Title or name of the top/primary result file"
+    },
+    "File IDs": {
+      "type": "rich_text",
+      "description": "Comma-separated Google Drive file IDs of processed files"
+    },
+    "Folder Context": {
+      "type": "rich_text",
+      "description": "Folder path or scope context for the operation"
+    },
+    "Sources Used": {
+      "type": "multi_select",
+      "options": ["Google Drive", "Notion"],
+      "description": "Which data sources were accessed during the operation"
+    },
+    "Generated At": {
+      "type": "date",
+      "description": "Timestamp when the operation was performed"
+    }
+  },
+  "idempotent_key": "Query + Generated At (same calendar day)",
+  "notes": "Idempotent by Query text (case-insensitive) + same calendar day: update if found, create if not. Activity tracking is optional and only writes when Notion is available. The /drive:organize command logs recommendations but never executes file moves."
+}

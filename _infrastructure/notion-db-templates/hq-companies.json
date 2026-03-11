@@ -1,0 +1,89 @@
+{
+  "title": "Founder OS HQ - Companies",
+  "description": "Central CRM hub for all client/company records. Enhanced with P10 Client Health Dashboard scoring properties and P20 Client Context Loader dossier caching. All client-facing databases relate back to this table.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Name": {
+      "type": "title",
+      "description": "Company name"
+    },
+    "Industry": {
+      "type": "select",
+      "description": "Company industry",
+      "options": ["Technology", "Healthcare", "Finance", "Education", "Retail", "Manufacturing", "Consulting", "Media", "Real Estate", "Other"]
+    },
+    "Size": {
+      "type": "select",
+      "description": "Company size classification",
+      "options": ["Startup", "SMB", "Mid-Market", "Enterprise"]
+    },
+    "Status": {
+      "type": "select",
+      "description": "Company relationship status",
+      "options": ["Active", "Prospect", "Churned", "Partner"]
+    },
+    "Website": {
+      "type": "url",
+      "description": "Company website"
+    },
+    "Contacts": {
+      "type": "relation",
+      "description": "Linked contacts/people",
+      "relation_database": "Founder OS HQ - Contacts"
+    },
+    "Deals": {
+      "type": "relation",
+      "description": "Linked sales deals",
+      "relation_database": "Founder OS HQ - Deals"
+    },
+    "Communications": {
+      "type": "relation",
+      "description": "Linked communication records",
+      "relation_database": "Founder OS HQ - Communications"
+    },
+    "Health Score": {
+      "type": "number",
+      "description": "P10: Composite health score 0-100"
+    },
+    "Health Status": {
+      "type": "select",
+      "description": "P10: RAG classification",
+      "options": ["Green", "Yellow", "Red"]
+    },
+    "Risk Flags": {
+      "type": "multi_select",
+      "description": "P10: Detected risk indicators",
+      "options": ["No Recent Contact", "Slow Response Time", "Overdue Tasks", "Payment Issues", "Negative Sentiment", "Declining Engagement", "Contract Expiring", "Missing Stakeholder"]
+    },
+    "Dossier": {
+      "type": "rich_text",
+      "description": "P20: Cached client context dossier (JSON format)"
+    },
+    "Dossier Completeness": {
+      "type": "number",
+      "description": "P20: Completeness score 0.0-1.0"
+    },
+    "Dossier Generated At": {
+      "type": "date",
+      "description": "P20: When dossier was last generated"
+    },
+    "Dossier Stale": {
+      "type": "checkbox",
+      "description": "P20: Whether dossier needs refresh (24h TTL)"
+    },
+    "Last Scanned": {
+      "type": "date",
+      "description": "P10: When health score was last calculated (24h cache TTL)"
+    },
+    "Notes": {
+      "type": "rich_text",
+      "description": "General notes"
+    }
+  },
+  "default_values": {
+    "Health Status": "Yellow",
+    "Dossier Stale": false,
+    "Health Score": 50
+  },
+  "notes": "Central hub of the Founder OS HQ workspace. All client-facing databases (Tasks, Meetings, Finance, Deliverables, Content, Research) link to Companies via Notion relations. P10 Client Health Dashboard writes health scoring properties directly to this database instead of a standalone Health Scores DB. P20 Client Context Loader writes dossier properties directly here instead of a standalone Client Dossiers DB. Both use 24h TTL caching. Discovery: plugins search for 'Founder OS HQ - Companies' first, then 'Companies'."
+}

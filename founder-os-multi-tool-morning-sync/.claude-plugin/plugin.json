@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-multi-tool-morning-sync",
+  "version": "1.0.0",
+  "description": "Orchestrator plugin that consolidates Gmail, Calendar, Notion, Slack, and Drive into a single morning briefing with cross-source priority synthesis",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Multi-Tool Morning Sync",
+  "platform": "claude-code",
+  "pillar": "MCP & Integrations",
+  "plugin_number": "22",
+  "type": "standalone",
+  "difficulty": "intermediate",
+  "release_week": 22,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}

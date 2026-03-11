@@ -1,0 +1,54 @@
+{
+  "title": "Contract Analyzer - Analyses",
+  "description": "Contract analysis results including extracted terms, risk assessments, and standard term comparisons. Created on first run via lazy DB creation.",
+  "plugin": "founder-os-contract-analyzer",
+  "properties": {
+    "Contract Name": {
+      "type": "title",
+      "description": "Name or title of the analyzed contract document for identification."
+    },
+    "File Path": {
+      "type": "rich_text",
+      "description": "Original file path of the contract document that was analyzed."
+    },
+    "Contract Type": {
+      "type": "select",
+      "description": "Type of contract detected during analysis.",
+      "options": ["Service Agreement", "NDA", "Freelance", "Agency", "Employment", "Other"]
+    },
+    "Summary": {
+      "type": "rich_text",
+      "description": "Brief summary of the contract's key terms and overall assessment."
+    },
+    "Key Terms": {
+      "type": "rich_text",
+      "description": "Structured extraction of key terms across 7 categories: Payment, Duration/Renewal, IP, Confidentiality, Liability, Termination, Warranty."
+    },
+    "Risk Level": {
+      "type": "select",
+      "description": "Overall risk assessment using RAG classification.",
+      "options": ["Red", "Yellow", "Green"]
+    },
+    "Risk Flags": {
+      "type": "rich_text",
+      "description": "List of identified risk flags with severity levels and descriptions."
+    },
+    "Compared To Standard": {
+      "type": "checkbox",
+      "description": "Whether this analysis included comparison against standard terms template."
+    },
+    "Comparison Notes": {
+      "type": "rich_text",
+      "description": "Detailed comparison results showing deviations from standard terms with recommendations."
+    },
+    "Analyzed At": {
+      "type": "date",
+      "description": "Timestamp when the contract analysis was performed."
+    }
+  },
+  "default_values": {
+    "Risk Level": "Green",
+    "Compared To Standard": false
+  },
+  "notes": "The plugin searches for this database by name before creating it (lazy creation). Contract Name serves as the primary identifier. Risk Level uses RAG classification: Red = high risk (needs lawyer), Yellow = medium risk (needs attention), Green = low risk (acceptable)."
+}

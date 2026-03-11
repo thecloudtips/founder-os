@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-linkedin-post-generator",
+  "version": "1.0.0",
+  "description": "Generates LinkedIn posts from topics, documents, or campaigns with multiple frameworks, audience targeting, and hook optimization",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "LinkedIn Post Generator",
+  "platform": "claude-code",
+  "pillar": "MCP & Integrations",
+  "plugin_number": "24",
+  "type": "standalone",
+  "difficulty": "beginner",
+  "release_week": 24,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}

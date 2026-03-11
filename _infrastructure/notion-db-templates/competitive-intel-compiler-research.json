@@ -1,0 +1,67 @@
+{
+  "title": "Competitive Intel Compiler - Research",
+  "description": "Competitor research results including pricing models, positioning archetypes, review scores, and strategic recommendations. Created on first run via lazy DB creation.",
+  "plugin": "founder-os-competitive-intel-compiler",
+  "properties": {
+    "Company Name": {
+      "type": "title",
+      "description": "Name of the competitor company being researched."
+    },
+    "Domain": {
+      "type": "url",
+      "description": "Company website URL used as the primary research source."
+    },
+    "Research Date": {
+      "type": "date",
+      "description": "Date on which the competitive research was conducted."
+    },
+    "Pricing Model": {
+      "type": "select",
+      "description": "Pricing structure detected for this competitor.",
+      "options": ["Per Seat", "Flat Rate", "Usage-Based", "Freemium", "Enterprise Only", "Unknown"]
+    },
+    "Starting Price": {
+      "type": "rich_text",
+      "description": "Normalized pricing string for the lowest publicly available tier (e.g., \"$15/user/month\"). Empty if pricing is not public."
+    },
+    "Free Tier": {
+      "type": "checkbox",
+      "description": "Whether the company offers a free plan or free trial with ongoing access."
+    },
+    "Positioning Archetype": {
+      "type": "select",
+      "description": "Strategic positioning category identified for this competitor.",
+      "options": ["Enterprise Leader", "SMB Friendly", "Developer-First", "Non-Technical Founder", "Vertical Specialist", "Challenger", "Unknown"]
+    },
+    "Review Score": {
+      "type": "number",
+      "description": "Composite review score aggregated from public sources (G2, Capterra, Trustpilot, etc.), normalized to a 0.0–5.0 scale."
+    },
+    "Strengths": {
+      "type": "rich_text",
+      "description": "Top 2–3 competitive advantages identified from product positioning, reviews, and marketing signals."
+    },
+    "Weaknesses": {
+      "type": "rich_text",
+      "description": "Top 2–3 gaps, complaints, or vulnerabilities identified from negative reviews and competitive gaps."
+    },
+    "Strategic Recommendations": {
+      "type": "rich_text",
+      "description": "3–5 actionable recommendations for how to differentiate from or compete against this company."
+    },
+    "Report File Path": {
+      "type": "rich_text",
+      "description": "Local filesystem path to the full Markdown research report saved on disk."
+    },
+    "Researched At": {
+      "type": "date",
+      "description": "Timestamp when the research pipeline was last executed for this competitor."
+    }
+  },
+  "default_values": {
+    "Free Tier": false,
+    "Pricing Model": "Unknown",
+    "Positioning Archetype": "Unknown"
+  },
+  "notes": "The plugin searches for this database by name before creating it (lazy creation). Company Name serves as the primary identifier for idempotent updates — re-running research on the same competitor overwrites the existing row rather than creating a duplicate. Review Score is stored as a float (e.g., 4.3) and should be aggregated across at least 2 public review sources when available. Positioning Archetype is auto-detected from product copy and review language signals."
+}

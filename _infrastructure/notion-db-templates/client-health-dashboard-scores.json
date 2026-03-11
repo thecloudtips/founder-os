@@ -1,0 +1,63 @@
+{
+  "title": "Client Health Dashboard - Health Scores",
+  "description": "Cached client health scores computed from 5 weighted metrics. Created by the /client:health-scan command on first run. Scores are cached for 24 hours before refresh.",
+  "plugin": "founder-os-client-health-dashboard",
+  "command": "health-scan",
+  "properties": {
+    "Client Name": {
+      "type": "title",
+      "description": "Client company name — primary lookup key for score retrieval. Matches CRM Companies database entries."
+    },
+    "Overall Score": {
+      "type": "number",
+      "description": "Composite health score 0-100. Weighted from 5 metrics: Last Contact (0.25), Response Time (0.20), Open Tasks (0.20), Payment Status (0.20), Sentiment (0.15)."
+    },
+    "Health Status": {
+      "type": "select",
+      "description": "RAG color-coded status derived from Overall Score.",
+      "options": ["Green", "Yellow", "Red"]
+    },
+    "Last Contact Score": {
+      "type": "number",
+      "description": "Score 0-100 for recency of last contact. Exponential decay: 100 at 0 days, ~50 at 14 days, ~0 at 60+ days."
+    },
+    "Response Time Score": {
+      "type": "number",
+      "description": "Score 0-100 for average email response time. 100 for same-day, decreasing for longer response times."
+    },
+    "Open Tasks Score": {
+      "type": "number",
+      "description": "Score 0-100 for open task completion health. High score = few overdue tasks, low score = many overdue or stale tasks."
+    },
+    "Payment Score": {
+      "type": "number",
+      "description": "Score 0-100 for payment status. 100 for all invoices paid on time, decreasing for overdue or partial payments. Reads from P11 Invoice Processor DB."
+    },
+    "Sentiment Score": {
+      "type": "number",
+      "description": "Score 0-100 for communication sentiment. Derived from email tone analysis and meeting behavior patterns."
+    },
+    "Risk Flags": {
+      "type": "multi_select",
+      "description": "Qualitative risk indicators beyond numeric scores.",
+      "options": ["No Recent Contact", "Slow Response", "Overdue Tasks", "Payment Issues", "Negative Sentiment", "Meeting Cancellations", "Escalation Language", "New Client"]
+    },
+    "Sources Used": {
+      "type": "multi_select",
+      "description": "Which data sources contributed to this health score.",
+      "options": ["Gmail", "Notion", "Calendar", "Invoices", "Dossiers"]
+    },
+    "Last Scanned": {
+      "type": "date",
+      "description": "Timestamp of last health score computation. Used for 24h cache TTL — scores older than this are refreshed on next scan."
+    },
+    "Notes": {
+      "type": "rich_text",
+      "description": "Additional context or notes about this client's health status. May include recommended actions or recent changes."
+    }
+  },
+  "default_values": {
+    "Health Status": "Yellow"
+  },
+  "notes": "The /client:health-scan command searches for this database by name ('Client Health Dashboard - Health Scores') before creating it. Lazy-created on first scan. Cache TTL is 24 hours — entries older than this are refreshed on next scan with --refresh flag or automatically when stale."
+}

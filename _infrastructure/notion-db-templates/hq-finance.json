@@ -1,0 +1,84 @@
+{
+  "title": "Founder OS HQ - Finance",
+  "description": "Consolidated financial records merging P11 Invoice Processor invoices and P16 Expense Report Builder expense reports. Each record has a Type column (Invoice or Expense).",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Invoice number or Report title"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Record type",
+      "options": ["Invoice", "Expense"]
+    },
+    "Company": {
+      "type": "relation",
+      "description": "Vendor or client company",
+      "relation_database": "Founder OS HQ - Companies"
+    },
+    "Amount": {
+      "type": "number",
+      "description": "Monetary amount"
+    },
+    "Currency": {
+      "type": "select",
+      "description": "Currency code",
+      "options": ["USD", "EUR", "GBP", "CAD", "AUD", "Other"]
+    },
+    "Date": {
+      "type": "date",
+      "description": "Invoice date or report date"
+    },
+    "Due Date": {
+      "type": "date",
+      "description": "Payment due date (invoices only)"
+    },
+    "Category": {
+      "type": "select",
+      "description": "Expense category",
+      "options": ["Office Supplies", "Software & SaaS", "Professional Services", "Travel & Transport", "Meals & Entertainment", "Marketing & Advertising", "Equipment & Hardware", "Utilities", "Insurance", "Rent & Facilities", "Subscriptions", "Training & Education", "Contractor Fees", "Other"]
+    },
+    "Tax Deductible": {
+      "type": "select",
+      "description": "Tax deductibility status",
+      "options": ["Full", "Partial", "No"]
+    },
+    "Budget Code": {
+      "type": "select",
+      "description": "Budget allocation code",
+      "options": ["OPS", "TECH", "SVC", "TRV", "FAC", "ADM", "MKT", "HR", "GEN"]
+    },
+    "Status": {
+      "type": "select",
+      "description": "Processing status",
+      "options": ["Pending", "Approved", "Rejected", "Paid"]
+    },
+    "Extraction Confidence": {
+      "type": "number",
+      "description": "P11: OCR extraction confidence 0-1 (invoices only)"
+    },
+    "Source File": {
+      "type": "rich_text",
+      "description": "Path to source document"
+    },
+    "Line Items": {
+      "type": "rich_text",
+      "description": "P11: JSON array of invoice line items (invoices only)"
+    },
+    "Date Range": {
+      "type": "rich_text",
+      "description": "P16: Report date range (expense reports only)"
+    },
+    "Processed At": {
+      "type": "date",
+      "description": "When record was processed"
+    }
+  },
+  "default_values": {
+    "Status": "Pending",
+    "Currency": "USD",
+    "Tax Deductible": "No"
+  },
+  "notes": "P16 reads from this DB filtered by Type='Invoice' (replacing the old P11-specific 'Invoice Processor - Invoices' DB read). P16 writes expense report summaries to the Reports DB, not here. Company relation links vendors to CRM for automatic vendor tracking. Discovery: search 'Founder OS HQ - Finance' first, then fall back to 'Invoice Processor - Invoices'."
+}

@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-report-generator",
+  "version": "1.0.0",
+  "description": "Pipeline-based report generation factory that transforms raw data from CSV, JSON, Notion, and text files into polished Markdown reports with Mermaid charts and executive summaries",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Report Generator Factory",
+  "platform": "claude-code",
+  "pillar": "Code Without Coding",
+  "plugin_number": "09",
+  "type": "standalone",
+  "difficulty": "intermediate",
+  "release_week": 3,
+  "agent_pattern": "pipeline",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": true
+  },
+  "dependencies": []
+}

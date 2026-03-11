@@ -1,0 +1,42 @@
+{
+  "database_name": "Goal Progress Tracker - Milestones",
+  "description": "Stores milestones as sub-goals linked to parent goals via relation property. Milestone completion drives automatic goal progress calculation.",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Milestone name describing the deliverable or checkpoint"
+    },
+    "Goal": {
+      "type": "relation",
+      "related_database": "Goal Progress Tracker - Goals",
+      "description": "Link to the parent goal. Goals DB must be created before Milestones DB."
+    },
+    "Status": {
+      "type": "select",
+      "options": ["Not Started", "In Progress", "Done", "Skipped"],
+      "description": "Current status of the milestone"
+    },
+    "Due Date": {
+      "type": "date",
+      "description": "Target completion date for this milestone"
+    },
+    "Completed At": {
+      "type": "date",
+      "description": "Actual completion date. Set automatically when Status changes to Done."
+    },
+    "Order": {
+      "type": "number",
+      "description": "Sequence number (1-based) for display ordering within the goal"
+    },
+    "Notes": {
+      "type": "rich_text",
+      "description": "Optional context or completion notes for this milestone"
+    },
+    "Created At": {
+      "type": "date",
+      "description": "Timestamp when the milestone was created"
+    }
+  },
+  "idempotent_key": "Title + Goal relation (unique per goal)",
+  "notes": "Lazy creation by database name on first milestone addition. Requires Goals DB to exist first for the relation property. Milestone completion (Status = Done) triggers parent goal progress recalculation. Skipped milestones are excluded from progress calculation. Order field determines display sequence in reports and dashboards."
+}

@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-client-context-loader",
+  "version": "1.0.0",
+  "description": "Parallel-gathering plugin that pulls client data from Notion CRM, Gmail, Google Drive, Google Calendar, and meeting notes — assembling a complete client dossier in under 30 seconds",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Client Context Loader",
+  "platform": "claude-code",
+  "pillar": "MCP & Integrations",
+  "plugin_number": "20",
+  "type": "standalone",
+  "difficulty": "intermediate",
+  "release_week": 2,
+  "agent_pattern": "parallel-gathering",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": true
+  },
+  "dependencies": []
+}

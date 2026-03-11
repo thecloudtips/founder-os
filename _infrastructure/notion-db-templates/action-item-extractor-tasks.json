@@ -1,0 +1,49 @@
+{
+  "title": "Action Item Extractor - Tasks",
+  "description": "Action items extracted from meeting transcripts, emails, or documents by the Action Item Extractor plugin. Created on first run via lazy DB creation.",
+  "plugin": "founder-os-action-item-extractor",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Verb-first action description (max 80 chars). Examples: 'Review project timeline', 'Send invoice to client', 'Schedule team sync'."
+    },
+    "Description": {
+      "type": "rich_text",
+      "description": "Full context of what needs to be done, including relevant details from the source document."
+    },
+    "Owner": {
+      "type": "rich_text",
+      "description": "Who should complete this task. Inferred from content using owner inference rules: explicit @mention > named delegation > team reference > default to user."
+    },
+    "Deadline": {
+      "type": "date",
+      "description": "ISO date deadline or empty. Parsed from explicit dates, relative references ('by Friday'), and urgency language ('ASAP' = today)."
+    },
+    "Priority": {
+      "type": "number",
+      "description": "Priority score 1-5. 5 = critical/urgent, 1 = low/backlog. Inferred from urgency language, deadline proximity, and context."
+    },
+    "Status": {
+      "type": "select",
+      "description": "Task completion status.",
+      "options": ["To Do", "In Progress", "Done"]
+    },
+    "Source Type": {
+      "type": "select",
+      "description": "Type of document the action item was extracted from.",
+      "options": ["Meeting Transcript", "Email", "Document", "Other"]
+    },
+    "Source Title": {
+      "type": "rich_text",
+      "description": "Title or subject of the source document, email, or meeting."
+    },
+    "Extracted At": {
+      "type": "date",
+      "description": "Timestamp when the action item was extracted."
+    }
+  },
+  "default_values": {
+    "Status": "To Do"
+  },
+  "notes": "The plugin searches for this database by name before creating it (lazy creation). Duplicate detection uses verb+noun matching within a 14-day window to prevent re-extraction of the same action items."
+}

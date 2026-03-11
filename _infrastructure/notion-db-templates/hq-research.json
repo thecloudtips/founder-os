@@ -1,0 +1,83 @@
+{
+  "title": "Founder OS HQ - Research",
+  "description": "Consolidated research database merging P08 Newsletter Engine research sessions and P15 Competitive Intel Compiler research entries.",
+  "plugin": "founder-os-hq",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "Research topic or company name"
+    },
+    "Type": {
+      "type": "select",
+      "description": "Research type",
+      "options": ["Newsletter Research", "Competitive Analysis"]
+    },
+    "Company": {
+      "type": "relation",
+      "description": "Related company (competitive entries)",
+      "relation_database": "Founder OS HQ - Companies"
+    },
+    "Date Range": {
+      "type": "rich_text",
+      "description": "P08: Time period researched"
+    },
+    "Total Findings": {
+      "type": "number",
+      "description": "P08: Number of findings collected"
+    },
+    "Sources Searched": {
+      "type": "multi_select",
+      "description": "P08: Sources searched",
+      "options": ["Web", "GitHub", "Reddit", "Quora"]
+    },
+    "Key Themes": {
+      "type": "rich_text",
+      "description": "P08: Major themes identified"
+    },
+    "Domain": {
+      "type": "url",
+      "description": "P15: Competitor website domain"
+    },
+    "Pricing Model": {
+      "type": "rich_text",
+      "description": "P15: Pricing structure description"
+    },
+    "Starting Price": {
+      "type": "rich_text",
+      "description": "P15: Lowest price point"
+    },
+    "Positioning Archetype": {
+      "type": "select",
+      "description": "P15: Market positioning",
+      "options": ["Premium", "Value", "Disruptor", "Niche", "Platform", "Freemium"]
+    },
+    "Review Score": {
+      "type": "number",
+      "description": "P15: Average review score 0-5"
+    },
+    "Strengths": {
+      "type": "rich_text",
+      "description": "P15: Key competitive strengths"
+    },
+    "Weaknesses": {
+      "type": "rich_text",
+      "description": "P15: Key competitive weaknesses"
+    },
+    "Strategic Recommendations": {
+      "type": "rich_text",
+      "description": "P15: Recommended actions"
+    },
+    "Report File": {
+      "type": "rich_text",
+      "description": "Path to generated report file"
+    },
+    "Researched At": {
+      "type": "date",
+      "description": "When research was conducted"
+    }
+  },
+  "default_values": {
+    "Type": "Newsletter Research"
+  },
+  "notes": "P15 Competitive Analysis entries should have Company relation populated (create or find company in Companies DB). P08 entries are idempotent by Topic + same calendar day. P15 entries are idempotent by Company Name. Discovery: search 'Founder OS HQ - Research' first, then fall back to plugin-specific names."
+}

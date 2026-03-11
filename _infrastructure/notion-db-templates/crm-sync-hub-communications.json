@@ -1,0 +1,66 @@
+{
+  "title": "CRM Pro - Communications",
+  "description": "Client communication activity log populated by CRM Sync Hub. Contains email and meeting records with AI-generated summaries, sentiment classification, and client associations. Created via lazy DB creation on first sync.",
+  "plugin": "founder-os-crm-sync-hub",
+  "properties": {
+    "Title": {
+      "type": "title",
+      "description": "AI-generated summary headline of the activity (max 80 characters)."
+    },
+    "Type": {
+      "type": "select",
+      "description": "Activity type indicating the communication channel and direction.",
+      "options": ["Email Sent", "Email Received", "Meeting Held", "Meeting Scheduled"]
+    },
+    "Date": {
+      "type": "date",
+      "description": "ISO 8601 timestamp of when the activity occurred."
+    },
+    "Contact": {
+      "type": "relation",
+      "description": "Related contact from the CRM Pro Contacts database.",
+      "relation_database": "Contacts"
+    },
+    "Company": {
+      "type": "relation",
+      "description": "Related company from the CRM Pro Companies database.",
+      "relation_database": "Companies"
+    },
+    "Summary": {
+      "type": "rich_text",
+      "description": "AI-generated 2-3 sentence summary of the communication content."
+    },
+    "Sentiment": {
+      "type": "select",
+      "description": "AI-classified sentiment of the communication.",
+      "options": ["Positive", "Neutral", "Negative"]
+    },
+    "Thread ID": {
+      "type": "rich_text",
+      "description": "Gmail Thread ID or Calendar Event ID for deduplication. Used as the unique key to prevent duplicate records."
+    },
+    "Participants": {
+      "type": "rich_text",
+      "description": "Comma-separated list of participants in the format 'Name (Role)'."
+    },
+    "Direction": {
+      "type": "select",
+      "description": "Communication direction relative to the user.",
+      "options": ["Outbound", "Inbound"]
+    },
+    "Source": {
+      "type": "select",
+      "description": "Source system the activity was synced from.",
+      "options": ["Gmail", "Google Calendar"]
+    },
+    "Synced At": {
+      "type": "date",
+      "description": "Timestamp when the record was created or last updated by CRM Sync Hub."
+    }
+  },
+  "default_values": {
+    "Sentiment": "Neutral",
+    "Source": "Gmail"
+  },
+  "notes": "The plugin searches for this database by name ('Communications' or 'CRM - Communications') before creating it (lazy creation). Title serves as part of the compound deduplication key (Title + Date + Type). If the Thread ID property exists, exact deduplication by Thread ID/Event ID is preferred over the compound key approach. Sentiment defaults to Neutral when AI classification is ambiguous."
+}

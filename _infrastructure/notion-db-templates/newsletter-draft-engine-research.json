@@ -1,0 +1,38 @@
+{
+  "title": "Newsletter Engine - Research",
+  "description": "Research sessions performed by the Newsletter Draft Engine plugin. Tracks topics researched, sources searched, findings extracted, and key themes identified. Created on first run via lazy DB creation.",
+  "plugin": "founder-os-newsletter-draft-engine",
+  "properties": {
+    "Topic": {
+      "type": "title",
+      "description": "The research topic being investigated for newsletter content."
+    },
+    "Date Range": {
+      "type": "rich_text",
+      "description": "Time window searched for findings, e.g., 'Last 14 days' or 'Last 7 days'."
+    },
+    "Total Findings": {
+      "type": "number",
+      "description": "Count of distinct findings extracted from the research session."
+    },
+    "Sources Searched": {
+      "type": "multi_select",
+      "description": "Which source platforms were queried during research.",
+      "options": ["Web", "GitHub", "Reddit", "Quora", "Official Blogs"]
+    },
+    "Key Themes": {
+      "type": "rich_text",
+      "description": "Comma-separated themes identified across findings, used for newsletter angle selection."
+    },
+    "Findings Summary": {
+      "type": "rich_text",
+      "description": "Brief summary of the top findings from the research session."
+    },
+    "Researched At": {
+      "type": "date",
+      "description": "Timestamp when the research session was performed."
+    }
+  },
+  "default_values": {},
+  "notes": "The plugin searches for this database by name before creating it (lazy creation). Topic serves as the primary identifier for research sessions. Re-running research on the same topic updates the existing record rather than creating a duplicate (idempotent)."
+}

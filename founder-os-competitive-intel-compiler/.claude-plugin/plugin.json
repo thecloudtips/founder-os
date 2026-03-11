@@ -1,0 +1,23 @@
+{
+  "name": "founder-os-competitive-intel-compiler",
+  "version": "1.0.0",
+  "description": "Researches competitors via web search (pricing, features, reviews, positioning, news), produces structured competitive intelligence reports with optional self-comparison, and builds comparison matrices across multiple competitors",
+  "author": {
+    "name": "Founder OS",
+    "email": "contact@founderos.dev"
+  },
+  "display_name": "Competitive Intel Compiler",
+  "platform": "claude-code",
+  "pillar": "Code Without Coding",
+  "plugin_number": "15",
+  "type": "standalone",
+  "difficulty": "intermediate",
+  "release_week": 16,
+  "agent_pattern": "none",
+  "capabilities": {
+    "commands": true,
+    "skills": true,
+    "agent_teams": false
+  },
+  "dependencies": []
+}
