@@ -2,7 +2,6 @@
   "name": "founder-os",
   "version": "1.0.0",
   "description": "32-namespace AI automation ecosystem for SMB founders. Email triage, meeting prep, report generation, CRM sync, and 28 more tools — all powered by Claude Code.",
-  "platform": "claude-code",
   "author": {
     "name": "Founder OS",
     "url": "https://github.com/thecloudtips/founder-os"
