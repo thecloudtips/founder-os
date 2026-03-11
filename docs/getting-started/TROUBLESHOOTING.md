@@ -4,27 +4,28 @@ Each entry follows: **Symptom → Cause → Fix → Verify**
 
 ## Installation Issues
 
-### "Permission denied" when running install.sh
+### "Plugin has an invalid manifest" during install
 
-**Symptom:** `bash: ./install.sh: Permission denied`
+**Symptom:** `claude plugin install founder-os` fails with a manifest validation error.
 
-**Cause:** The script doesn't have execute permissions.
+**Cause:** The marketplace cache may have a stale version.
 
 **Fix:**
 ```bash
-chmod +x install.sh
-./install.sh
+claude plugin marketplace remove founder-os-marketplace
+claude plugin marketplace add thecloudtips/founder-os
+claude plugin install founder-os
 ```
 
-**Verify:** Script starts running and shows "Phase 1: Checking prerequisites..."
+**Verify:** Plugin installs without errors.
 
 ---
 
-### "Node.js not found" or "need v18+"
+### "Node.js not found" or MCP servers fail to start
 
-**Symptom:** Phase 1 fails with Node.js error.
+**Symptom:** Notion or Filesystem MCP servers don't connect.
 
-**Cause:** Node.js is not installed or is an older version.
+**Cause:** Node.js is not installed or is an older version. MCP servers require Node.js 18+.
 
 **Fix:**
 1. Install Node.js 18+ from https://nodejs.org/ (LTS recommended)
@@ -35,21 +36,9 @@ chmod +x install.sh
 
 ---
 
-### "npx not found"
-
-**Symptom:** Phase 1 fails with npx error.
-
-**Cause:** npx comes bundled with Node.js. If missing, Node.js may be partially installed.
-
-**Fix:** Reinstall Node.js from https://nodejs.org/
-
-**Verify:** `npx --version` outputs a version number.
-
----
-
 ### "Claude Code not found"
 
-**Symptom:** Phase 1 fails with Claude Code error.
+**Symptom:** `claude` command not recognized.
 
 **Cause:** Claude Code CLI is not installed or not in PATH.
 
@@ -59,23 +48,30 @@ chmod +x install.sh
 
 ---
 
-### "gws CLI not found"
+## Notion Issues
 
-**Symptom:** Phase 1 fails with gws error.
+### "NOTION_API_KEY not set" or Notion commands fail
 
-**Cause:** The gws CLI tool is not installed.
+**Symptom:** Commands that use Notion return errors about missing API key.
 
-**Fix:** Follow gws CLI installation instructions for your platform.
+**Cause:** The `NOTION_API_KEY` environment variable is not set in your shell.
 
-**Verify:** `gws --version` outputs a version number.
+**Fix:**
+```bash
+# Add to ~/.zshrc (macOS) or ~/.bashrc (Linux)
+export NOTION_API_KEY=ntn_your_token_here
+
+# Reload
+source ~/.zshrc
+```
+
+**Verify:** `echo $NOTION_API_KEY` shows your key. Restart Claude Code and retry.
 
 ---
 
-## Notion Issues
-
 ### "Notion API key validation failed"
 
-**Symptom:** Phase 2 fails with HTTP 401 or 403.
+**Symptom:** Notion commands fail with HTTP 401 or 403.
 
 **Cause:** The API key is invalid, expired, or missing capabilities.
 
@@ -84,9 +80,9 @@ chmod +x install.sh
 2. Go to https://www.notion.so/my-integrations
 3. Click on your "Founder OS" integration
 4. Check that all capabilities are enabled (Read, Update, Insert content)
-5. If the key looks wrong, create a new integration and update `.env`
+5. If the key looks wrong, create a new integration and update your env var
 
-**Verify:** Re-run `./install.sh` — Phase 2 should show "Notion API key is valid".
+**Verify:** Run `/founder-os:setup:verify` — Notion check should pass.
 
 ---
 
@@ -97,8 +93,8 @@ chmod +x install.sh
 **Cause:** Notion HQ setup didn't complete, or the integration doesn't have access.
 
 **Fix:**
-1. Run `/founder-os:setup:notion-hq` in Claude Code (creates missing databases)
-2. If databases exist but aren't found: open the Founder OS HQ page in Notion → Click **...** → **Connections** → Ensure your integration is connected
+1. Run `/founder-os:setup:notion-hq` in Claude Code (creates missing databases — it's idempotent)
+2. If databases exist but aren't found: open the Founder OS HQ page in Notion → Click **...** → **Connections** → Ensure your "Founder OS" integration is connected
 
 **Verify:** Run `/founder-os:setup:verify` — should show 22/22 databases.
 
@@ -118,9 +114,21 @@ chmod +x install.sh
 
 ## Google (gws) Issues
 
+### "gws CLI not found"
+
+**Symptom:** Google-dependent commands fail, or `gws --version` returns nothing.
+
+**Cause:** The gws CLI tool is not installed. This is optional — only needed for 20 namespaces that use Gmail, Calendar, or Drive.
+
+**Fix:** Follow gws CLI installation instructions for your platform.
+
+**Verify:** `gws --version` outputs a version number.
+
+---
+
 ### "Google authentication failed"
 
-**Symptom:** Phase 3 fails after `gws auth login`.
+**Symptom:** Google commands fail after `gws auth login`.
 
 **Cause:** Browser didn't open, wrong account selected, or scopes not approved.
 
@@ -133,71 +141,79 @@ chmod +x install.sh
 
 ---
 
-### "Could not verify Gmail access"
-
-**Symptom:** Phase 3 warning about Gmail access.
-
-**Cause:** Gmail API access wasn't granted, or the account has no emails.
-
-**Fix:**
-1. Re-run `gws auth login` and ensure Gmail scope is approved
-2. Check Google API console for any restrictions on your account
-
-**Verify:** `gws gmail list --limit=1` returns at least one email.
-
----
-
-## Plugin Issues
+## Plugin & Command Issues
 
 ### Commands not recognized
 
-**Symptom:** Slash commands like `/founder-os:inbox:triage` aren't recognized.
+**Symptom:** Slash commands like `/founder-os:inbox:triage` aren't recognized in Claude Code.
 
-**Cause:** The plugin manifest is missing or Claude Code needs a restart.
+**Cause:** Plugin not installed, or Claude Code needs a restart.
 
 **Fix:**
-1. Verify `.claude-plugin/plugin.json` exists at the repository root
-2. Verify the command file exists: `ls commands/inbox/triage.md`
-3. Restart Claude Code (close and reopen)
+1. Verify the plugin is installed: check that `founder-os@founder-os-marketplace` appears in `~/.claude/plugins/installed_plugins.json`
+2. Restart Claude Code (close and reopen)
+3. If still not working, reinstall:
+   ```bash
+   claude plugin marketplace remove founder-os-marketplace
+   claude plugin marketplace add thecloudtips/founder-os
+   claude plugin install founder-os
+   ```
 
-**Verify:** Open Claude Code and type `/founder-os:inbox:` — autocomplete should show available commands.
+**Verify:** Open Claude Code and type `/founder-os:` — autocomplete should show available commands.
 
 ---
 
 ### "MCP server connection failed"
 
-**Symptom:** Commands fail with MCP connection errors.
+**Symptom:** Commands fail with MCP connection errors for Notion or Filesystem.
 
-**Cause:** The root `.mcp.json` is missing server entries, or environment variables aren't set.
+**Cause:** The plugin's `.mcp.json` isn't being picked up, or environment variables aren't set.
 
 **Fix:**
-1. Check the root `.mcp.json` has `notion` and `filesystem` entries: `cat .mcp.json`
-2. Verify `.env` has `NOTION_API_KEY` and `WORKSPACE_DIR` set
-3. Re-run `./install.sh` to regenerate MCP config
+1. Verify `NOTION_API_KEY` is set: `echo $NOTION_API_KEY`
+2. Restart Claude Code to reload MCP configuration
+3. Check that Node.js 18+ is installed (MCP servers need it)
 
-**Verify:** Run `/founder-os:setup:verify` — MCP Config check should pass.
+**Verify:** Run `/founder-os:setup:verify` — MCP checks should pass.
+
+---
+
+## Memory & Intelligence Issues
+
+### Memory or intelligence features not working
+
+**Symptom:** Commands don't seem to remember context or adapt behavior.
+
+**Cause:** The local SQLite databases haven't been created yet, or they're in a different project directory.
+
+**Fix:** Memory and intelligence databases are created per-project on first use. Run any command that uses memory (e.g., `/founder-os:memory:show`) to initialize the memory store. The intelligence store initializes when hooks first fire.
+
+**Verify:** Check that `.memory/memory.db` exists in your project root after running a memory command.
+
+---
+
+### Want to start fresh with memory/intelligence?
+
+**Fix:**
+```bash
+# Reset memory
+rm -rf .memory/
+
+# Reset intelligence
+rm -rf .intelligence/
+```
+
+Both will be re-created automatically on next use.
 
 ---
 
 ## Environment Issues
 
-### ".env file not found" on re-run
-
-**Symptom:** Installer creates a new `.env` from template and exits.
-
-**Cause:** `.env` file was deleted or never created.
-
-**Fix:** The installer automatically creates `.env` from `.env.example`. Edit it with your API keys and re-run.
-
-**Verify:** `cat .env` shows your actual API keys (not placeholder values).
-
----
-
 ### Workspace directory permission errors
 
 **Symptom:** File-based commands (Report Generator, Contract Analyzer) fail to write output.
 
-**Cause:** `WORKSPACE_DIR` doesn't exist or has wrong permissions.
+**Cause:** The workspace directory (`~/founder-os-workspace` by default) doesn't exist or has wrong permissions.
 
 **Fix:**
 ```bash

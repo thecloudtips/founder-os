@@ -5,13 +5,14 @@ This guide walks you through installing and configuring Founder OS — a single-
 ## What You're Installing
 
 - **1 AI plugin with 32 command namespaces** organized into 4 pillars (Daily Work, Code Without Coding, MCP & Integrations, Meta & Growth)
+- **94 slash commands** available in any Claude Code project
 - **22 Notion databases** (CRM, tasks, meetings, reports, and more — all interconnected)
-- **MCP server connections** (Notion, Filesystem)
-- **Google Workspace access** via gws CLI (Gmail, Calendar, Drive)
+- **Automatic MCP server configuration** (Notion + Filesystem — configured by the plugin)
+- **Google Workspace access** via gws CLI (Gmail, Calendar, Drive — optional)
 
 ## Prerequisites
 
-Install these before running the Founder OS installer:
+Install these before adding Founder OS:
 
 ### 1. Claude Code
 
@@ -36,9 +37,9 @@ node --version   # Should be v18.x or higher
 npx --version    # Should be available
 ```
 
-### 3. gws CLI
+### 3. gws CLI (Optional)
 
-Command-line tool for Gmail, Calendar, and Drive access. Used by 20+ namespaces for email, scheduling, and document operations.
+Command-line tool for Gmail, Calendar, and Drive access. Used by 20 namespaces for email, scheduling, and document operations. Skip this if you only want Notion-based features.
 
 Install: Follow the gws CLI installation instructions for your platform.
 
@@ -62,23 +63,20 @@ Your Notion key allows Founder OS to read and write to your Notion workspace.
    - Insert content
 5. Click **"Submit"**
 6. Copy the **"Internal Integration Secret"** (starts with `ntn_`)
-7. Save this — you'll paste it into `.env` in the next section
 
-### Google Account (Required)
+### Google Account (Optional)
 
 The gws CLI handles Google authentication. No API key needed — just your Google account.
 
-During installation, the script runs `gws auth login` which:
-1. Opens your browser
-2. Asks you to sign in with your Google account
-3. Requests access to Gmail, Calendar, and Drive
-4. Confirms authentication in the terminal
+```bash
+gws auth login
+```
 
-You only need to do this once. The token is stored locally.
+This opens your browser, asks you to sign in, and requests access to Gmail, Calendar, and Drive. You only need to do this once — the token is stored locally.
 
 ### Slack Bot Token (Optional)
 
-Only needed for P19 Slack Digest. Skip this if you don't use Slack.
+Only needed for the Slack Digest namespace. Skip this if you don't use Slack.
 
 1. Go to https://api.slack.com/apps
 2. Click **"Create New App"** → **"From scratch"**
@@ -90,75 +88,132 @@ Only needed for P19 Slack Digest. Skip this if you don't use Slack.
 5. Click **"Install to Workspace"** and approve
 6. Copy the **"Bot User OAuth Token"** (starts with `xoxb-`)
 
-### Web Search API Key (Optional)
-
-Only needed for P08 Newsletter Engine and P15 Competitive Intel. Skip if not using these namespaces.
-
 ## Installation
 
-### Step 1: Clone the repository
+### Step 1: Install the Plugin
 
 ```bash
-git clone https://github.com/[org]/founderOS.git
-cd founderOS
+# Add the Founder OS marketplace
+claude plugin marketplace add thecloudtips/founder-os
+
+# Install the plugin
+claude plugin install founder-os
 ```
 
-### Step 2: Configure your environment
+The plugin installs globally — it's available in every Claude Code project, not just one directory.
+
+### Step 2: Set Environment Variables
+
+Add your API keys to your shell profile so they persist across sessions:
 
 ```bash
-cp .env.example .env
+# Add to ~/.zshrc (macOS) or ~/.bashrc (Linux)
+
+# Required — Notion API key
+export NOTION_API_KEY=ntn_your_token_here
+
+# Optional — Slack bot token
+export SLACK_BOT_TOKEN=xoxb_your_token_here
 ```
 
-Open `.env` in your editor and fill in:
-- `NOTION_API_KEY` — paste your Notion integration secret
-- `WORKSPACE_DIR` — directory for file operations (default: `~/founder-os-workspace`)
-- `SLACK_BOT_TOKEN` — (optional) paste your Slack bot token
-- `WEB_SEARCH_API_KEY` — (optional) paste your search API key
-
-### Step 3: Run the installer
-
+Reload your shell:
 ```bash
-./install.sh
+source ~/.zshrc   # or source ~/.bashrc
 ```
 
-The installer runs 6 phases:
+### Step 3: Set Up Notion HQ Databases
 
-| Phase | What It Does |
-|-------|-------------|
-| 1. Prerequisites | Checks Node.js, npx, Claude Code, gws CLI |
-| 2. Environment | Loads `.env`, validates API keys against live APIs |
-| 3. Google Auth | Runs `gws auth login` if not already authenticated |
-| 4. Plugin Config | Configures MCP servers in the root `.mcp.json` |
-| 5. Notion HQ | Creates 22 databases in your Notion workspace |
-| 6. Verification | Tests all connections and reports results |
+Open Claude Code in any project and run:
+
+```
+/founder-os:setup:notion-hq
+```
+
+This creates 22 interconnected Notion databases in your workspace:
+
+| Category | Databases Created |
+|----------|------------------|
+| CRM | Companies (central hub), Contacts, Deals, Communications |
+| Operations | Tasks, Meetings, Finance |
+| Intelligence | Briefings, Knowledge Base, Research, Reports |
+| Content | Content, Deliverables, Prompts |
+| Growth | Goals, Milestones, Learnings, Weekly Insights, Workflows, Activity Log, Memory |
+
+**This command is idempotent** — if some databases already exist (from a previous run or partial setup), it only creates the missing ones. Safe to re-run anytime.
+
+### Step 4: Verify Installation
+
+```
+/founder-os:setup:verify
+```
+
+This checks:
+- Notion API connectivity and database access
+- Google Workspace authentication (if gws is installed)
+- Filesystem MCP read/write capability
+- Reports pass/fail for each integration
+
+## How Everything Connects
+
+### What Happens at Install Time
+
+When you run `claude plugin install founder-os`:
+
+1. Claude Code downloads the plugin files from GitHub
+2. The plugin's `.mcp.json` automatically configures Notion and Filesystem MCP servers
+3. All 94 slash commands become available as `/founder-os:<namespace>:<action>`
+4. No files are created in your project directory — the plugin lives in Claude Code's plugin cache
+
+### What Happens on First Use
+
+Three local systems initialize automatically when first needed:
+
+| System | Storage | Created When | What It Does |
+|--------|---------|-------------|-------------|
+| Memory Engine | `.memory/memory.db` (SQLite) | First command using memory | Stores cross-namespace context, preferences, and patterns |
+| Intelligence Engine | `.intelligence/intelligence.db` (SQLite) | First intelligence event | Powers adaptive behavior and pattern detection |
+| Notion HQ | 22 databases in your Notion workspace | When you run `/founder-os:setup:notion-hq` | CRM, tasks, meetings, reports — all interconnected |
+
+**All three are optional for basic usage.** Commands gracefully skip memory/intelligence if the databases don't exist. Individual namespaces work with whatever Notion databases are available.
+
+### Where Your Data Lives
+
+| Data | Location | Scope |
+|------|----------|-------|
+| Plugin files | `~/.claude/plugins/cache/...` (managed by Claude Code) | Global |
+| Notion databases | Your Notion workspace | Per workspace |
+| Memory store | `.memory/memory.db` in project root | Per project |
+| Intelligence store | `.intelligence/intelligence.db` in project root | Per project |
+| File outputs | `~/founder-os-workspace` (default, configurable) | Global |
+
+Everything stays local or in your own Notion workspace. No data is sent to third-party servers.
 
 ## After Installation
 
 ### First Commands to Try
 
-Open Claude Code in the `founderOS` directory and try:
+Open Claude Code in any project and try:
 
 ```
-/founder-os:inbox:triage                          # Triage your inbox
-/founder-os:report:generate --type=weekly         # Generate a weekly report
-/founder-os:client:load --company="Acme Corp"     # Load client context
-/founder-os:setup:verify                          # Check installation health
+/founder-os:morning:sync                    # Morning briefing from all sources
+/founder-os:inbox:triage                    # AI-powered email triage
+/founder-os:prep:today                      # Prep for today's meetings
+/founder-os:client:load --company="Acme"    # Load client context
+/founder-os:report:generate                 # Generate a business report
+/founder-os:memory:teach                    # Teach the system a preference
+/founder-os:setup:verify                    # Check installation health
 ```
 
 ### Updating Founder OS
 
-Pull the latest changes and re-run the installer (safe — it skips completed steps):
-
 ```bash
-git pull
-./install.sh
+claude plugin marketplace remove founder-os-marketplace
+claude plugin marketplace add thecloudtips/founder-os
+claude plugin install founder-os
 ```
 
-### Installer Flags
+This pulls the latest version. Your Notion databases, memory store, and intelligence data are preserved — they live outside the plugin.
 
-| Flag | Purpose |
-|------|---------|
-| `--verify` | Run only the verification phase |
-| `--skip-notion` | Skip Notion database setup |
-| `--reset` | Remove MCP entries and reset config (clean slate) |
-| `--help` | Show usage information |
+## Troubleshooting
+
+See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues and fixes.

@@ -10,30 +10,110 @@ Stop drowning in email, meetings, and manual busywork. Founder OS gives you a fu
 
 ## Install
 
-```bash
-# 1. Remove any previous marketplace (if upgrading)
-claude plugin marketplace remove founder-os-marketplace
+### Step 1: Add the Marketplace and Install
 
-# 2. Add the marketplace
+```bash
+# Add the Founder OS marketplace
 claude plugin marketplace add thecloudtips/founder-os
 
-# 3. Install the plugin
+# Install the plugin
 claude plugin install founder-os
 ```
 
-### Configure
+That's it — the plugin is now installed globally. All 94 commands are available in any Claude Code project.
+
+### Step 2: Set Your Notion API Key
+
+Most commands need Notion access. Get your key at [notion.so/my-integrations](https://www.notion.so/my-integrations):
+
+1. Click **"+ New integration"**
+2. Name it **"Founder OS"**
+3. Enable capabilities: **Read content**, **Update content**, **Insert content**
+4. Copy the **Internal Integration Secret** (starts with `ntn_`)
+
+Then add it to your shell profile so it persists:
 
 ```bash
-# Set your Notion API key (required for most commands)
-# Get yours at: https://www.notion.so/my-integrations
+# Add to ~/.zshrc (macOS) or ~/.bashrc (Linux)
 export NOTION_API_KEY=ntn_your_token_here
 ```
 
-Add the export to your `~/.zshrc` or `~/.bashrc` so it persists across sessions.
+Reload your shell: `source ~/.zshrc`
 
-### Verify
+### Step 3: Set Up Notion Databases (Recommended)
 
-Open Claude Code in any project and type `/founder-os:` — you should see all available commands in autocomplete.
+Open Claude Code in any project and run:
+
+```
+/founder-os:setup:notion-hq
+```
+
+This creates 22 interconnected Notion databases — CRM, task management, content library, financial tracking, and more. The command is idempotent: if some databases already exist, it only creates the missing ones.
+
+### Step 4: Verify
+
+```
+/founder-os:setup:verify
+```
+
+This checks all connections (Notion, Google, Filesystem) and reports pass/fail for each.
+
+### Optional: Google Workspace
+
+For email, calendar, and drive features (20 namespaces), install the [gws CLI](https://github.com/nicholasgasior/gws) and authenticate:
+
+```bash
+gws auth login
+```
+
+### Optional: Slack
+
+For the Slack Digest namespace, set your bot token:
+
+```bash
+export SLACK_BOT_TOKEN=xoxb_your_token_here
+```
+
+### Upgrading
+
+```bash
+claude plugin marketplace remove founder-os-marketplace
+claude plugin marketplace add thecloudtips/founder-os
+claude plugin install founder-os
+```
+
+---
+
+## How It Works
+
+Founder OS is a single Claude Code plugin that installs via the standard marketplace system. Here's what happens under the hood:
+
+### At Install Time
+
+- Claude Code downloads the plugin from GitHub
+- The plugin's `.mcp.json` auto-configures Notion and Filesystem MCP servers
+- All 94 slash commands become available as `/founder-os:<namespace>:<action>`
+- No files are created in your project directory
+
+### On First Use
+
+- **Memory Engine** — A local SQLite database (`.memory/memory.db`) is created automatically the first time a command uses memory. It stores cross-namespace context, learned preferences, and patterns. Commands work fine without it — if the DB is missing, memory features are silently skipped.
+
+- **Intelligence Engine** — A separate SQLite database (`.intelligence/intelligence.db`) is created when the hooks system first logs an event. It powers adaptive behavior and pattern detection. Also optional — commands degrade gracefully without it.
+
+- **Notion HQ** — The 22 Notion databases are created on-demand when you run `/founder-os:setup:notion-hq`. Individual commands also search for their required databases and work with whatever exists. You don't need all 22 databases to use specific namespaces.
+
+### Data Storage
+
+| What | Where | Created When |
+|------|-------|-------------|
+| Commands, skills, agents | Plugin install directory (managed by Claude Code) | At install |
+| Notion databases (22) | Your Notion workspace | When you run `/founder-os:setup:notion-hq` |
+| Memory store | `.memory/memory.db` in project root | First command that uses memory |
+| Intelligence store | `.intelligence/intelligence.db` in project root | First intelligence event |
+| File outputs (reports, exports) | `~/founder-os-workspace` (configurable) | When a command writes a file |
+
+All data stays local or in your own Notion workspace. Nothing is sent to third-party servers.
 
 ---
 
@@ -125,26 +205,29 @@ Seven namespaces include full AI agent teams for complex multi-step tasks. Use t
 
 ## Notion HQ
 
-Founder OS uses Notion as its data backbone. After installing, create all 22 interconnected databases with one command inside Claude Code:
+Founder OS uses Notion as its data backbone. The `/founder-os:setup:notion-hq` command creates 22 interconnected databases:
 
-```
-/founder-os:setup:notion-hq
-```
+| Category | Databases |
+|----------|-----------|
+| CRM | Companies (central hub), Contacts, Deals, Communications |
+| Operations | Tasks, Meetings, Finance |
+| Intelligence | Briefings, Knowledge Base, Research, Reports |
+| Content | Content, Deliverables, Prompts |
+| Growth | Goals, Milestones, Learnings, Weekly Insights, Workflows, Activity Log, Memory |
 
-This creates a full workspace with CRM, task management, content library, financial tracking, and more — all cross-linked with Companies as the central hub.
+Companies is the central hub — all client-facing databases relate back to it. The setup command is idempotent: run it anytime to create missing databases without affecting existing ones.
 
 ---
 
 ## Requirements
 
-- **Claude Code** (latest version)
-- **Node.js 18+**
-- **Notion workspace + API key** (free tier works) — [Get your key](https://www.notion.so/my-integrations)
-
-### Optional
-
-- **Google account + [gws CLI](https://github.com/nicholasgasior/gws)** — for Gmail, Calendar, and Drive features (20 namespaces)
-- **Slack Bot Token** — for Slack Digest (`slack` namespace)
+| Requirement | Why | Required? |
+|-------------|-----|-----------|
+| **Claude Code** (latest) | Runs all commands | Yes |
+| **Node.js 18+** | MCP servers (Notion, Filesystem) | Yes |
+| **Notion API key** | Data backbone for 21 namespaces | Yes |
+| **gws CLI** | Gmail, Calendar, Drive access | Optional (20 namespaces) |
+| **Slack Bot Token** | Slack Digest namespace | Optional (1 namespace) |
 
 ---
 
@@ -167,6 +250,12 @@ After installing, try these inside Claude Code:
 
 # Generate a report
 /founder-os:report:generate
+
+# Teach the system a preference
+/founder-os:memory:teach
+
+# Check your goals
+/founder-os:goal:check
 ```
 
 ---
